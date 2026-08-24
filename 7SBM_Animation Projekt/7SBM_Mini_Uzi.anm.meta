@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{28F5CC635796D725}7SBM_Animation Projekt/7SBM_Mini_Uzi.anm"
+ Author "henrys-pc"
+ ChangeDate -1113443124
+ Configurations {
+  TXAResourceClass PC {
+   SourceFile "7SBM_Mini_Uzi.txa"
+  }
+  TXAResourceClass XBOX_ONE : PC {
+  }
+  TXAResourceClass PS4 : PC {
+  }
+  TXAResourceClass LINUX : PC {
+  }
+ }
+}

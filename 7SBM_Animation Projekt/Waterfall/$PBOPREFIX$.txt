@@ -1,0 +1,6 @@
+//<'Waterfall.pbo' properties via Mikero's dos tools, dll version 10.13>
+prefix=Waterfall;
+Mikero=DePbo.dll.8.90;
+version=24062612;
+//PboType=Arma Addon;
+//</properties>

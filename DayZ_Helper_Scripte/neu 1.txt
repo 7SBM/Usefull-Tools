@@ -1,0 +1,1312 @@
+
+0:00
+Good day survivors. Hope you're doing well. In today's video, I'm going to be showing you guys how to set up your own custom 3D model in Daisy Modding,
+0:06
+complete with proxies so that the objects you attach display in game. I'll
+0:12
+go over how to retexture objects in game using the model config. To set up hidden
+0:17
+selections so that you can configure different skins for your objects in the CPP file instead of editing the model
+0:23
+itself. I'll be showing you how to set up custom slots and how to organize them using GUI inventory attachment props.
+0:29
+We'll go over some basics for creating kits to deploy objects in game as well
+0:35
+as being able to dismantle them with a screwdriver. And I will also be covering
+0:40
+the basics of the object editor for creating 3D models so that you can get
+0:47
+started creating your own basic 3D models in Daisy Modding.
+0:53
+[music]
+cpp file structure
+1:00
+It's going to be quite a bit of a longer episode, so strap in, grab a coffee or three, and uh don't worry, by the end of
+1:05
+this video, you'll have a pretty thorough understanding of how all this works. And even though it's a longer video, it's worth watching if you're
+1:10
+interested in this stuff. I'm by no means an expert, but I'll be able to show you how to get started with a very
+1:16
+basic bookshelf mod complete with proxy attachments, as I said. All right, to
+1:22
+save time, I've set up a mod structure template. Um, I'll go through everything
+1:28
+real quick. Basically, this is a mostly blank mod folder, Zenbookshelf. I have
+1:35
+my config CPP file, scripts folder with nothing in it yet, a language core for
+1:41
+my string tableabling, my translations. I've already done that. I'm not going to cover that today since I've done that in a previous video. And then I've got my
+1:47
+data folder with the models and textures folders ready to go. And that's it. If I open up the CPP file, there's a bit of
+1:54
+code here to get started. I'm planning to override the book slots and the uh
+2:00
+slots for the teddy bear to attach to this bookshelf. So, I've got all of my
+2:05
+uh pre-ompiler class names here ready to go. For today, we are going to be working with config vehicles, config
+2:11
+slots, config nonai vehicles for the proxy attachments. Um, and here are my dependencies. So gear books and gear
+2:20
+containers are required to load first so that our overrides will apply. And I'm
+2:25
+using my Zen mod core because that contains the 3D model and setup to
+2:30
+really quickly and easily add deployable kits into the game. So today we're just
+2:36
+focusing on the bookshelf. Making the kit is a separate process, but
+2:41
+everything's pretty similar. Obviously, the the uh 3D modeling part is going to be similar for the kit. The scripting
+2:48
+part will be a bit different. Go and check out my Zen Mod Core source code if you want to see how I created my kit. Or
+2:54
+you can just use my Zen Mod Core in your own mod. Just add this as a dependency. Make sure to add it into your mod list
+2:59
+or repack it into your server mod. And you can just use my kit setup, which is really easy to work with. That's why I
+3:05
+created my core mod to make these things a lot simpler to work with. So before we get started, we are obviously going to
+3:11
+need a 3D model. So I'm using this
+3:17
+should say shelf. I'm using a free 3D model from SketchFab. Sketch Fab is a
+Finding a free 3D model
+3:23
+fantastic website to get free 3D models from. So is CG Trader. Uh they also have
+3:29
+paid models which are usually higher quality, but depending on what you're doing, very often free models will do
+3:36
+the job. For today, I want to keep things simple. I want to work with this
+3:41
+simple bookshelf model for a couple of reasons. First of all, it's very simple to work with, which is great for a
+3:47
+beginner introduction guide to this sort of stuff. And second of all, I actually want this on my server. I run tier skill
+3:55
+mods. I have vanilla books spawning in the world as collectible items to sell at the trader. They're rare. Um, so I
+4:02
+want players to be able to store these books somewhere in their base without them taking up storage slots in other
+4:07
+objects. And it just just looks cool to have in your base, just a bookshelf like this. So that's why I chose this model.
+4:14
+There were a bunch of others on the um Sketch Fab website, but this one stood out to me the most. First of all, it's
+4:21
+low poly, which is what we want for most objects in a game, especially a game
+4:26
+like Day Z. Low poly means low poly count or polygons. U which is basically
+4:32
+triangles or surfaces. Vertices are you can look this stuff up. I'm not an
+4:37
+expert on this by any means, but basically the less triangles in a model,
+4:42
+the more efficient it is to render. And for a bookshelf, that's what we want. We don't want it to be radically complex
+4:50
+because it doesn't need to be. This will do the job. Very simple 3D model, simple texture. It's perfect. So, I'm going to
+4:57
+download this 3D model in Daisy. The ideal 3D format to work with file format
+5:04
+is FBX. OBJ in my experience works reasonably
+5:09
+well as well. Um, but in this case, we don't have any of those options. We only have D AE. So, what you can do,
+5:16
+sometimes this will work, sometimes it won't, is look up something like a 3D model converter. So, here I have a DAE
+5:23
+to FBX converter. I'm going to download this file. Here are the folders. I can
+5:28
+copy these into my mod folder temporarily. So, I'll just copy it straight in here.
+5:34
+Go into source in a model. This is the 3D model we want. And the textures are
+5:39
+in here, too. So, I'll copy all of these and create a new folder here and just
+5:44
+say raw files. Paste them in there. And now I can delete these two folders.
+5:50
+We've extracted the files we need out of this. And now I can drag and drop this
+5:58
+um DAE model into this converter. It will convert the model for me. I can
+Preparing texture paa files
+6:04
+download the FBX format. Uh because the Daisy object editor cannot import a DAE
+6:11
+model. That's why we're doing this. So now I have my FBX model. I can come back to my bookshelf model, paste it in
+6:18
+there. I'm going to come into the textures and cut all of these and put them into the data textures folder. And
+6:25
+now I can delete the raw folder. In fact, I'll put this in the models folder for now. So now what we have is the FBX
+6:34
+raw model to import into the Daisy object editor. And we also have some texture files to work with, which we'll
+6:40
+need to modify soon. Now, I don't usually work with roughness or metallic
+6:46
+or AO. So I'm going to delete these. And these are the two files we'll mainly
+6:51
+work with. We also need an SMDI file, but we'll get to that later. So, ideally, you want to find a model that
+6:57
+is FBX or OBJ format. If not, try and find a converter that works. You won't
+7:03
+know if it works or not until we go to import it into the object editor, which we'll do in a moment. And when it comes to textures, we need a color texture. We
+7:10
+need a normal map, and we also need an SMDI, which, as I said, we'll get to later. This model didn't come with an
+7:17
+SMDI, so we'll have to create one. There's various ways we can do that, but we'll get to that later. These also need
+7:22
+to be PAAA format. So, what I'm going to have to do here is open up Photoshop. I'm going to drag these files into
+7:29
+Photoshop to open them up, and I'm going to have to save these as PNG files. Now, a pro tip while you're here um on this
+7:37
+step, you can see this image is 12 megabytes big. Depending on the object you're working with, you might want a
+7:43
+high-res texture, but for something like this, you could probably get away with
+7:48
+having the size of the object or the texture. So, right now, we have a48
+7:54
+pixel x248 pixel square, which is 12 megabytes big. If we go down to a 1024x
+8:01
+1024, we shrink the file size significantly. We go from 12 down to 3
+8:06
+mgab. If you're working with a lot of objects, it's the textures that add dramatically to the file size. So, if
+8:14
+you're running into issues with file size, try shrinking your textures. Another thing that you need to be aware
+8:19
+of, all textures in Daisy need to be square format. So, if this was, for
+8:25
+example, if it was like this sort of shape, that's not going to work. It's not going to import into the object
+8:31
+editor properly. We need it to be a square. So now that I have my square, I need to save this as PNG.
+8:38
+Um, the sort of naming convention that Bohemia go with is the name of the
+8:44
+object underscore co for color. So I'm just going to call that bookshelf color.
+8:50
+Then we have our normal map. This defines the 3Dness of the texture in game. It gives it some
+8:57
+sort of roughness to the texture in game. simulates the sort of etches in
+9:03
+the wood, some of the cornering and stuff like that. So, this is an important texture to have as well. It
+9:08
+really helps define your object in game. This is a normal map. It's called a normal map. So, what Daisy uh Bohemia
+9:16
+would normally call this would be something like bookshelf NHQ.
+9:21
+So, I can save that into this folder as well. And we can delete these originals.
+9:28
+And if you haven't set up micro tools, go and check out my guide on my channel for how to set micro tools up. Um, if
+9:35
+you have the add-on builder as well and you set this to binarize all textures
+9:42
+down here, then the add-on builder will automatically convert these into PAA
+9:48
+texture files. If it doesn't work for some reason for you, you can install micro tools, open this up with text
+9:54
+view, save as a paa file. And now this
+10:00
+is the image format that Daisy requires in order to render this texture properly
+10:06
+in game. So now we can do the same thing for the normal map. For the SMDI,
+10:12
+you can Google SMDI creation tips. I for today to speed
+10:18
+things up I just used chat GPT to create one for me. It's not perfect but it will
+10:24
+do the job. So if I find my reference files here we've got bookshelf SNDI.
+10:32
+Typically this is way pinker in um Daisy files but when I was testing this
+10:37
+earlier this worked fine. So I'm just going to use this file for now. We'll save this as paa.
+10:44
+So now we have our core texture files set up. These three are the main files that we need. There are other files you
+10:50
+can add in like metallic and stuff like that. As I said, I'm not an expert on this stuff, so I'm going to focus on the basics. These are the three files I
+10:56
+usually work with at a minimum. So now we've got our textures ready. The next step is to boot up object builder and
+Preparing Object Builder
+11:03
+get started importing this model. So bring up your Daisy tools
+11:08
+and go to object builder. Open this up. If you've never opened this before, you will need to do some setup. So, need to
+11:15
+go to file options. And now, you'll need to copy what I have in here. There'll be
+11:22
+uh I'll I'll leave this value down below in the in the video
+11:28
+description. Obviously, you need to change this file path to wherever your Daisy is installed and then add these
+11:34
+runtime command parameters. And if I scroll down here, you can see a bunch of
+11:40
+um other settings here that I have. I haven't really tweaked much at all from
+11:45
+the default settings. So, just go through this and copy any settings that
+11:50
+you need to in order to get your editor to work like mine. Your thing on the
+11:55
+right here will look very different as well. Mine is a mess because I don't know. I think this software was created
+12:01
+in the 1980s because it's just the most clunky piece of I've ever worked with, as are most Daisy modding tools,
+12:09
+but you get used to it. It's also a bit janky on a 4K monitor like I have right now. Everything's quite small for me.
+12:16
+Okay, a lot of information dumped right now, I know, but we're about to get into the nitty-gritty of setting up 3D
+12:24
+objects. So, we've got a blank project here. If you don't have these windows, come up to windows and go for views here
+Importing FBX object file
+12:31
+or hit F9. Now, what we need to do is go file, import, FBX, and then we need to
+12:37
+navigate to our folder we just set up. Go into data, models. Here is our raw
+12:43
+model, and open. So, depending on the object, you may need to tweak things here. We're not going to go over
+12:48
+animations or any of these more advanced subjects today. We're just focusing on a very simple 3D object. Um, I'm going to
+12:54
+import it with the master scale as one. For many objects out there, you will need to set this to 10%, 0.1, or even 1%
+13:02
+if it's a massive object. I'll leave mine as one for now and import it. And here is the 3D model that we have to
+13:10
+work with. Couple of things to note. First of all, this should be centered up on this center line. This is the front
+13:18
+view, left view, top view, and the 3D preview. If you hold control and alt and
+13:24
+right click, you can drag the 3D preview around a bit. Same with these windows, you can hold control and alt and move
+Preparing our 3D model
+13:32
+the camera view around. So, there's a lot of information to cover here, so just replay the video if you miss a step
+13:38
+or you're not sure about something. First things first, I'm going to delete this named selection over here and
+13:44
+create my own. So, I'm going to highlight the entire object, right click down here in this um named selections
+13:51
+window. If you don't have that, come up to windows and click on this named
+13:57
+selections. You can double click these and move them around usually. I don't know why mine's not working today, but
+14:03
+welcome to Daisy modding. So, what we need to do here is select the entire object. Right click this name selection,
+14:10
+click new, and I'm going to call mine texture. And now when we select this, it
+14:16
+should highlight our object. I don't have enough LODs here to make it work, but you can see that that highlights it
+14:22
+red. Okay, so this is important. This is the most important step of setting up a model because if you get this right, it
+14:28
+makes things a lot easier down the line. It's very hard to modify the position of an object um or the orientation of the
+14:36
+object after you've added several different LODs and you've added in proxies and things like that. So let's
+14:41
+get this step right first. So, first of all, I'm going to center the object. Bring it down to this bottom center sort
+14:49
+of crosshair. It's hard to see, but there's four red lines here. I want this centered on the front view. Treating
+14:56
+this middle line as the ground. We'll worry about these other views later. For now, this is relatively centered. I'm
+15:04
+fine with this. So, what we can do now is click on this little red button here. For me, it's absolutely tiny because I'm
+15:10
+on a 4K monitor, but anyway. So, your interface might look a bit different. I'll zoom in in editing as best as I
+15:15
+can. If you click on this red button here and click start, restart. If you've
+15:20
+set up Bulldozer correctly, you should get this window popping up. And mine
+15:26
+just crashed, which is normal for me. I'll try it again. I think I clicked on
+15:31
+it too soon. Yep, there we go. So, usually it takes over your mouse and you might need to alt tab to get out of it
+15:38
+or hit Windows key. I can come up and drag this window over. Um, this is
+15:45
+the 3D sort of preview inspector for Day-Z. Something to note is when you
+15:52
+first import an object like this in the 3D view, this is actually the back of
+15:59
+the object in game. So, when I load this in, the inventory view is going to be
+16:04
+looking at this in game. So, what I want to do here is highlight everything or double click on texture and click on
+16:11
+this little cube here with the rotate button. And I want to flip this 180° on the Y
+16:17
+ais. Now, if I had multiple LODs here, I would have to select apply to all LODs.
+16:22
+And it gets quite complicated. That's why this step is so important to do first. So, I'm going to apply this to
+16:28
+flip the object 180° on the Y-axis. And now I can run bulldozer again. And we
+16:35
+should be looking at the back of the bookcase. There we go. Perfect. All
+16:40
+right. So now let's figure out how big our object is. To do that, we can add in a proxy. Now, because this is a
+16:46
+bookshelf, I'm just [snorts] going to use a book proxy. So come up to create, come down to proxy, click browse, go to
+16:54
+your P drive, look for the DZ folder, and then we need to go into gear.
+16:59
+Typically, you can also go into characters and look for um zombies and
+17:06
+use a zombie to see how big an object is because a zombie is obviously similar size to a player. Um so it makes it
+17:13
+easier to scale your object properly. For today, I'm working with books. So, I'm going to come up to uh DZ gear
+17:20
+books. And we want this book. I'm not going to try to pronounce its file name. P3D. Click open. Click okay. And now if
+17:28
+I bring up bulldozer, we should see a book um somewhere on our screen. There
+17:34
+it is. And we can start to see the scale of our object. So right now the
+17:40
+bookshelf is a bit too big. I want this book to fit pretty snugly in the shelf.
+17:46
+So what I need to do is come here and click on texture. Click on this little
+17:52
+scale box here. Um, again, if you don't have these um on your toolbar, come up to windows
+17:59
+and it should be in one of these. So, just play around with these till you get your toolbarss set up properly. We're
+18:05
+getting these icons displaying. So, now if I come to scale, if I want to shrink
+18:10
+the entire object, I need to apply this to all of the XYZ axes. So, let's go
+18:16
+with 0.6 for now. That's a 40% reduction in the size of our bookshelf. Do not
+18:22
+click apply to all odds or it might apply to the proxy. We don't want to affect our proxy. We just want the
+18:27
+bookshelf to change size in relation to the proxy. And now if I bring up
+18:33
+bulldozer, that should have updated. So that might have been a bit too much. Let's click on our proxy and drag it up
+18:38
+a bit. Actually, we'll drag it off to the side a little bit and bring up bulldozer.
+18:44
+Yeah, you can see that the bookshelf is a little too small. Now, just a just a
+18:49
+tip, whatever you've highlighted in the editor will affect what Bulldozer
+18:55
+displays. So, if you want to see a rough 3D model of everything you're working on, just deselect everything and bring
+19:02
+up Bulldozer. And now you can see the full 3D model. So, that book is a little
+19:08
+too big now relative to the bookshelf. So, let's increase the bookshelf size by I don't know, let's do 10% for now.
+19:17
+Make them all 1.1. That will increase by 1.1 size. Drag it up a little bit. Get
+19:24
+it centered on that bottom line and center line. And deselect everything.
+19:29
+Bring our bulldozer. It's still not quite the right size. Let's bring our proxy over a little bit more.
+19:38
+It's still a little bit too small. So, select our texture and we'll just apply
+19:44
+this 10% increase one more time. Center the object. That's a bit better. So, now
+19:50
+our book fits pretty snugly in the shelf. So, we also want the book proxy
+19:56
+to face spine out. We want the book spine to be facing us. So what we can do
+20:02
+now is select our proxy here and we can apply the same manipulations as we can
+20:08
+to the bookshelf to the proxy. So if we come up to the rotate option, we want to
+20:14
+rotate this 90° on the Y ais. So let's click okay on that and see if that was
+20:20
+the right direction. And it was. So you can see the spine of the book there is facing outwards and the paper is inwards
+20:27
+just like a normal bookcase. And our size is pretty correct. So, we can drag
+20:33
+this in to the bookshelf. And we're starting to get somewhere now with our proxy. Now, we can save our
+20:40
+object. So, we'll save it into our mod folder. Zen bookshelf data models. And I'll just
+20:48
+call this bookshelf. Save it. And before we continue, we have
+Creating geometry LOD
+20:54
+to do a few more steps to get this to render properly in game. First of all, let's focus on our LODs.
+21:02
+So, the zero LOD is your actual in-game display LOD. It's what the object looks
+21:07
+like in game. If I duplicate this a couple times, these LODs are distance LODs. So, the further the player is from
+21:14
+the object, these different LODs will come into play. So, the one LOD would would be a few meters away, two would be
+21:21
+several meters away, and three would be very far away. For an object like this bookshelf, which has 167 points and 89
+21:28
+faces, we don't really need to optimize this any further. But if you're working with a very complex object, especially
+21:34
+an object that's going to be rendered in game frequently, so an object that's going to be relatively common, you would
+21:41
+want to optimize your lods, your view distance lods, so that if the player is not close to the item, it doesn't
+21:47
+display the full high resolution object. This is how you would do that. And there are several ways you can create a LOD, a
+21:54
+distance LOD. You can do it in Blender if you have the source file, which is the ideal way to do it. Um, you can also
+22:00
+do a bit of a hacky way, which is to select your object and come up to points and come to merge near and click detect
+22:07
+and click okay. Depending on the model, sometimes this will shrink the model a little bit. It will remove it will it'll
+22:14
+merge the nearest vertices based on what you set here. Um, but it looks pretty
+22:21
+janky in game for most models. So, I don't recommend doing that unless you have to. Um, ideally, you'd want to
+22:27
+create your own LODs in Blender if you know what you're doing. If you don't know what you're doing or you're just working with a simple object like this,
+22:34
+keeping just the zero load is fine. So, now what we need to do is create our geometry load. There are a few ways we
+22:40
+can do this. One way is to duplicate this layer. Right click on the one here
+22:46
+and go to properties and double click geometry. And this is now a geometry layer. We need to delete our proxy. We
+22:52
+don't want any of these extra things on any of the other LODs here. The geometry
+22:59
+LOD is the physical representation of our object in game. It's what the player will interact with. If it's a physical
+23:05
+object that blocks player movement, this is the LOD that defines how that works. So, we could do a few things here. We
+23:12
+could select our model and come up to structure and come to topology and click
+23:17
+find components. And then we could set mass down here to something like a th00and for a big object like this. And
+23:25
+usually this will work fine in game. And we now have a geometry load. Another way
+23:30
+to do this is to delete all of this. Duplicate our load here. Delete the
+23:37
+proxy. By the way, when you delete a proxy, there's two things you need to delete. You need to select the proxy in
+23:43
+your 3D editor, delete it, and you also need to delete the name selection here. Um, the second way to do this is delete
+23:49
+this lot as well completely. And we can just create a box and we can select the
+23:57
+vertices option up here. And we can shape this around our 3D object to
+24:04
+roughly encapsulate the 3D model. I'm doing a pretty rough job here. Normally you would spend a lot more time doing
+24:09
+this to make it as accurate as you can, but that's a pretty rough estimate of our 3D object. Just make sure all the
+24:17
+lods, all the different view angles align with the object. Then what you would do is highlight everything. U
+24:24
+first of all, change this to a geometry lot. Set the mass. You always need to set the
+24:30
+mass down here of a geometry lot in order for it to take effect. It doesn't usually matter what you set it unless
+24:36
+you can throw the object in game. It really doesn't matter. I'm just going to set this to a th00and mass. Click apply.
+24:42
+Now you can see this little blue thing appears in the middle. That means our geometry lot has applied correctly.
+24:48
+There's one more step to get this to work in game. We need to rightclick this and name it. So you can just name this
+24:54
+component 01. Now that we have a named selection that is a component with mass,
+25:00
+this object will now be interactable in game. It will also when we spawn it in
+25:06
+treat this as the bottom of the object and that will be the land contact that contacts the ground. So for today's
+25:12
+example I'm going to work with this basic 3D box that I created. As I said
+25:17
+you should spend a lot more time um aligning this to the model which by the way is the yellow ghost in the
+25:24
+background there. That is the outline of our object. When I'm finished with this tutorial, I'm going to do this redo this
+25:31
+properly with a lot more attention to detail. So, if you download the source to this project, which is linked below,
+25:38
+you'll get a much better quality version of this mod. But for now, let's just keep things simple. We have our graphics
+25:43
+LOD. We have our geometry LOD. That's all we need to import this into the game. One last thing to do with the
+25:50
+geometry lot is to right click down here in the properties tab, click new, and
+25:55
+type in auto center value zero. That uh eliminates a lot of jankiness with the
+26:02
+geometry l. I'm not 100% sure what it does. Like I said, I'm not an expert on this, but this is what a lot of the
+26:07
+vanilla objects have. So now we can save our object and we can go back to our CPP
+26:13
+file. And now we need to define the object its class so that we can spawn it
+26:18
+in game. So here is a basic setup for a bookshelf. It inherits from inventory
+26:23
+base. Its fizz layer physics layer is item large. That means the player can actually interact with it. If you want
+26:29
+this to be visible from a great distance, like a base building object or something that players should be able to see from very far away, you can set
+26:35
+force far bubble equals true. Because this is going to contain a lot of books and it doesn't really matter if players
+26:41
+can see it from a distance or not. I'm going to leave this as commented out so it's not forced to the far network
+26:48
+bubble and it only is visible when players are close to it. Since it'll mostly be inside players bases anyway,
+26:55
+it's not really going to make much of a difference. Item size is the size of the item as an inventory grid. So 10x 10 is
+27:02
+pretty big. I think that's the same size as a barrel. This object is not going to be placeable in the player's hands.
+27:07
+We're going to script that out of it. We're going to use a kit to deploy this and pack this. Um, so this doesn't
+27:13
+really matter anyway, but we have an attachments array. We'll get into this in more detail later. For now, I just
+27:19
+want to get in game and make sure this looks right. So, we'll come back to the attachments in a moment. The next step before we compile this and check it in
+Hidden selections, RVMATs and model.cfg
+27:26
+game is to set up our model config file and our RV mats. So, the model config
+27:33
+file, if I create a new text document here and call this model.cfg, cfg.
+27:38
+This is an important file for telling the game
+27:43
+how to structure our model in game. So you don't really need to understand what this does. This is the bare minimum you
+27:51
+will need for a 3D model like this. Config models and config skeletons. This
+27:57
+is the important thing to note. You can start with this template in any mod that you're working with with any 3D model.
+28:03
+And then if you want to define your objects hidden selections, this is how
+28:08
+it works. So we have our bookshelf.p3D file here. This class must match the
+28:14
+name of our P3D file. So if this was called anything else, that's what we would name this class. It must inherit
+28:22
+from the default Daisy uh model config. And the sections is where we define
+28:29
+various hidden selections on our object. So in this particular case, I named mine
+28:34
+texture. If we bring up the editor and go back to our main LOD, you can see texture here highlights the entire
+28:41
+object. By including this in our config models file, I can now use hidden
+28:47
+selections to define the texture. This allows us to have multiple different objects that use different texture paths
+28:54
+on the same P3D model without having to set up multiple P3Ds to have different variations of textures on the model. For
+29:01
+a bookshelf, there's no real need to have multiple textures, but it's a good habit to get into to set up your model
+29:07
+config file with hidden selections because it makes it really easy down the line for players to add various skins to
+29:14
+the different objects that you create. Or you can easily add variations of different colors for things and that sort of thing. So, that's the model
+29:21
+config file set up. Now, we need to set up the RV mats. So, I've already set those up in a reference folder to save
+29:28
+time. I'll copy those over and just briefly go over what I did. So, we'll go into textures here, paste the RV mats
+29:35
+in. So, we've got the bookshelf when it's pristine or worn. We've got the damage RVmat and the destructed or
+29:42
+ruined RV mat. I'll open up the pristine one first. I've just copied this from a
+29:49
+vanilla reference file. if you go into the DZ folder and look for anything
+29:54
+remotely related to what you're working with. So in my case that might be something like a C chest um which would
+30:01
+be under camping I think C chest. Yep. You would go into data, look for Cchest
+30:07
+and here are the different um C chest RV mats. You could open one of these up,
+30:13
+copy the entire file into your RV map, and then just tweak the texture paths
+30:19
+that are relevant to you. So here in the CSS, we have the normal map. All of these are generic values. We don't need
+30:26
+to touch. And then we have the SMDI, and this is a reflections RVM layer. You don't need to touch this.
+30:32
+Just ignore this if you see it in the file. All we want to change is these two file paths that are relevant to the C
+30:38
+chest itself. I don't know what I use for reference here, but it'll do fine. You can see I've changed the texture to
+30:44
+my bookshelf normal map, and I've changed the SMDI path to match as well.
+30:50
+These file paths must be exact, so it's ideal to come into here and copy them into there, and then copy the file name
+30:57
+as well to make sure they're 100% accurate. The destruct and damage RV mats are almost identical except that
+31:05
+they have a generic damage texture applied under the stage three RV mat.
+31:12
+Since this is a wooden bookshelf, I'm using the generic wood damage and generic um or it's weapons destruct
+31:18
+generic. It should probably use the C chest. This just uses a generic
+31:24
+destruct. So, we could just copy the generic destruct MC in there if we wanted to. And that's it. That's our RV
+31:31
+mats. Just copy a vanilla file that's similar to what you're working with and change the texture paths. Name it
+31:37
+something relevant to your file. One extra step we need in order for this to work properly is to come into your zero
+31:43
+load in the editor. Select your full object. Press E to open up the texture
+31:48
+interface. So, the E key, E for Eric. Um, you can apply the texture directly
+31:54
+in here if you want to. I could select PAA, select bookshelf code, get rid of
+31:59
+the P drive. [snorts] Otherwise, it will only work based on this file path. And when you publish the mod on the
+32:06
+workshop, the texture will look fine for you because this file path exists on your computer. But for everyone else,
+32:11
+it'll be a blank texture. So, you always need to remove the P drive. Uh, because we set up hidden selections, which
+32:17
+allows us to set the texture in the CPP file. I don't need to do that step unless I want to use it for reference in
+32:23
+the daisy editor in Bulldozer, but I don't really care about that right now. What I care about is the material path.
+32:29
+This is the RVmat path. This must be set in order for this to work properly. So,
+32:34
+we get rid of the P colon. Click apply. Click okay. Save our object file. Go
+32:41
+back to the CPV file and make sure all of these RV mats point to a real RVM mat
+32:46
+in our mod folder that is configured correctly. Now that we have all that set up, I've also set the sound impact type
+32:52
+as wood. This is only if you throw the item. For this, it doesn't really matter since we can't throw it, but as I said,
+32:57
+good practice to get into to find a vanilla object, copy its relevant parameters into your CPP file and your
+33:05
+RVM files. All right, so now we're finally ready to see if this works in game, and then we'll get to the slots
+33:12
+and proxies next. So, I'm going to compile this onto my test server mod
+33:17
+folder. If you don't know how to set up a test server, check out my YouTube video guide on that. So now, if I come
+33:23
+down to my YouTube test server and run it, we can load in game and we can make
+33:28
+sure that this actually renders properly and has physics, geometry, and the
+33:34
+textures look okay. Once that's all ready to go, we can move on to setting up the slots and proxies. And then
+33:41
+finally, we can script it and add the um deployable kit in as well. Now, my
+Previewing model in-game
+33:46
+object wasn't rendering in game properly because I had the file path wrong. I had in here the model set to the model
+33:52
+folder, but my model folder was actually called models. So, I've closed out of object builder. And since this is a
+33:59
+single model project, I'm just going to rename this folder model instead of models. And now when I compile and load
+34:06
+in, this should now hopefully render properly in game. All right, we're in.
+34:11
+And here's our bookshelf. It has physics. We can jump on it. We can run
+34:17
+into it. Uh we can also pick it up, which we shouldn't be able to, but we'll fix that later.
+34:24
+It has one slot here, which we haven't configured yet, but it looks fine.
+34:30
+Um, it's sitting on the ground properly, so we're good to keep working on the project. One thing worth checking here
+34:37
+is to make sure your RV mats work. So, if I go to bookshelf and select it, the
+34:42
+texture should change as the object changes. And it does. There. Uh, for
+34:47
+some reason, the destruct load doesn't work. So, maybe I'll change this back to
+34:54
+whatever this was, weapons destruct generic, cuz I know that works. So, we'll save that. Um, but everything's
+35:01
+working. We can also test uh bullet impacts is worth testing here as well to
+35:08
+make sure. Whoops, it's ruined. Make sure that the geome geometry log is
+35:15
+working properly. There we go. We saw the bullet impact.
+35:21
+All right, we're good to progress with the project. So, there's a bunch of things we could do next. The first thing
+35:27
+I probably want to do is finish setting up our geometry lods and then add a test
+35:34
+attachment with a proxy to make sure that that part works before we continue.
+35:39
+So, let's bring up object builder again, open my bookshelf, and let's go over the other geometry loads we need. So, if I
+Fire & view geometry LODs
+35:45
+double click on geometry here and duplicate this, go to properties, we can
+35:51
+now set this to fire geometry. We do not need the auto center lo um property here. So I can delete that out of there.
+35:57
+Uh we can select our component here. Press E again to bring up the texture panel. Go to materials and this will be
+36:05
+the ballistics impact surface type. So we want to go to DZ
+36:11
+data data um penetration. Everyone likes a bit of penetration. We'll go down to
+36:17
+wood. I'm going to select wood desk because this is kind of a furniture object. So we'll select that. Get rid of
+36:24
+the P part. Click apply. Click okay. Now when someone shoots this object, it
+36:30
+should have a wood impact um um sort of effect and sound. Now we can duplicate
+36:38
+our geometry lot again. Go to properties. Go to view geometry.
+36:43
+Um again delete the auto center property. With these LODs, if you don't
+36:48
+configure these manually, they will automatically inherit whatever is in the geometry LOD. So, these are
+36:54
+kind of optional, but I recommend setting them up if you can because you have more control over how it works. So,
+37:00
+view geometry is literally for defining how the in-game camera interacts with
+37:05
+this object. If we now move this over here, when the player looks at this
+37:12
+bookshelf, they won't get any action prompts. they won't get the action to take it or open it or attach things to
+37:18
+it unless they're looking a little bit off to the right of the object. So, this is useful for things like, for example,
+37:24
+recently I made an invisible object that blocks player movement. I needed to block people getting in a door which in
+37:31
+a modded object did not have a geometry log when the door was shut. So, I made a
+37:37
+hacky script solution that spawns in a an invisible blocker on the door when the door is shut. But the problem was I
+37:44
+had a view geometry l and so the invisible object blocked the action to open the door when the player looked at
+37:50
+the door. So what I did was create a view geometry lod and set it really
+37:55
+small like this. And then what happens is the geometry load blocks the player
+38:00
+movement but the view geometry does not block the action prompt for the object
+38:05
+behind this object. If that makes sense. If it doesn't make sense don't worry about it. For most objects, you'll want
+38:11
+the view geometry load to match the object. I think the view geometry load
+38:17
+also impacts um how the object renders in game. So if another object is
+38:23
+blocking the view geometry load of this object, then it gets hidden from the renderer. So it's a good idea to set
+38:29
+this up accurately. So those are the main geometry lods we need. One other geometry load worth mentioning is the
+38:37
+view pilot. This is the firsterson view of the object. So this will define what
+38:43
+the object looks like for the player in first person. So if I was making
+38:48
+something like a helmet that goes on the player's head, I might need to duplicate
+38:53
+my visual l that controls the textures in 3D model. change it to a view pilot
+39:01
+lod and delete part of the object to hide like a visor on the helmet or
+39:09
+something like that so that it doesn't display in first person so the player can actually see through the object. For
+39:14
+99% of objects, you won't even need a view pilot lo. It's purely for firsterson view when the object is in
+Setting up Memory LOD
+39:21
+the player's hands or on the player's body. The final load we need is a memory
+39:27
+load. The memory load dictates a few things like the inventory view. If you want to move how the object renders in
+39:34
+the vicinity tab or as a inventory object, you can set the memory load up to do that. If I open up my reference
+39:42
+file that I've already created for this bookshelf,
+39:47
+you can see my memory load has bounding box max, bounding box min, C center, and C radius. So, I'll copy those over right
+39:55
+now just to show you how it's done. So, we need to double click on our memory load. Click the insert key to create a a
+40:03
+point. You can right click to drag the point around for this. This is for um
+40:08
+when the object spawns in the loot economy. It's a spawn point config. So, we need to right click down here in the
+40:15
+name selections, create new, and we'll call this bounding box min for minimum.
+40:23
+and we'll drag this down to one of the corners. Put it right on the corner of the object. So, this is the bounding box
+40:30
+of the object. So, that's the minimum value. Now, I can uh create another one up in the top right corner here and drag
+40:37
+this. See, I'm using my four different views to make sure this is encompassing the entire object's vertices. Right
+40:45
+click here, bounding box max. The next two we need is C uh center
+40:53
+and C radius which is for the central economy spawner. So this will dictate
+40:59
+where this object can spawn. So the C center will be here and the C radius
+41:05
+will be somewhere on the outskirts of the object. I think it can be I think
+41:12
+the bounding box is also incl used by the central economy. I'm not 100% sure. I haven't done extensive testing on
+41:18
+this. This object is not going to spawn by the central loot economy anyway. So, it doesn't really matter what we do
+41:24
+here. You might want to test this in game depending on the object you're creating. But, this needs to be C
+41:29
+radius. And we just need to make sure that it's away from the center point and
+41:35
+encompasses the object so that the central economy doesn't spawn it halfway inside a building or something like a
+41:42
+wall or something like that. The final memory sort of reference point I want to
+41:48
+mention is the inventory view. So as we saw in game before, our inventory view
+41:54
+is fine because the game will automatically calculate an inventory view based on your bounding box min and
+42:00
+max. And we'll try to look at the object from its front view, which is this view
+42:06
+here. We've already set that up correctly in game. But if we wanted to change where the object was being viewed
+42:13
+from, let's say we wanted it to be like looking upwards down at the object, we
+42:18
+could create an in view inv
+42:23
+for inventory and view is inventory view. Wherever this point is, um, it
+42:29
+will look at the front of the object from this angle. So if we wanted to be looking down and to the left at the
+42:35
+object, we would put it up in the right here. Um, it's a bit tricky to get it in the right spot, but you you need to play
+42:41
+around with this in game to get it to look right. Because we've set up our model bounding box min and max properly
+42:47
+and it's orientated properly in the editor to be facing the player, we
+42:52
+shouldn't need an inventory view memory lo or memory name selection point here.
+42:58
+These are the only four that we need to get the object to render properly. And that should be all we need in terms of
+43:04
+loads. So, it's a good idea to test things before you move forwards. Um, I can delete that point I have floating up
+43:11
+there since we're not using it anymore. Um, so what we can do is now save and compile our model. Jump in game and make
+43:18
+sure the inventory view looks okay before we continue. So now let's have a look at our object. Perfect. You can see
+43:25
+that the model is aligned properly because we set up our bounding box correctly. We don't need an inventory
+43:31
+view. The object is correctly orientated. If it's not facing you and the the back of the object is facing the
+43:37
+inventory view, that means you need to highlight everything, come up to rotate object, and flip this 180°. And make
+43:45
+sure to click apply to all LODs so that it does it for every LOD we've set up. But we did that at the beginning, so we
+43:50
+don't need to do that now. So, we've got our collisions. Let's test shooting it
+43:56
+again. Yeah, I don't know if you could notice that, but that was a wood effect that just played when we first shot it.
+44:03
+It was more like a metallic ballistics effect. And that was because we set up our fire geometry LOD properly with the
+44:10
+um correct RV mat for the penetration, bullet penetration. All right, we're nearly there. Well,
+Attachment proxies setup
+44:18
+there's quite a bit left to do for this particular model in terms of adding like 60 plus book slots. Um I won't go over
+44:26
+every single slot, but what I'll show you is how to set up a proxy. Now, a proxy slot. So, I've got this book
+44:32
+attachment here. Let's um I want to also be able to put teddy
+44:38
+bears on top. I think that's a cool touch for this model. So, let's start with the teddy bear. Let's call this zen
+44:44
+teddy one. We'll attach three teddy bears to this object. So, we'll define
+44:49
+three teddy slots. We also need to override the teddy bear base script to
+44:55
+add these slots to it. That's why I have all this ready to go. So, what I need to do, I have a reference file here. Close
+45:02
+the game to stop the sounds. I'll copy the bear class over. When we are
+45:07
+modifying a vanilla object's inventory slots, always append the slots by plus
+45:13
+equal. Do not ever set them like this. Because if any other
+45:19
+mod interacts with this object, it will break that mod. And now depending which mod loads first only these attachment
+45:26
+slots will be applied to the object. By adding the plus equals we are adding our
+45:32
+slots to whatever existing slots there are. That is the correct way to add slots to a vanilla object. Many mods out
+45:39
+there override the inventory slots and it's such a nightmare to add compatibility for other people's mods
+45:45
+when you do that. So always append. That's all we need to do for this. Add our three slots. Inventory slots mean
+45:51
+this object can attach to these three slots. Attachments means this object can receive these three attachments. Now we
+45:59
+need to define the slots themselves. Again, I'll go to my reference file to save time. I've already set all of this
+46:06
+up. Let's copy these over into config slots. So, we have zentedy 1 2 and
+46:12
+three. You need to name it slot underscore and then the name. This name of the class must match the name of the
+46:19
+slot. The display name is what appears as a tool tip when you hover over it. So since these can take bears, I just put
+46:26
+in the teddy bear vanilla string table object which you can get from looking up the vanilla class. So if you have
+46:34
+something like agent ransack for example, which is what I use for this stuff, you can go cpp you can go bear
+46:42
+search all the files in P drive. It'll be under containers. Here we have bear
+46:47
+color base. If I double click containers and bring this over and search for bear,
+46:53
+this is where I get the bare name from the display name. So, we have our slots set up. Uh the ghost icon is the icon
+47:00
+that displays in game. There are a bunch of vanilla icons. Again, you can use
+47:05
+something like agent ransack to search through the vanilla um ghost icons which
+47:10
+are in scripts. So, here you can search for any vanilla slot icon that suits
+47:16
+your mod. If you want to add your own unique inventory icon, go and check out my image sets guide on YouTube, which
+47:24
+shows you exactly how to set up your own image set with your own icon, which you can use for this sort of thing. But most
+47:29
+of the time, you can find a vanilla icon that suits what you're trying to do. If you can't and you don't care what the
+47:34
+icon is, just set it to missing and it'll be like a round dot. And just make sure your display name clearly says what
+47:41
+goes on that slot and most players will figure it out. So here are our slots. If I compile this and go into the game,
+47:48
+we'll now be able to add teddy bears to the bookshelf on these slots, but you won't see them appear in game as
+47:54
+proxies. We haven't set up the proxies yet. That is the next step. And there's a little bit to this. It's a little bit
+48:01
+involved. It's not particularly intuitive. So I'll try to walk you through this carefully. Let me come down
+48:07
+to my reference proxies real quick and copy these over. So here's how we set up a proxy. First
+48:14
+of all, we have the CPP config and then we also need to set it up in the 3D model as well. So first we need to
+48:20
+inherit all of our proxies from proxy attachment. This all goes under config nonai vehicles. This is how we set it
+48:26
+up. So we need to name our proxy starting with proxy and then the class
+48:32
+name must match the P p3D file and the inventory slot must match this name. So
+48:39
+this is for the Teddy 1 proxy, Teddy 2 proxy, Teddy 3 proxy. You can see these
+48:44
+reference a 3D model that we haven't created yet. We'll do that now. So first
+48:50
+things first, let's bring up the editor. Go to our zero load. We've already got a
+48:55
+book proxy in here. I'm going to delete that for now. We'll come back to that in a moment. For now, let's create these
+49:01
+three teddy bear proxies. So, I can come up to create proxy. I've already got the
+49:07
+teddy bear here, but you can browse for the file. If you need to, you go to DZ.
+49:13
+Uh, it's usually under gear. These will be under containers. And we should have teddy bear. Click open. Click okay. And
+49:22
+now if we move this up here somewhere and zoom in a bit on our different view
+49:28
+angles, we can start bulldozer and see where
+49:34
+this bear appears in relation to our 3D model. So here it is. I actually got it pretty
+49:42
+close on the first guess, which is rare. So there's our uh proxy position. You
+49:48
+can see it's actually embedded inside the bookcase a bit. So, we need to lift this up a little. So, I'll zoom in a bit
+49:54
+here and lift it up a little bit. We can also angle it a bit. Remember, you can
+49:59
+apply um rotations to proxies. So, let's rotate the Y value by 10°.
+50:06
+And then deselect everything. Bring up bulldozer. So, now that's facing outwards a little
+50:12
+bit. That's fine. The 3D model is pretty close. If you need to see how far it
+50:18
+intersects your object, remember you can select or highlight the proxy. Bring up bulldozer and it will show you here that
+50:26
+the bear is sunk like maybe 2 in into the book shelf. So, we need to lift it
+50:31
+up just a little bit more. Come back to bulldozer. That's better. It doesn't matter if it intersects a little bit. In
+50:37
+fact, that's better than floating above it. So, this is perfect. So, that'll do for this proxy. So, now what I need to
+50:43
+do is open a new instance of object builder. Create proxy. Select our bear.
+50:49
+Get rid of the P. Click okay. File. Save as. And because this teddy is
+50:56
+on the far right hand side of the bookshelf, this is going to technically be the third teddy slot. So I'll name
+51:03
+this one Zen Teddy 3. Make sure it aligns with what you've created in here. So Zen
+51:10
+Teddy 3 is valid. Save that file. We can actually use this same proxy a few times. It doesn't have to be
+51:18
+a new instance of the proxy each time. It just needs to be a unique P3D path.
+51:23
+So I can save this as Teddy 1, 2, and three. Here, this is just a invisible
+51:30
+reference to the proxy object. It's a bit complicated to explain, but all you
+51:35
+need to know is that now what we need to do is highlight our proxy here. Come down to the proxy. Rename it. Browse for
+51:45
+our mod folder. Data model proxy. Remember this was the third proxy teddy
+51:52
+bear. Click okay. Get rid of the P part.
+51:57
+Click okay. Deselect and save our model. So this is on the far right hand side of
+52:03
+the bookshelf. So we now know that we're looking at the back of the bookshelf here. That's fine. So now let's set up
+52:08
+the other two teddy bears. So create proxy. Um this step is only necessary so
+52:15
+that we can actually see the teddy bear where we're putting it. Um so let's align this roughly with the one on the
+52:22
+left here. This one can face straight forwards. Um let's bring up bulldozer.
+52:29
+There we go. That's fine. Obviously, you'd want to center this further back. I'm not going to spend too much time on this cuz I don't want to waste your
+52:34
+guys' time. You can do this in your own time getting this all perfect. Again, rename the proxy. Browse. This will be
+52:42
+the center middle teddy. Get rid of the P drive. Click okay. Create proxy. The
+52:48
+final teddy. Click okay. Drag it up to where the others are. Put it over here a bit. Um, remember we want this to be
+52:56
+facing out to the right a little bit. So, we need to rotate it -10 and that
+53:01
+will tilt it out to the right. Let's align it with the other teddies. Bring
+53:07
+up bulldozer. And there we go. That's our far left teddy. Perfect. So, now is
+53:13
+where we set up the proxy models corresponding to each slot. So, if we want the very first teddy slot to
+53:19
+correspond to the center of the bookshelf, what we would do is select our center proxy, which is this one
+53:25
+here. Right click, rename, and browse to the corresponding slot proxy. So,
+53:32
+bookshelf data model proxy. Um, that would be slot one, teddy one. So, teddy
+53:39
+one. Okay. Get rid of the P. Click okay. And now when we attach the teddy bear to
+53:45
+slot one, it will appear in the center proxy here. Now for this this one on the
+53:51
+I think this is the yeah this is the far left one. So this can be bare number
+53:58
+two. So, right click, rename, browse, P
+54:03
+mod folder data model proxy bear number two, open,
+54:10
+delete the P. Click okay. And I've already set up Teddy proxy number three,
+54:16
+which is the far right hand side one will be slot three. So, slot one will be in the middle. Slot two will be on the
+54:22
+left. Slot three will be on the right. If you want to mix these around, you just change the proxy reference file
+54:30
+path in here. Don't forget to remove the P or it won't work properly. So, now we've got our proxy set up for the
+54:37
+bears. Let's compile our mod and make sure it works properly in game. All
+54:42
+right, let's test it out. Boom.
+54:47
+Teddy in the center aligned perfectly. That's on the left. That's on the right.
+54:54
+So, we spawn in a couple more bears. Pink, dark.
+55:02
+Perfect. That is how you set up proxies. One useful tip for the editor when
+55:08
+you're doing this sort of thing is once you've set up the core framework for your mod, you can highlight everything
+55:15
+you've done so far, come to view, come down to lock, and lock everything. Lock selection. And now
+55:23
+if you accidentally move something, it won't actually move it, which is
+55:28
+fantastic for avoiding mistakes. It's a good habit to get into. So now let's do
+55:33
+a few books. I'll just show you a couple and then we'll um I'll obviously skip ahead because you don't need to see me
+55:40
+add every single book. So we need to go to gear, uh books, book proxy. Okay.
+55:48
+Uh I need to rotate it. I think it was 90 degrees.
+55:54
+put it roughly in the bookshelf and bringing up bulldozer. There we go. And
+55:59
+let's get this book positioned correctly. In fact, I think I just winged it pretty perfectly there. That's
+56:05
+pretty good. So, now I can copy and paste that proxy. Move it over a little
+56:12
+bit and move it closer. And I probably want, I don't know, maybe
+56:19
+10 books per shelf. Well, let's let's add in as many books as we can and see how many fit on a shelf.
+56:24
+6 and 12 hours later. All right, that's pretty good. It's about as good as I'm going to be able to
+56:30
+do. It's all I have the patience for. Reasonably well aligned and centered.
+56:36
+All right, let's go through the process now of replacing each one of these with
+56:43
+the corresponding proxy. So, I have I think I have 64 proxies here. I only need 48. So, I can delete a bunch once
+56:49
+I'm done. But let's go into here and just select all of these up to 48 and
+56:55
+see how it looks in game. 2,000 years later.
+57:00
+All right, done. It's kind of meditative doing that repetitiveness. Okay, so in
+57:07
+my mod folder, sand bookshelf data model proxy, I have
+57:13
+all these proxies set up. I can delete these extra ones we don't need. I just
+57:20
+used chat GPT. I uploaded one file and asked it to duplicate it and rename them all up to 64. That's how I did this. Um,
+57:29
+you can do it manually obviously as well just by copying and pasting and renaming them manually. Um, it's un unusual and
+57:35
+unlikely you would ever need this many proxies on an object. It's only because I've got so many books on this uh shelf
+57:42
+that we're doing this. Usually, you'd only have like maybe a dozen at the most to work through. So, now let's compile
+57:48
+our mod, jump in game, and make sure this all works. I've reconfigured my
+57:54
+bookshelves and attachment slots. I have a bunch of extra ones here I can get rid
+57:59
+of while I'm here since they're not necessary anymore. 48
+58:08
+down. and let's have a look. All right,
+58:14
+looking good already. We've got a bunch of random books attached. Um,
+58:22
+just make sure every slot works. Perfect.
+58:29
+Make sure our descriptions all work. Looking good. Spawn one in for good
+58:36
+measure just to make sure all the books spawn.
+58:42
+Boom. Looks pretty good. All right, we're done with that process at least.
+58:48
+Now, let's move on to the scripting and the kit part. So, here is the shelf kit,
+58:53
+which uses my Zen Kit box base, which is included in my Zen Mod Core, which is
+58:59
+open source, by the way. So, if you don't want to use my Zen Mod Core, you can copy out the kitbox code into your
+59:08
+own mod and set it up how you want. But this is how my final bookshelf mod
+59:14
+looks. You can see we have tons of book options here. You can close the bookshelf, which simply hides the
+59:20
+inventory to reduce inventory clutter in people's bases. Um, doesn't actually
+59:25
+open or close anything since there's no door on the shelf. So, first of all, for the bookshelf kit, all I need to do is
+59:32
+specify the projection type name inherit from Zen kit box, change the texture,
+59:38
+um, which is what I did here. You can see it has the bookshelf texture on it.
+59:44
+And if people pick up this bookshelf, they can deploy it.
+59:50
+And if they use a screwdriver, they can dismantle it to get the kit box
+59:58
+back. But before I wrap up the video, let me go over first of all how I set up the
+GUIInventoryAttachmentsProps
+1:00:04
+categories so you could see each shelf individually and also briefly go over some scripting. So class GUI inventory
+1:00:11
+attachment props is the class config responsible for categories. Each
+1:00:16
+category is its own class. You can give it a name. So you saw each shelf had its own name. These are all string tabled in
+1:00:24
+here, but you can obviously hardcode them if you want to.
+1:00:29
+Description, as far as I know, never displays in game, so that doesn't even need to be there. U for the teddy slots,
+1:00:36
+they have the missing image icon. For the books, they use the Daisy book image
+1:00:42
+set icon. And each shelf has 16 books. So I have 16 slots um assigned to each
+1:00:49
+shelf category. I also set up all the slot configs to reference a string table
+1:00:54
+book text and yeah you get the idea. The only last step was to add the book slots
+1:01:00
+to the item book class itself. Now some modded books do not inherit from item book. So you might need to add to your
+1:01:06
+server pack a mod override. For example, if you're adding these to like base
+1:01:11
+building plus, you would add in the base building plus mod, override the
+1:01:18
+uh BBP blueprint, inherit from whatever it inherits from
+1:01:23
+in the base mod, and then add these um slots to it. And then you could attach a
+1:01:31
+base building plus blueprint book or crafting book or whatever it's called. It might not even be called this, but
+1:01:37
+you get the idea. This is how you add modded books to this object if you
+1:01:42
+wanted to. Tier skill books inherit from item book. My Zen skills book has its
+1:01:47
+own slots config set up in there. So, it's compatible with this mod. And obviously, all vanilla books will work
+1:01:53
+with this attachment config as well. So, now let's go over the scripting side of
+1:01:59
+things. So, first of all, I have the book itself, bookshelf itself, which inherits from inventory base. It has
+Script code: crafting, kits, etc
+1:02:04
+some basic code for syncing whether the bookcase is classed as open or closed, which simply hides the inventory if it's
+1:02:12
+open. If it's not open, as I said, it doesn't actually have any door or animation. It doesn't hide the proxies
+1:02:19
+or anything like that. That would be a next step that you would do if the model had an animated door, but that is a
+1:02:26
+whole other can of worms maybe we'll get into in a different day. If you want to see how basic animations and hidden
+1:02:32
+selections work, check out mods like my Zippo mod and my Zen Swiss knife mod.
+1:02:38
+They use hidden selections to hide parts of the model based on scripted config.
+1:02:44
+As for animated doors, I don't think I have any animated objects in my mod collection, but perhaps we'll cover that
+1:02:50
+in a future video. So we have the open and close action added to the object which is handled here which simply syncs
+1:02:59
+the bookshelf open or close status to the client. And then the important part here is the recipes. So plug-in recipe
+1:03:06
+manager base is where you register new recipes. And this is how I set up my crafting recipe. You need a script that
+1:03:13
+inherits from recipe base. I've added some helper variables at the top here. So, you need 99 nails and 10 wooden
+1:03:20
+planks to craft a Zen bookshelf kit. And then I have some extra code in here for
+1:03:26
+compatibility with my Zen mod pack. So, server admins can turn on or off the ability to craft the bookshelf kit. To
+1:03:31
+decraft it, it's the same idea, except we're using a screwdriver on the bookshelf itself to get a bookshelf kit
+1:03:38
+back. It's a pretty rudimentary scripted config here. It doesn't actually preserve the health of the bookcase. Um,
+1:03:45
+if you dismantle a damaged bookcase, you'll get a pristine one back. So, you could improve this code quite a bit, but
+1:03:52
+for now, this will do for an example purpose. You can obviously expand on this as much as you want. Now, I
+1:03:57
+intentionally left out a whole portion of this video because otherwise it'll be 3 hours long. If you guys want to see
+1:04:03
+more details about how the kit code works, let me know down below and maybe I'll revisit this. As I said, my Zen Mod
+1:04:10
+Core is open source. So, you can go and get the P3D files to my kit, read through the code that's relevant to it.
+1:04:16
+A couple of things to be aware of is this code here, which is what I use for deploying the kit based on the config
+1:04:23
+projection type, which is this projection type name, which we configured in our own CPP file for the
+1:04:30
+bookshelf kit. And also this part here, which is responsible for the inhand
+1:04:36
+animation of your object. So, if you're adding an object that's not a bookshelf like mine is, and it's a knife or some
+1:04:42
+sort of tool or something the player uses in their hands, you need to set up a specific inhand animation profile. To
+1:04:49
+do that, we do that in the mod item register callbacks. Just open up something like agent ransack or whatever
+1:04:55
+software you use to search and search for heavy.asi.
+1:05:01
+If I enter this in, we'll get the vanilla config file here. This file is
+1:05:06
+responsible for registering every single item in the game and its corresponding animation. So if you have an object that
+1:05:14
+you want to configure its inhand animation, you need to go through this file, find an animation that suits your
+1:05:20
+item, and use this the same way I've done here for my kitbox base, which uses
+1:05:27
+the wooden crate animation. Also worth mentioning is the item behavior config
+1:05:32
+option for gear in DayZ. So, a medium tent has item behavior 2. That means
+1:05:38
+it's held in both hands. The large tent is item behavior zero, which means it's held in both hands, but the player can
+1:05:44
+only walk. They're forced into the walking speed. And then down here, we've got item behavior one, which is a fence
+1:05:51
+kit. So, that's a single-handed item that you can run with. And rotation flags dictates how the item spawns in
+1:05:57
+game, which way it faces when it spawns. So, if you're in doubt, go to my GitHub, look for my Zen mod pack, and I have a
+1:06:05
+um config file there, my config CPP file that lists all of the rotation flags and
+1:06:12
+what they do. 16 and 17 are two of the most common ones that spawns it back
+1:06:18
+with the back of the item on the ground or the front of the item on the ground. So, if your item spawns in the game in a
+1:06:24
+weird orientation, you may need to play around with your rotation flags. And if the item behaves weird in the hands, you
+1:06:30
+may need to play around with item behavior. And finally, um
+1:06:36
+there's a whole bunch of different types of animations you can register. So
+1:06:42
+mainly you will deal with two-handed, one-handed, and heavy. So as always,
+1:06:47
+when in doubt, if your object you are trying to create is not behaving as expected, find a vanilla reference. use
+1:06:54
+the vanilla config as your base for building your objects. Now, to do the kit would require probably about a half
+1:07:01
+hour or hour long video of its own. So, I'm going to leave that for another day. Sorry to leave you guys hanging if you
+1:07:06
+wanted to know about that. But now that you know how I did this project, you can easily go and check out the source code
+1:07:12
+to my Zen Mod Core and you will be able to reverse engineer what I've done there and take my code and my P3D there and do
+1:07:19
+your own kit if you want to. In future videos, maybe we can drill into weapons. I've never done guns, but I've done
+1:07:25
+knives. I've done a custom hatchet. I've done a couple of random items that go in
+1:07:30
+the player's hands. I've done some clothing items as well. I've done Ray-B bands and I've done um a face mask
+1:07:38
+before. So, I know a little bit about character gear that we could cover in a future video. Let me know down below if
+1:07:44
+you're interested in that. So, with that said, that'll do it for this video. That's enough information for one video. The source code, as always, will be
+1:07:50
+linked below if you want to play around with this, including the unbinized bookshelf model to look through my LODs
+1:07:57
+if you want to reference them. And I'll wrap this up here. Thanks for watching, guys. Good luck out there, and I'll speak with you in the next video.
+1:08:22
+[music]
+

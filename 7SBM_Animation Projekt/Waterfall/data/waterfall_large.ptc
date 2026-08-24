@@ -1,0 +1,66 @@
+EffectDef {
+ Emitors {
+  EmitorDef ExtraThickness_WaterJet {
+   ShapeType Box
+   ShapeSize 0 0 19
+   ConeAngle 0 0 0
+   MaxNum 4000
+   BirthRate 1300
+   BirthRateRND 0
+   BirthRateVel 1
+   Angles 0 0 -94.00001
+   LocalTransform 0
+   Material "{1B106473E3E6E911}graphics/particles/materials/enviroment/water_splash_01.emat"
+   CenterX 0
+   CenterY 0
+   ScaleX 1
+   ScaleY 1
+   SizeMultiplier 2
+   SizeRND 0.5
+   RandomRotDir 1
+   RotMultiplier 50
+   StretchMultiplier 0
+   StreakFullUV 0
+   VelAngle 0
+   RandomAngle 0
+   BillboardingType Full
+   Velocity 7
+   VelocityRND 0
+   VelAffect 2
+   AirResistance 0
+   AirResistanceRND 0
+   GravityMultiply 1
+   Wind 0
+   AnimFPS 0
+   RandomFrame 1
+   LifeTime 3
+   LifeTimeRND 0
+   Color {
+    0 0.6646 0.7089 1 1 0.7152 0.7722 1
+   }
+   Alpha {
+    0 0 0.07217 1 0.9494 0 1 0
+   }
+   RotationSpeed {
+    0 0.05921 1 0
+   }
+   Size {
+    0 1 1 1
+   }
+   EffectTime 1
+   Repeat 1
+   SizeMast {
+    0 1 1 1
+   }
+   BRateMast {
+    0 1 1 1
+   }
+   AirResistanceMast {
+    0 1 1 1
+   }
+   VelocityMast {
+    0 1 1 1
+   }
+  }
+ }
+}

@@ -1,0 +1,75 @@
+RTM: handanim_sg553_gl.rtm
+Version: 4   Frames: 1   Phase: 0.0000
+Knochen: 67
+
+--- Knochenliste ---
+  [ 0] weapon
+  [ 1] launcher
+  [ 2] rightarm
+  [ 3] righthand
+  [ 4] lefthand
+  [ 5] head
+  [ 6] rightleg
+  [ 7] rightlegroll
+  [ 8] rightfoot
+  [ 9] righttoebase
+  [10] leftforearmroll
+  [11] rightforearmroll
+  [12] leftleg
+  [13] leftlegroll
+  [14] leftfoot
+  [15] lefttoebase
+  [16] righthandindex1
+  [17] righthandindex2
+  [18] righthandindex3
+  [19] righthandmiddle1
+  [20] righthandmiddle2
+  [21] righthandmiddle3
+  [22] righthandpinky1
+  [23] righthandpinky2
+  [24] righthandpinky3
+  [25] righthandring1
+  [26] righthandring2
+  [27] righthandring3
+  [28] righthandthumb1
+  [29] righthandthumb2
+  [30] righthandthumb3
+  [31] righthandring
+  [32] lefthandindex1
+  [33] lefthandindex2
+  [34] lefthandindex3
+  [35] lefthandmiddle1
+  [36] lefthandmiddle2
+  [37] lefthandmiddle3
+  [38] lefthandpinky1
+  [39] lefthandpinky2
+  [40] lefthandpinky3
+  [41] lefthandring1
+  [42] lefthandring2
+  [43] lefthandring3
+  [44] lefthandthumb1
+  [45] lefthandthumb2
+  [46] lefthandthumb3
+  [47] lefthandring
+  [48] leftupleg
+  [49] leftuplegroll
+  [50] neck
+  [51] neck1
+  [52] pelvis
+  [53] spine
+  [54] spine1
+  [55] spine2
+  [56] spine3
+  [57] leftshoulder
+  [58] leftarm
+  [59] leftarmroll
+  [60] leftforearm
+  [61] rightshoulder
+  [62] rightupleg
+  [63] rightarmroll
+  [64] rightforearm
+  [65] rightuplegroll
+  [66] camera
+
+--- Frame 0 (phase=0.0000, bones=-1409286144) ---
+

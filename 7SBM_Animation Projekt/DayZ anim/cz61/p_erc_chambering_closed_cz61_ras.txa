@@ -1,0 +1,364 @@
+// Exportiert von 7SBM P3D.DeBin v1.9
+// Quelle: p_erc_chambering_closed_cz61_ras.anm
+// Format: ANIMSET5  |  HEAD=4088 bytes  |  73 Knochen  (Quaternionen)
+
+$node "Spine"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0248106 1.0248110
+}
+
+$node "Spine1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0260679 1.0260680
+}
+
+$node "Spine2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0266943 1.0266940
+}
+
+$node "Spine3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0277350 1.0277350
+}
+
+$node "Neck"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0344745 1.0344740
+}
+
+$node "Neck1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0374128 1.0374130
+}
+
+$node "Head"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0431044 1.0431040
+}
+
+$node "LeftShoulder"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0922482 0.9560129
+}
+
+$node "LeftArm"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1444268 0.9934996
+}
+
+$node "LeftArmRoll"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.2278809 1.2278680
+}
+
+$node "LeftForeArm"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0691376 1.0691310
+}
+
+$node "LeftForeArmRoll"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.5946817 1.5946800
+}
+
+$node "LeftHand"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.5714656 1.5614380
+}
+
+$node "LeftHandRing"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0339292 1.0339290
+}
+
+$node "LeftHandRing1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.2249748 1.2205460
+}
+
+$node "LeftHandRing2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0754272 1.0628550
+}
+
+$node "LeftHandRing3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0363106 1.0362960
+}
+
+$node "LeftHandMiddle1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.2235589 1.2223290
+}
+
+$node "LeftHandMiddle2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0832181 1.0756430
+}
+
+$node "LeftHandMiddle3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0941424 1.0934390
+}
+
+$node "LeftHandIndex1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.2738125 1.2683610
+}
+
+$node "LeftHandIndex2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0376138 1.0272020
+}
+
+$node "LeftHandIndex3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0183786 1.0183650
+}
+
+$node "LeftHandThumb1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.7912507 1.6980880
+}
+
+$node "LeftHandThumb2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1454680 1.1445230
+}
+
+$node "LeftHandThumb3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.2683047 1.2679440
+}
+
+$node "LeftHandPinky"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0339292 1.0339290
+}
+
+$node "LeftHandPinky1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.2262290 1.1891760
+}
+
+$node "LeftHandPinky2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1378035 1.1312740
+}
+
+$node "LeftHandPinky3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0541431 1.0538120
+}
+
+$node "LeftHand_Dummy"
+$frame 0 0 {
+ #q 0.0022243 0.1061352 -0.0000006 0.9914453
+}
+
+$node "LeftWristExtra"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.2995955 1.2970850
+}
+
+$node "LeftForeArmExtra"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.3130804 1.3130800
+}
+
+$node "LeftElbowExtra"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1190405 1.1183030
+}
+
+$node "LeftArmExtra"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1146974 1.1146940
+}
+
+$node "RightShoulder"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.5044879 1.4033130
+}
+
+$node "RightArm"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 0.2120173 0.5348043
+}
+
+$node "RightArmExtra"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1238292 1.1217440
+}
+
+$node "RightArmRoll"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.2457523 1.2374210
+}
+
+$node "RightForeArm"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0482084 0.9112723
+}
+
+$node "RightForeArmRoll"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.3802189 1.3799280
+}
+
+$node "RightHand"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.3342986 1.3293870
+}
+
+$node "RightHandRing"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 0.0000012 0.9999988
+}
+
+$node "RightHandRing1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0788359 0.9384373
+}
+
+$node "RightHandRing2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0464297 0.8264949
+}
+
+$node "RightHandRing3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1174244 1.0799140
+}
+
+$node "RightHandThumb1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.7925941 1.6059220
+}
+
+$node "RightHandThumb2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0849772 1.0393850
+}
+
+$node "RightHandThumb3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0962407 1.0590500
+}
+
+$node "RightHandMiddle1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1201178 1.0103860
+}
+
+$node "RightHandMiddle2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0039052 0.7539917
+}
+
+$node "RightHandMiddle3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0157052 0.9705923
+}
+
+$node "RightHandIndex1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.3500552 1.3497140
+}
+
+$node "RightHandIndex2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0105885 0.9958410
+}
+
+$node "RightHandIndex3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0075413 1.0027700
+}
+
+$node "RightHandPinky"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 0.0000012 0.9999988
+}
+
+$node "RightHandPinky1"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1258987 0.9760810
+}
+
+$node "RightHandPinky2"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1225828 0.9945198
+}
+
+$node "RightHandPinky3"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.0870076 1.0146130
+}
+
+$node "RightHand_Dummy"
+$frame 0 0 {
+ #q -0.1732680 0.1981373 -0.1477792 0.8687648
+}
+
+$node "RightWristExtra"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1698260 1.1685970
+}
+
+$node "RightForeArmExtra"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 -0.1937827 1.1937100
+}
+
+$node "RightElbowExtra"
+$frame 0 0 {
+ #q 0.0000000 0.0000000 0.0188990 0.8952223
+}
+
+$node "Weapon_Bullet"
+$frame 0 0 {
+ #q -0.6100590 1.4178300 -0.6342219 1.6342220
+}
+
+$node "Weapon_Magazine"
+$frame 0 0 {
+ #q -0.0000016 0.0000028 -0.0000056 1.0000060
+}
+
+$node "Weapon_Bolt"
+$frame 0 0 {
+ #q -0.0026630 0.0596876 -0.0000001 1.0000000
+}
+
+$node "Weapon_Bone_01"
+$frame 0 0 {
+ #q -0.0000093 0.0000271 -0.0000204 1.0000210
+}
+
+$node "Weapon_Bone_02"
+$frame 0 0 {
+ #q -0.0000093 0.0000271 -0.0000204 1.0000210
+}
+
+$node "Weapon_Bone_03"
+$frame 0 0 {
+ #q -0.0000093 0.0000271 -0.0000204 1.0000210
+}
+
+$node "Weapon_Bone_04"
+$frame 0 0 {
+ #q -0.0000093 0.0000271 -0.0000204 1.0000210
+}
+
+$node "Weapon_Bone_05"
+$frame 0 0 {
+ #q -0.0000093 0.0000271 -0.0000204 1.0000210
+}
+
+$node "Weapon_Bone_06"
+$frame 0 0 {
+ #q -0.0000093 0.0000272 -0.0000204 1.0000210
+}
+

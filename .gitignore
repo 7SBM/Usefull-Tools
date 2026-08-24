@@ -1,0 +1,73 @@
+# ============================================================
+#  7SBM Usefull-Tools — was NICHT ins oeffentliche Repo gehoert
+#  Angelegt 2026-08-24. Begruendung: Vault-Note
+#  "Source-Sync ueber alle Maschinen (Plan)".
+#
+#  Grundregel: Eigener Quellcode ja. Fremdes Material nein.
+#  Installer, Build-Ausgaben und Schluessel niemals.
+# ============================================================
+
+# ---- 1. SICHERHEIT — niemals veroeffentlichen --------------
+# Privater Mod-Signaturschluessel. Wer ihn hat, kann PBOs
+# signieren, die alle 7SBM-Server als echt akzeptieren.
+# Die oeffentliche *.bikey darf dagegen mit rein.
+*.biprivatekey
+*.pem
+*.pfx
+id_rsa*
+
+# Persoenliche DayZ-Profile (Spielername, Einstellungen)
+*.DayZProfile
+dzprofilestats
+
+# ---- 2. Vendor-Installer -----------------------------------
+# Fremde Setups gehoeren nicht in ein Git-Repo: teils
+# kommerziell, teils >100 MB (GitHubs Hardlimit), und sie
+# aendern sich binaer bei jeder Version.
+*.exe
+*.msi
+*.msix
+!**/RENAME.bat
+
+# ---- 3. Build-Ausgaben -------------------------------------
+bin/
+obj/
+.vs/
+*.pdb
+*.cache
+*.dll
+*.suo
+*.vsidx
+*.user
+
+# ---- 4. Fremde Projekte ------------------------------------
+# Herkunft + Version stehen in VENDOR.md, bei Bedarf neu ziehen.
+# Sie hier mitzuveroeffentlichen waere Weiterverbreitung
+# fremder Arbeit unter eigenem Namen.
+/ArmAToolbox-Blender/
+/DayZ-Misc-master/
+/DayZ.Community.OfflineMode/
+/DayZAnimationPlugin_Voglefixed/
+/ZenTemplate-main/
+/QGIS/
+/DayZ-Central-Economy-master.zip
+/ZenTemplate-main.zip
+
+# ---- 5. Schwergewichte / Ablage ----------------------------
+# Editor-Exporte, Caches und Engine-Binaerdaten.
+/DayZ Editor Exports/
+areaflags.map
+*.max
+*.mp4
+*.dze
+EditorCache/
+
+# ---- 6. Gebaute Releases -----------------------------------
+# Der Installer wird ueber GitHub Releases verteilt, nicht
+# ueber die Versionierung (Tag p3ddebin-vX.Y + SHA256SUMS).
+/DayZ_Arma_p3dDeBin/_RELEASE/
+
+# ---- 7. Sonstiges ------------------------------------------
+Thumbs.db
+desktop.ini
+*~
