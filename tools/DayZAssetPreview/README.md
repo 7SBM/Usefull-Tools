@@ -131,16 +131,38 @@ Beim ersten Start sucht das Programm nach einem Arbeitslaufwerk mit einem
 Unterordner `DZ`. Gefunden wird üblicherweise `H:\P_Drive`. Nach dem
 Hinzufügen neuer Modelle auf **Neu einlesen** klicken.
 
+## Installieren
+
+Es gibt zwei Wege — beide brauchen keine .NET-Installation, die Laufzeit
+ist enthalten.
+
+**Setup** (`DayZAssetPreview_Setup.exe`, rund 57 MB) legt das Programm
+unter `%ProgramFiles%\7SBM\Asset Preview` ab, erstellt Startmenü- und auf
+Wunsch Desktop-Verknüpfung und trägt sich für `.p3d` und `.asc` ins Menü
+**Öffnen mit** ein. Die Standardzuordnung bleibt unangetastet — `.p3d`
+hängt in aller Regel am Object Builder, und die darf ein Setup nicht
+stillschweigend an sich reissen.
+
+**Portabel**: `DayZ Asset Preview.exe` einfach irgendwohin legen und
+starten. Einstellungen landen so oder so in
+`%LOCALAPPDATA%\DayZAssetPreview`.
+
+Windows SmartScreen meldet sich beim ersten Start, weil der Installer
+nicht signiert ist: „Weitere Informationen" → „Trotzdem ausführen".
+
 ## Bauen
 
 ```
 dotnet build tools/DayZAssetPreview
 dotnet test  tools/DayZAssetPreview
 powershell -ExecutionPolicy Bypass -File tools/DayZAssetPreview/veroeffentlichen.ps1
+"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" tools\DayZAssetPreview\DayZAssetPreview_Setup.iss
 ```
 
-Das Ergebnis ist eine eigenständige `.exe`; auf dem Zielrechner ist keine
-.NET-Installation nötig.
+Die ersten drei Schritte erzeugen die eigenständige `.exe` in
+`veroeffentlicht\`, der vierte daraus das Setup in `_RELEASE\`. Beide
+Ordner sind von der Versionierung ausgenommen; fertige Stände werden wie
+beim P3D.DeBin über Releases verteilt.
 
 Die Tests, die echte Dateien brauchen, überspringen sich, wenn kein
 Arbeitslaufwerk vorhanden ist. Mit `DZ_PDRIVE` lässt sich ein abweichender

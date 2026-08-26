@@ -73,6 +73,7 @@ EditorCache/
 tools/DayZAssetPreview/**/bin/
 tools/DayZAssetPreview/**/obj/
 tools/DayZAssetPreview/veroeffentlicht/
+tools/DayZAssetPreview/_RELEASE/
 
 # ---- 8. Sonstiges ------------------------------------------
 Thumbs.db
