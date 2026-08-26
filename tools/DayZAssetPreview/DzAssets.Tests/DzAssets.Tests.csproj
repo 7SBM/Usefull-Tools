@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,10 +17,14 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <!-- UseWPF veraendert das Set der impliziten Usings; System.IO faellt
+         sonst weg und Path/Directory sind unbekannt. -->
+    <Using Include="System.IO" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DzAssets.Formats\DzAssets.Formats.csproj" />
+    <ProjectReference Include="..\DzAssets.Preview\DzAssets.Preview.csproj" />
   </ItemGroup>
 
 </Project>

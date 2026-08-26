@@ -1,0 +1,12 @@
+<UserControl x:Class="DzAssets.Preview.Module.AssetVorschau.AssetVorschauAnsicht"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource PinselGrund}">
+  <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+    <TextBlock Text="Asset-Vorschau" Style="{StaticResource StilUeberschrift}"
+               HorizontalAlignment="Center" />
+    <TextBlock Text="Die Ansicht wird im naechsten Schritt aufgebaut."
+               Style="{StaticResource StilNebentext}"
+               HorizontalAlignment="Center" Margin="0,6,0,0" />
+  </StackPanel>
+</UserControl>

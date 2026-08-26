@@ -1,0 +1,548 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+  <!-- ===================================================================
+       Farbwerte. NUR dieser Block wird ausgetauscht, wenn die Gestaltung
+       an eine andere Vorlage angeglichen wird. Kein anderer Ort im
+       Projekt darf eine Farbe fest verdrahten.
+       =================================================================== -->
+  <Color x:Key="FarbeGrund">#0E1116</Color>
+  <Color x:Key="FarbeFlaeche">#161A21</Color>
+  <Color x:Key="FarbeFlaecheHoch">#1E242D</Color>
+  <Color x:Key="FarbeRand">#2A313C</Color>
+  <Color x:Key="FarbeText">#E6EAF0</Color>
+  <Color x:Key="FarbeTextSchwach">#98A2B3</Color>
+  <Color x:Key="FarbeAkzent">#4C8DFF</Color>
+  <Color x:Key="FarbeAkzentGedaempft">#2B4C8C</Color>
+  <Color x:Key="FarbeWarnung">#F0A64A</Color>
+  <Color x:Key="FarbeSchliessen">#C42B1C</Color>
+
+  <!-- ===================================================================
+       Abgeleitete Pinsel
+       =================================================================== -->
+  <SolidColorBrush x:Key="PinselGrund" Color="{DynamicResource FarbeGrund}" />
+  <SolidColorBrush x:Key="PinselFlaeche" Color="{DynamicResource FarbeFlaeche}" />
+  <SolidColorBrush x:Key="PinselFlaecheHoch" Color="{DynamicResource FarbeFlaecheHoch}" />
+  <SolidColorBrush x:Key="PinselRand" Color="{DynamicResource FarbeRand}" />
+  <SolidColorBrush x:Key="PinselText" Color="{DynamicResource FarbeText}" />
+  <SolidColorBrush x:Key="PinselTextSchwach" Color="{DynamicResource FarbeTextSchwach}" />
+  <SolidColorBrush x:Key="PinselAkzent" Color="{DynamicResource FarbeAkzent}" />
+  <SolidColorBrush x:Key="PinselAkzentGedaempft" Color="{DynamicResource FarbeAkzentGedaempft}" />
+  <SolidColorBrush x:Key="PinselWarnung" Color="{DynamicResource FarbeWarnung}" />
+  <SolidColorBrush x:Key="PinselSchliessen" Color="{DynamicResource FarbeSchliessen}" />
+
+  <!-- ===================================================================
+       Masse und Schriften
+       =================================================================== -->
+  <CornerRadius x:Key="RadiusKlein">6</CornerRadius>
+  <CornerRadius x:Key="RadiusGross">10</CornerRadius>
+  <sys:Double x:Key="SchriftgroesseNormal">13</sys:Double>
+
+  <FontFamily x:Key="SchriftText">Segoe UI Variable Text, Segoe UI, sans-serif</FontFamily>
+  <FontFamily x:Key="SchriftUeberschrift">Segoe UI Variable Display, Segoe UI, sans-serif</FontFamily>
+  <FontFamily x:Key="SchriftSymbole">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+  <FontFamily x:Key="SchriftFest">Cascadia Mono, Consolas, monospace</FontFamily>
+
+  <!-- ===================================================================
+       Text
+       =================================================================== -->
+  <!-- BEWUSST KEIN impliziter TextBlock-Style.
+       Ein solcher Style greift auch fuer den TextBlock, den ein
+       ContentPresenter fuer eine Zeichenkette erzeugt, und ueberschreibt
+       dort die vom Steuerelement geerbte Schrift. Die Fensterknoepfe
+       waren dadurch unsichtbar: ihre Symbolglyphen wurden in der
+       Textschrift gesucht, in der es sie nicht gibt.
+       Schrift, Groesse und Farbe werden stattdessen am Fenster gesetzt
+       und vererbt — das ueberschreibt nichts. -->
+
+  <Style x:Key="StilUeberschrift" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftUeberschrift}" />
+    <Setter Property="FontSize" Value="18" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+  </Style>
+
+  <Style x:Key="StilNebentext" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftText}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselTextSchwach}" />
+  </Style>
+
+  <!-- Kleine Grossbuchstaben-Beschriftung ueber einem Wert -->
+  <Style x:Key="StilFeldname" TargetType="TextBlock" BasedOn="{StaticResource StilNebentext}">
+    <Setter Property="FontSize" Value="10.5" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Opacity" Value="0.75" />
+  </Style>
+
+  <Style x:Key="StilWert" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftText}" />
+    <Setter Property="FontSize" Value="{DynamicResource SchriftgroesseNormal}" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+    <Setter Property="Margin" Value="0,3,0,0" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+
+  <!-- ===================================================================
+       Schaltflaechen
+       =================================================================== -->
+  <Style TargetType="Button">
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftText}" />
+    <Setter Property="FontSize" Value="{DynamicResource SchriftgroesseNormal}" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+    <Setter Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+    <Setter Property="Padding" Value="12,7" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border x:Name="Rahmen"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{DynamicResource PinselRand}"
+                  BorderThickness="1"
+                  CornerRadius="{DynamicResource RadiusKlein}"
+                  Padding="{TemplateBinding Padding}">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Rahmen" Property="BorderBrush" Value="{DynamicResource PinselAkzent}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+              <Setter TargetName="Rahmen" Property="Background" Value="{DynamicResource PinselAkzentGedaempft}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter TargetName="Rahmen" Property="Opacity" Value="0.45" />
+              <Setter Property="Cursor" Value="Arrow" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Fensterknoepfe in der eigenen Titelleiste -->
+  <Style x:Key="StilFensterKnopf" TargetType="Button">
+    <Setter Property="Width" Value="46" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselTextSchwach}" />
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftSymbole}" />
+    <Setter Property="FontSize" Value="10" />
+    <Setter Property="Cursor" Value="Arrow" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border x:Name="Flaeche" Background="{TemplateBinding Background}">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Flaeche" Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+              <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="StilSchliessenKnopf" TargetType="Button" BasedOn="{StaticResource StilFensterKnopf}">
+    <Style.Triggers>
+      <Trigger Property="IsMouseOver" Value="True">
+        <Setter Property="Background" Value="{DynamicResource PinselSchliessen}" />
+        <Setter Property="Foreground" Value="White" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+
+  <!-- Symbolschalter der Modulleiste: Akzentbalken links, wenn aktiv -->
+  <Style x:Key="StilModulSchalter" TargetType="ToggleButton">
+    <Setter Property="Width" Value="52" />
+    <Setter Property="Height" Value="52" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselTextSchwach}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ToggleButton">
+          <Grid>
+            <Border x:Name="Balken" Width="3" HorizontalAlignment="Left"
+                    Margin="0,12" CornerRadius="0,2,2,0"
+                    Background="{DynamicResource PinselAkzent}" Opacity="0" />
+            <Border x:Name="Flaeche" Margin="6,4"
+                    CornerRadius="{DynamicResource RadiusKlein}"
+                    Background="Transparent">
+              <TextBlock Text="{TemplateBinding Content}"
+                         FontFamily="{DynamicResource SchriftSymbole}"
+                         FontSize="19"
+                         Foreground="{TemplateBinding Foreground}"
+                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Flaeche" Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+              <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+              <Setter TargetName="Balken" Property="Opacity" Value="1" />
+              <Setter TargetName="Flaeche" Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+              <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- ===================================================================
+       Eingabe
+       =================================================================== -->
+  <Style TargetType="TextBox">
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftText}" />
+    <Setter Property="FontSize" Value="{DynamicResource SchriftgroesseNormal}" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+    <Setter Property="CaretBrush" Value="{DynamicResource PinselAkzent}" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource PinselAkzent}" />
+    <Setter Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource PinselRand}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Padding" Value="9,7" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="TextBox">
+          <Border x:Name="Rahmen"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{DynamicResource RadiusKlein}">
+            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+              <Setter TargetName="Rahmen" Property="BorderBrush" Value="{DynamicResource PinselAkzent}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="CheckBox">
+    <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftText}" />
+    <Setter Property="FontSize" Value="{DynamicResource SchriftgroesseNormal}" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="CheckBox">
+          <StackPanel Orientation="Horizontal" Background="Transparent">
+            <Border x:Name="Kasten" Width="17" Height="17" CornerRadius="4"
+                    Background="{DynamicResource PinselFlaecheHoch}"
+                    BorderBrush="{DynamicResource PinselRand}" BorderThickness="1"
+                    VerticalAlignment="Center">
+              <TextBlock x:Name="Haken" Text="&#xE73E;"
+                         FontFamily="{DynamicResource SchriftSymbole}" FontSize="10"
+                         Foreground="White" Opacity="0"
+                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ContentPresenter Margin="9,0,0,0" VerticalAlignment="Center" />
+          </StackPanel>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+              <Setter TargetName="Kasten" Property="Background" Value="{DynamicResource PinselAkzent}" />
+              <Setter TargetName="Kasten" Property="BorderBrush" Value="{DynamicResource PinselAkzent}" />
+              <Setter TargetName="Haken" Property="Opacity" Value="1" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Kasten" Property="BorderBrush" Value="{DynamicResource PinselAkzent}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="ComboBoxItem">
+    <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+    <Setter Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+    <Setter Property="Padding" Value="9,6" />
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftText}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ComboBoxItem">
+          <Border x:Name="Flaeche" Background="Transparent" Padding="{TemplateBinding Padding}">
+            <ContentPresenter />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsHighlighted" Value="True">
+              <Setter TargetName="Flaeche" Property="Background" Value="{DynamicResource PinselAkzentGedaempft}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="ComboBox">
+    <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+    <Setter Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource PinselRand}" />
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftText}" />
+    <Setter Property="FontSize" Value="{DynamicResource SchriftgroesseNormal}" />
+    <Setter Property="Padding" Value="9,6" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ComboBox">
+          <Grid>
+            <ToggleButton x:Name="PART_ToggleButton"
+                          Focusable="False" ClickMode="Press"
+                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+              <ToggleButton.Template>
+                <ControlTemplate TargetType="ToggleButton">
+                  <Border x:Name="Rahmen"
+                          Background="{DynamicResource PinselFlaecheHoch}"
+                          BorderBrush="{DynamicResource PinselRand}"
+                          BorderThickness="1"
+                          CornerRadius="{DynamicResource RadiusKlein}">
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                      </Grid.ColumnDefinitions>
+                      <ContentPresenter Grid.Column="0" />
+                      <TextBlock Grid.Column="1" Text="&#xE70D;" Margin="0,0,10,0"
+                                 FontFamily="{DynamicResource SchriftSymbole}" FontSize="9"
+                                 Foreground="{DynamicResource PinselTextSchwach}"
+                                 VerticalAlignment="Center" />
+                    </Grid>
+                  </Border>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                      <Setter TargetName="Rahmen" Property="BorderBrush" Value="{DynamicResource PinselAkzent}" />
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </ToggleButton.Template>
+            </ToggleButton>
+
+            <ContentPresenter Margin="{TemplateBinding Padding}"
+                              Content="{TemplateBinding SelectionBoxItem}"
+                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                              IsHitTestVisible="False"
+                              VerticalAlignment="Center" />
+
+            <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False"
+                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                   Placement="Bottom" PopupAnimation="Fade">
+              <Border Background="{DynamicResource PinselFlaecheHoch}"
+                      BorderBrush="{DynamicResource PinselRand}" BorderThickness="1"
+                      CornerRadius="{DynamicResource RadiusKlein}"
+                      MinWidth="{TemplateBinding ActualWidth}"
+                      MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                      Margin="0,3,0,0">
+                <ScrollViewer>
+                  <ItemsPresenter />
+                </ScrollViewer>
+              </Border>
+            </Popup>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- ===================================================================
+       Bildlaufleisten: schlank, ohne Pfeilknoepfe
+       =================================================================== -->
+  <Style x:Key="StilBildlaufDaumen" TargetType="Thumb">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Thumb">
+          <Border x:Name="Griff" Background="{DynamicResource PinselRand}"
+                  CornerRadius="5" Margin="3,0" />
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Griff" Property="Background" Value="{DynamicResource PinselTextSchwach}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="ScrollBar">
+    <Setter Property="Width" Value="10" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ScrollBar">
+          <Grid Background="{TemplateBinding Background}">
+            <Track x:Name="PART_Track" IsDirectionReversed="True">
+              <Track.Thumb>
+                <Thumb Style="{StaticResource StilBildlaufDaumen}" />
+              </Track.Thumb>
+              <Track.IncreaseRepeatButton>
+                <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="False" />
+              </Track.IncreaseRepeatButton>
+              <Track.DecreaseRepeatButton>
+                <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="False" />
+              </Track.DecreaseRepeatButton>
+            </Track>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+              <Setter Property="Width" Value="Auto" />
+              <Setter Property="Height" Value="10" />
+              <Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="False" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- ===================================================================
+       Baum
+       =================================================================== -->
+  <Style x:Key="StilBaumAufklapper" TargetType="ToggleButton">
+    <Setter Property="Width" Value="16" />
+    <Setter Property="Height" Value="16" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ToggleButton">
+          <Border Background="Transparent">
+            <!-- E76C = Chevron nach rechts (zugeklappt).
+                 Ein Trigger kann keine RenderTransform ansprechen, nur
+                 benannte Elemente im Vorlagenbaum — deshalb wird die
+                 Glyphe getauscht statt gedreht. -->
+            <TextBlock x:Name="Pfeil" Text="&#xE76C;"
+                       FontFamily="{DynamicResource SchriftSymbole}" FontSize="8"
+                       Foreground="{DynamicResource PinselTextSchwach}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+              <!-- E70D = Chevron nach unten (aufgeklappt) -->
+              <Setter TargetName="Pfeil" Property="Text" Value="&#xE70D;" />
+              <Setter TargetName="Pfeil" Property="Foreground" Value="{DynamicResource PinselText}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Pfeil" Property="Foreground" Value="{DynamicResource PinselAkzent}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="TreeViewItem">
+    <Setter Property="IsExpanded" Value="{Binding IstAufgeklappt, Mode=TwoWay}" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftText}" />
+    <Setter Property="FontSize" Value="{DynamicResource SchriftgroesseNormal}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="TreeViewItem">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border x:Name="Zeile" Grid.Row="0" Margin="2,1" Padding="0,3"
+                    CornerRadius="{DynamicResource RadiusKlein}"
+                    Background="Transparent">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="18" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ToggleButton x:Name="Aufklapper" Grid.Column="0"
+                              Style="{StaticResource StilBaumAufklapper}"
+                              IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                <ContentPresenter x:Name="PART_Header" Grid.Column="1"
+                                  ContentSource="Header" VerticalAlignment="Center" />
+              </Grid>
+            </Border>
+
+            <ItemsPresenter x:Name="Kinder" Grid.Row="1" Margin="14,0,0,0" />
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="False">
+              <Setter TargetName="Kinder" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="HasItems" Value="False">
+              <Setter TargetName="Aufklapper" Property="Visibility" Value="Hidden" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Zeile" Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="Zeile" Property="Background" Value="{DynamicResource PinselAkzentGedaempft}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- ===================================================================
+       Listeneintraege
+       =================================================================== -->
+  <Style TargetType="ListBoxItem">
+    <Setter Property="Padding" Value="8,6" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselText}" />
+    <Setter Property="FontFamily" Value="{DynamicResource SchriftText}" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ListBoxItem">
+          <Border x:Name="Flaeche" Background="Transparent"
+                  CornerRadius="{DynamicResource RadiusKlein}"
+                  Margin="6,1" Padding="{TemplateBinding Padding}">
+            <ContentPresenter />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Flaeche" Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="Flaeche" Property="Background" Value="{DynamicResource PinselAkzentGedaempft}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- ===================================================================
+       Trennlinie zwischen Spalten
+       =================================================================== -->
+  <Style TargetType="GridSplitter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Cursor" Value="SizeWE" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="GridSplitter">
+          <Border x:Name="Griff" Background="Transparent">
+            <Rectangle x:Name="Strich" Width="1" Fill="Transparent"
+                       HorizontalAlignment="Center" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Strich" Property="Fill" Value="{DynamicResource PinselAkzent}" />
+              <Setter TargetName="Strich" Property="Width" Value="2" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+</ResourceDictionary>

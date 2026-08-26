@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationTitle>DayZ Asset Preview</ApplicationTitle>
+    <AssemblyName>DayZ Asset Preview</AssemblyName>
+    <RootNamespace>DzAssets.Preview</RootNamespace>
+    <Version>1.0.0</Version>
+    <Company>7SBM</Company>
+    <Product>DayZ Asset Preview</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DzAssets.Formats\DzAssets.Formats.csproj" />
+  </ItemGroup>
+
+</Project>
