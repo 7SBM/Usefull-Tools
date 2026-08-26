@@ -32,6 +32,14 @@ public sealed class SkriptEintrag
     /// <summary>Ordner, in dem das Skript liegt — dient als Gruppierung.</summary>
     public required string Ordner { get; init; }
 
+    /// <summary>
+    /// Zeile unter dem Dateinamen in der Liste. Ohne Kopfkommentar wird
+    /// darauf hingewiesen, statt den Dateinamen zu wiederholen.
+    /// </summary>
+    public string KurzHinweis => Beschreibung.Length == 0
+        ? "ohne Kopfkommentar"
+        : Beschreibung.Split('\n')[0].Trim();
+
     public string ArtName => Art switch
     {
         SkriptArt.Python => "Python",

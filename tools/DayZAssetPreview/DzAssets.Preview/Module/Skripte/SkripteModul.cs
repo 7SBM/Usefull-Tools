@@ -13,5 +13,9 @@ public sealed class SkripteModul : IWerkzeugModul
 
     public string Beschreibung => "Hilfsskripte ansehen, bearbeiten und ausführen";
 
-    public UserControl ErzeugeAnsicht(WerkzeugKontext kontext) => new SkripteAnsicht(kontext);
+    /// <summary>Skript, das nach dem Start gewaehlt wird (Dateiname oder Pfad).</summary>
+    public string? SofortWaehlen { get; init; }
+
+    public UserControl ErzeugeAnsicht(WerkzeugKontext kontext)
+        => new SkripteAnsicht(kontext, SofortWaehlen);
 }

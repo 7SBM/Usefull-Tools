@@ -1,0 +1,117 @@
+<UserControl x:Class="DzAssets.Preview.Module.Debinarizer.DebinarizerAnsicht"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource PinselGrund}">
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" MinWidth="420" />
+      <ColumnDefinition Width="5" />
+      <ColumnDefinition Width="330" MinWidth="280" />
+    </Grid.ColumnDefinitions>
+
+    <!-- ============ Links: Dateien und Bericht ============ -->
+    <Grid Grid.Column="0">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" MinHeight="120" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <Border Grid.Row="0" Padding="18,14" Background="{DynamicResource PinselFlaeche}"
+              BorderBrush="{DynamicResource PinselRand}" BorderThickness="0,0,0,1">
+        <StackPanel>
+          <TextBlock Text="ODOL → MLOD" Style="{StaticResource StilUeberschrift}" />
+          <TextBlock Style="{StaticResource StilNebentext}" Margin="0,5,0,0" TextWrapping="Wrap"
+                     Text="Wandelt binarisierte Modelle in die bearbeitbare Fassung. Nutzt denselben Umwandler wie das Konsolenwerkzeug 7SBM P3D.DeBin." />
+        </StackPanel>
+      </Border>
+
+      <ListBox x:Name="DateiListe" Grid.Row="1"
+               Background="Transparent" BorderThickness="0"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+               VirtualizingStackPanel.IsVirtualizing="True">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <StackPanel Orientation="Horizontal">
+              <Border CornerRadius="3" Padding="6,1" Margin="0,0,9,0" MinWidth="76"
+                      Background="{DynamicResource PinselGrund}"
+                      BorderBrush="{Binding RandPinsel}" BorderThickness="1">
+                <TextBlock Text="{Binding Zustand}" FontSize="9.5"
+                           Foreground="{Binding RandPinsel}"
+                           HorizontalAlignment="Center" />
+              </Border>
+              <StackPanel MaxWidth="520">
+                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding Hinweis}" Style="{StaticResource StilNebentext}"
+                           TextTrimming="CharacterEllipsis" />
+              </StackPanel>
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+
+      <Border Grid.Row="2" Padding="18,12" Background="{DynamicResource PinselFlaeche}"
+              BorderBrush="{DynamicResource PinselRand}" BorderThickness="0,1,0,0">
+        <StackPanel>
+          <ProgressBar x:Name="Fortschritt" Height="4" Minimum="0" Maximum="100" Value="0" />
+          <TextBlock x:Name="StandText" Style="{StaticResource StilNebentext}"
+                     Margin="0,8,0,0" TextTrimming="CharacterEllipsis"
+                     Text="Noch nichts ausgewählt" />
+        </StackPanel>
+      </Border>
+    </Grid>
+
+    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+    <!-- ============ Rechts: Steuerung ============ -->
+    <Border Grid.Column="2" Background="{DynamicResource PinselFlaeche}"
+            BorderBrush="{DynamicResource PinselRand}" BorderThickness="1,0,0,0">
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="18">
+          <TextBlock Text="QUELLE" Style="{StaticResource StilFeldname}" />
+          <Button x:Name="KnopfDateien" Content="Dateien wählen…" Click="Dateien_Click"
+                  HorizontalAlignment="Stretch" Margin="0,6,0,0" />
+          <Button x:Name="KnopfOrdner" Content="Ordner wählen…" Click="Ordner_Click"
+                  HorizontalAlignment="Stretch" Margin="0,7,0,0" />
+          <CheckBox x:Name="SchalterUnterordner" Content="Unterordner einbeziehen"
+                    Margin="0,10,0,0" IsChecked="True" />
+
+          <Border Height="1" Background="{DynamicResource PinselRand}" Margin="0,16" />
+
+          <TextBlock Text="ZIEL" Style="{StaticResource StilFeldname}" />
+          <TextBlock x:Name="ZielText" Style="{StaticResource StilWert}"
+                     Text="neben der Quelldatei" />
+          <Button x:Name="KnopfZiel" Content="Ausgabeordner…" Click="Ziel_Click"
+                  HorizontalAlignment="Stretch" Margin="0,7,0,0" />
+          <Button x:Name="KnopfZielZuruecksetzen" Content="Zurücksetzen"
+                  Click="ZielZuruecksetzen_Click"
+                  HorizontalAlignment="Stretch" Margin="0,7,0,0" />
+
+          <CheckBox x:Name="SchalterSuffix" Content="Suffix _mlod anhängen"
+                    Margin="0,12,0,0" IsChecked="True"
+                    ToolTip="Aus haus.p3d wird haus_mlod.p3d" />
+          <CheckBox x:Name="SchalterUeberschreiben" Content="Vorhandene überschreiben"
+                    Margin="0,4,0,0" />
+
+          <Border Height="1" Background="{DynamicResource PinselRand}" Margin="0,16" />
+
+          <Button x:Name="KnopfStart" Content="Umwandeln" Click="Start_Click"
+                  HorizontalAlignment="Stretch" IsEnabled="False" />
+          <Button x:Name="KnopfAbbruch" Content="Abbrechen" Click="Abbruch_Click"
+                  HorizontalAlignment="Stretch" Margin="0,7,0,0" IsEnabled="False" />
+          <Button x:Name="KnopfLeeren" Content="Liste leeren" Click="Leeren_Click"
+                  HorizontalAlignment="Stretch" Margin="0,7,0,0" />
+
+          <Border x:Name="HinweisRahmen" Margin="0,16,0,0" Visibility="Collapsed"
+                  Background="{DynamicResource PinselGrund}"
+                  BorderBrush="{DynamicResource PinselWarnung}" BorderThickness="1"
+                  CornerRadius="{DynamicResource RadiusKlein}" Padding="11,9">
+            <TextBlock x:Name="HinweisText" TextWrapping="Wrap" FontSize="11.5"
+                       Foreground="{DynamicResource PinselWarnung}" />
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+  </Grid>
+</UserControl>

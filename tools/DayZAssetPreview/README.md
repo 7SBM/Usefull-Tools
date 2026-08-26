@@ -1,18 +1,32 @@
 # DayZ Asset Preview
 
-Zeigt die entpackten DayZ-Assets in 3D an — als Ersatz für die fehlende
-Vorschau im Terrain Builder.
+Eine Werkzeugsammlung für die Terrain-Arbeit an **BrienZ** — als eine
+Windows-Anwendung mit vier Modulen. Sie läuft eigenständig neben Terrain
+Builder und QGIS, koppelt sich an nichts und verändert keine
+Projektdateien, solange man es nicht ausdrücklich verlangt.
 
-Das Werkzeug läuft eigenständig. Es koppelt sich nicht an den Terrain
-Builder und verändert keine Projektdateien; gedacht ist es für den zweiten
-Bildschirm: hier nachsehen, wie ein Objekt aussieht und wie groß es ist,
-den Namen dann im Objekt-Browser des Terrain Builder suchen.
+| Modul | Zweck |
+|---|---|
+| **Asset-Vorschau** | DayZ-Modelle texturiert in 3D ansehen — der Ersatz für die fehlende Vorschau im Terrain Builder |
+| **Höhenkarte** | ASC-Höhenkarten als 3D-Relief betrachten |
+| **Debinarizer** | Binarisierte P3D (ODOL) in bearbeitbare MLOD umwandeln |
+| **Skripte** | Die eigenen Hilfsskripte ansehen, bearbeiten, ausführen und ergänzen |
 
-Die Anwendung ist als **Rahmen für mehrere Werkzeuge** angelegt. Die
-Asset-Vorschau ist das erste Modul; geplant sind der P3D-Debinarizer mit
-eigener Oberfläche und ein Previewer für ASC-Höhenkarten.
+Neue Werkzeuge kommen als weiteres Modul dazu; die Shell braucht dafür nur
+eine Zeile in `HauptFenster`.
 
-## Bedienung
+---
+
+## Asset-Vorschau
+
+Ordnerbaum und Volltextsuche über den gesamten Bestand — im Test 9.646
+Modelle aus `DZ` und den eigenen Mods. Die Trefferliste zeigt
+Miniaturbilder, die beim ersten Mal gerendert und danach auf der Platte
+zwischengespeichert werden.
+
+Rechts stehen Maße, Dreiecksanzahl, Dateiformat und — sofern in einer
+`config.cpp` gefunden — der Klassenname. Über die Detailstufe lassen sich
+auch Geometrie-, Roadway- und Memory-LODs ansehen.
 
 | Eingabe | Wirkung |
 |---|---|
@@ -24,42 +38,98 @@ eigener Oberfläche und ein Previewer für ASC-Höhenkarten.
 | `G` | Bodengitter |
 | `M` | Maßstabsfigur (1,80 m) |
 
-Links der Ordnerbaum über den gesamten Bestand, darüber die Volltextsuche.
-Mehrere durch Leerzeichen getrennte Wörter müssen alle im Pfad vorkommen —
-`land baracke` grenzt also weiter ein als `baracke`. Die Trefferliste zeigt
-Miniaturbilder, die beim ersten Mal gerendert und danach auf der Platte
-zwischengespeichert werden.
+Unterstützt werden **ODOL** (binarisiert, wie ausgeliefert) und **MLOD**
+(debinarisiert). Auf einem gewachsenen Arbeitslaufwerk kommen beide
+nebeneinander vor.
 
-Rechts stehen Maße, Dreiecksanzahl, Dateiformat und — sofern in einer
-`config.cpp` gefunden — der Klassenname. Über die Detailstufe lassen sich
-auch Geometrie-, Roadway- und Memory-LODs ansehen.
+**Proxy-Platzhalter** — die Pyramide mit Pfeil, die eine Andockstelle
+markiert — sind ausgeblendet, weil sie nicht zum sichtbaren Objekt gehören.
+Ein Schalter blendet sie ein; die Dreiecksanzahl weist sie getrennt aus.
+
+Verweist ein Modell auf `P:\…`, also auf das Arma-Arbeitslaufwerk, wird der
+Laufwerksbuchstabe abgestreift und relativ zu den eingestellten Wurzeln
+gesucht — ein Arbeitslaufwerk ist dessen Spiegel.
+
+## Höhenkarte
+
+Liest Esri-ASCII-Grids (`.asc`) und stellt sie als 3D-Relief dar. Die
+124-MB-Karte mit 4096 × 4096 Zellen ist in gut zwei Sekunden eingelesen.
+
+Netzfeinheit und Texturauflösung sind getrennt einstellbar: ein Netz von
+512 × 512 hat gut eine halbe Million Dreiecke, während die Relieftextur mit
+2048 × 2048 praktisch nichts kostet. Das Gelände sieht dadurch feiner aus,
+als es vernetzt ist.
+
+Einstellbar sind ausserdem die Farbskala (Gelände, Graustufen, Verlauf),
+die Überhöhung und die Stärke der Schummerung. Angezeigt werden Rasterweite,
+Ausdehnung in Metern und Kilometern, Höhenbereich und die Zahl der Lücken.
+
+## Debinarizer
+
+Wandelt binarisierte Modelle in die bearbeitbare Fassung — einzeln oder
+als ganzer Ordner, mit Fortschritt, Abbruch und einem Bericht je Datei.
+
+Verwendet denselben Umwandler wie das Konsolenwerkzeug **7SBM P3D.DeBin**
+(`Conversion.ODOL2MLOD` aus `BisDll`). Dessen Quelldatei bleibt
+unangetastet: sie ist ein ausgeliefertes Werkzeug mit eigener
+Versionsnummer.
+
+Die Umwandlung läuft **eine Datei nach der anderen**, nicht nebenläufig.
+`BisDll` meldet seine Diagnose über `Console.Error`, und dieser Strom gilt
+für den ganzen Prozess — gleichzeitige Umwandlungen würden ihre Meldungen
+vermischen.
+
+Nicht enthalten sind die übrigen Betriebsarten des Konsolenwerkzeugs
+(ANM/RTM-Umwandlung, PBO-Entpacken). Deren Fachlogik steht dort inline in
+`Main` zwischen den Konsolenausgaben und wäre nicht wiederverwendbar,
+sondern neu zu schreiben. Für diese Aufgaben bleibt `Debinarizer.exe` das
+Werkzeug der Wahl.
+
+## Skripte
+
+Findet die eigenen Hilfsskripte (`.py`, `.ps1`, `.bat`, `.cmd`), zeigt zu
+jedem die Beschreibung aus seinem Kopfkommentar — bei Python der Docstring,
+sonst die führenden Kommentarzeilen — und lässt sie ansehen, bearbeiten,
+speichern und ausführen.
+
+Vor dem Ausführen wird gefragt und genau gezeigt, was gestartet wird:
+Programm, Arbeitsordner und Argumente. Die Ausgabe erscheint zeilenweise,
+Fehlerausgaben sind mit `!` gekennzeichnet, ein Lauf lässt sich abbrechen.
+Vor dem Überschreiben legt das Werkzeug eine `.bak`-Sicherung an.
+
+Ohne eigene Einstellung wird `DayZ_Helper_Scripte` neben dem Programm
+gesucht; weitere Ordner lassen sich aufnehmen.
+
+---
 
 ## Aufruf
 
 ```
 "DayZ Asset Preview.exe"
 "DayZ Asset Preview.exe" H:\P_Drive\DZ\plants\tree\t_betulapendula_1f.p3d
+"DayZ Asset Preview.exe" H:\BrienZ_QGIS\gtt_export\gtt_heightmap.asc
 "DayZ Asset Preview.exe" --suche "wall concrete"
+"DayZ Asset Preview.exe" --modul hoehenkarte
+"DayZ Asset Preview.exe" --skript DayZ_TB_River_steps.py
 ```
 
-Ein `.p3d` als Argument wird sofort geöffnet, `--suche` belegt das
-Suchfeld vor.
+Eine `.p3d` oder `.asc` als Argument wird sofort geöffnet und springt ins
+passende Modul. Modulkennungen: `asset-vorschau`, `hoehenkarte`,
+`debinarizer`, `skripte`.
 
-## Bestand
+## Einstellungen und Daten
+
+```
+%LOCALAPPDATA%\DayZAssetPreview\
+    settings.json    Wurzeln, Skriptordner, Schalter, zuletzt Geöffnetes
+    log.txt          Meldungen, auch die des P3D-Lesers
+    index.json       Zwischenspeicher des Bestands
+    thumbs\          Miniaturbilder
+```
 
 Beim ersten Start sucht das Programm nach einem Arbeitslaufwerk mit einem
-Unterordner `DZ`. Gefunden wird üblicherweise `H:\P_Drive`. Weitere Wurzeln
-lassen sich eintragen in
-
-```
-%LOCALAPPDATA%\DayZAssetPreview\settings.json
-```
-
-Der Bestand wird zwischengespeichert. Nach dem Hinzufügen neuer Modelle auf
-**Neu einlesen** klicken.
-
-Im selben Ordner liegen `log.txt` (Meldungen, auch die des P3D-Lesers) und
-`thumbs\` (die Miniaturbilder).
+Unterordner `DZ`. Gefunden wird üblicherweise `H:\P_Drive`. Nach dem
+Hinzufügen neuer Modelle auf **Neu einlesen** klicken.
 
 ## Bauen
 
@@ -78,14 +148,10 @@ Pfad vorgeben.
 
 ## Herkunft
 
-Das Lesen der P3D-Dateien stammt aus `BisDll`, dem Parser des
+Das Lesen und Umwandeln der P3D-Dateien stammt aus `BisDll`, dem Parser des
 **7SBM P3D.DeBin** in diesem Repository. Der Quellcode wird nicht kopiert,
 sondern direkt mitkompiliert — Korrekturen wirken in beiden Werkzeugen.
 Siehe `VENDOR.md` im Wurzelverzeichnis.
-
-Unterstützt werden **ODOL** (binarisiert, wie ausgeliefert) und **MLOD**
-(debinarisiert). Auf einem gewachsenen Arbeitslaufwerk kommen beide
-nebeneinander vor.
 
 ## Grenzen
 
@@ -93,7 +159,11 @@ nebeneinander vor.
   vom Spiel ab; der Alphakanal wird deshalb auf 0 oder 255 gerundet.
 - Dargestellt wird die Diffusetextur. Normal- und Specular-Maps bleiben
   unberücksichtigt — für „wie sieht das Objekt aus" reicht das.
-- Proxies werden nicht aufgelöst: ein Haus zeigt seine eigenen Flächen,
-  nicht die über Proxy eingehängten Fenster und Türen.
+- Proxies werden nicht **aufgelöst**: ein Haus zeigt seine eigenen Flächen,
+  nicht die über Proxy eingehängten Fenster und Türen. Erkannt und
+  ausgeblendet werden nur die Platzhalter selbst.
 - Die Beleuchtung ist nicht die des Spiels. Ziel sind Wiedererkennbarkeit
   und Maßstab, nicht fotorealistische Übereinstimmung.
+- Fehlt eine Textur, bleibt die Fläche grau und die Datei wird im
+  Info-Panel genannt. Das trifft vor allem Modelle, die auf fremde Mods
+  verweisen, die nicht auf dem Arbeitslaufwerk liegen.

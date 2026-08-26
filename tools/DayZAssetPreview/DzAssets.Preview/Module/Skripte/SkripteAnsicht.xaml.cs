@@ -28,9 +28,12 @@ public partial class SkripteAnsicht : UserControl
     private bool _quelltextWirdGesetzt;
     private bool _geaendert;
 
-    public SkripteAnsicht(WerkzeugKontext kontext)
+    private readonly string? _sofortWaehlen;
+
+    public SkripteAnsicht(WerkzeugKontext kontext, string? sofortWaehlen = null)
     {
         _kontext = kontext;
+        _sofortWaehlen = sofortWaehlen;
         InitializeComponent();
 
         SkriptListe.ItemsSource = _sichtbar;
@@ -58,6 +61,13 @@ public partial class SkripteAnsicht : UserControl
                 : $"{_katalog.Eintraege.Count} Skripte in {ordner.Count} Ordner(n)";
 
             _kontext.Protokoll.Schreiben($"Skripte eingelesen: {_katalog.Eintraege.Count}");
+
+            if (!string.IsNullOrWhiteSpace(_sofortWaehlen))
+            {
+                SkriptListe.SelectedItem = _sichtbar.FirstOrDefault(
+                    e => e.Dateiname.Equals(_sofortWaehlen, StringComparison.OrdinalIgnoreCase)
+                         || e.Pfad.Equals(_sofortWaehlen, StringComparison.OrdinalIgnoreCase));
+            }
         }
         catch (Exception fehler)
         {

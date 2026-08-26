@@ -46,7 +46,20 @@ public partial class App : Application
         var hoehenkarte = e.Args.FirstOrDefault(
             a => a.EndsWith(".asc", StringComparison.OrdinalIgnoreCase));
 
-        new HauptFenster(_kontext, sofortOeffnen, suche, hoehenkarte).Show();
+        // "--modul <kennung>" waehlt beim Start ein bestimmtes Werkzeug.
+        string? modul = null;
+        var modulStelle = Array.FindIndex(e.Args,
+            a => a.Equals("--modul", StringComparison.OrdinalIgnoreCase));
+        if (modulStelle >= 0 && modulStelle + 1 < e.Args.Length) modul = e.Args[modulStelle + 1];
+
+        // "--skript <name>" waehlt beim Start ein Skript aus.
+        string? skript = null;
+        var skriptStelle = Array.FindIndex(e.Args,
+            a => a.Equals("--skript", StringComparison.OrdinalIgnoreCase));
+        if (skriptStelle >= 0 && skriptStelle + 1 < e.Args.Length) skript = e.Args[skriptStelle + 1];
+        if (skript is not null) modul ??= "skripte";
+
+        new HauptFenster(_kontext, sofortOeffnen, suche, hoehenkarte, modul, skript).Show();
     }
 
     protected override void OnExit(ExitEventArgs e)

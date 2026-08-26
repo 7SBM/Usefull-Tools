@@ -12,18 +12,32 @@ Format lose nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
 ### Hinzugefügt
 - **DayZ Asset Preview** (`tools/DayZAssetPreview/`) — eigenständiges
-  Windows-Programm, das die entpackten DayZ-Assets texturiert in 3D anzeigt.
-  Gedacht als Ersatz für die fehlende Vorschau im Terrain Builder: läuft auf
-  dem zweiten Bildschirm, koppelt sich nicht an TB.
-  Ordnerbaum und Volltextsuche über den gesamten Bestand (im Test 9.646
-  Modelle aus `DZ` und den eigenen Mods), Miniaturbilder mit Plattencache,
-  Umschaltung der Detailstufen, Bodengitter in Metern und eine
-  Maßstabsfigur von 1,80 m.
-  Liest **ODOL und MLOD** über den `BisDll`-Parser des P3D.DeBin — der
-  Quellcode wird mitkompiliert statt kopiert, Korrekturen wirken in beiden
-  Werkzeugen. `.paa`-Texturen (DXT1/DXT5, LZO) werden selbst dekodiert.
-  Angelegt als Rahmen für weitere Werkzeuge; der Debinarizer und ein
-  ASC-Höhenkarten-Previewer sollen als Module folgen.
+  Windows-Programm mit vier Werkzeug-Modulen für die Terrain-Arbeit.
+  Läuft neben Terrain Builder und QGIS, koppelt sich an nichts.
+
+  - **Asset-Vorschau** — DayZ-Modelle texturiert in 3D, als Ersatz für die
+    fehlende Vorschau im Terrain Builder. Ordnerbaum und Volltextsuche über
+    den gesamten Bestand (im Test 9.646 Modelle aus `DZ` und den eigenen
+    Mods), Miniaturbilder mit Plattencache, Umschaltung der Detailstufen,
+    Bodengitter in Metern, Maßstabsfigur von 1,80 m, Klassenname aus
+    `config.cpp`. Liest **ODOL und MLOD**; `.paa`-Texturen (DXT1/DXT5, LZO)
+    werden selbst dekodiert. Proxy-Platzhalter werden erkannt und
+    ausgeblendet.
+  - **Höhenkarte** — ASC-Raster als 3D-Relief mit hypsometrischer Färbung
+    und Schummerung. Die 124-MB-Karte mit 4096² Zellen ist in gut zwei
+    Sekunden gelesen. Netzfeinheit, Texturauflösung, Überhöhung und
+    Farbskala einstellbar.
+  - **Debinarizer** — ODOL nach MLOD, einzeln oder als Ordner, mit
+    Fortschritt, Abbruch und Bericht je Datei. Nutzt denselben Umwandler
+    wie das Konsolenwerkzeug; dessen Quelldatei bleibt unangetastet.
+  - **Skripte** — die eigenen Hilfsskripte aus `DayZ_Helper_Scripte`
+    ansehen, bearbeiten, ausführen und ergänzen. Die Beschreibung wird aus
+    dem Kopfkommentar gezogen (Python-Docstring bzw. führende
+    Kommentarzeilen).
+
+  Der `BisDll`-Quellcode des P3D.DeBin wird mitkompiliert statt kopiert —
+  Korrekturen wirken in beiden Werkzeugen. 199 Tests, davon viele gegen die
+  echten Dateien des Arbeitslaufwerks.
 - `.gitignore`, `VENDOR.md`, dieses Änderungsprotokoll
 - README auf den tatsächlichen Funktionsstand gebracht (beschrieb bis dahin nur
   die reine ODOL→MLOD-Fassung)

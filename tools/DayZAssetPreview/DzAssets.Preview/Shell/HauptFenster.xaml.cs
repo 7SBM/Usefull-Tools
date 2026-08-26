@@ -16,7 +16,9 @@ public partial class HauptFenster : Window
     public HauptFenster(WerkzeugKontext kontext,
                         string? sofortOeffnen = null,
                         string? suche = null,
-                        string? hoehenkarte = null)
+                        string? hoehenkarte = null,
+                        string? modul = null,
+                        string? skript = null)
     {
         _kontext = kontext;
         InitializeComponent();
@@ -33,10 +35,13 @@ public partial class HauptFenster : Window
             {
                 SofortOeffnen = hoehenkarte,
             },
-            new Module.Skripte.SkripteModul());
+            new Module.Debinarizer.DebinarizerModul(),
+            new Module.Skripte.SkripteModul { SofortWaehlen = skript });
 
-        // Wurde eine Hoehenkarte uebergeben, gleich dorthin springen.
-        if (!string.IsNullOrWhiteSpace(hoehenkarte)) ModulWaehlen("hoehenkarte");
+        // Ein ausdruecklich genanntes Modul geht vor; sonst springt eine
+        // uebergebene Hoehenkarte in ihr Modul.
+        if (!string.IsNullOrWhiteSpace(modul)) ModulWaehlen(modul);
+        else if (!string.IsNullOrWhiteSpace(hoehenkarte)) ModulWaehlen("hoehenkarte");
 
         StateChanged += (_, _) =>
         {

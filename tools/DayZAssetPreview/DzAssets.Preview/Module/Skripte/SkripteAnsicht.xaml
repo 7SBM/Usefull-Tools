@@ -47,7 +47,7 @@
                   </Border>
                   <TextBlock Text="{Binding Dateiname}" TextTrimming="CharacterEllipsis" />
                 </StackPanel>
-                <TextBlock Text="{Binding Titel}" Style="{StaticResource StilNebentext}"
+                <TextBlock Text="{Binding KurzHinweis}" Style="{StaticResource StilNebentext}"
                            TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
               </StackPanel>
             </DataTemplate>
