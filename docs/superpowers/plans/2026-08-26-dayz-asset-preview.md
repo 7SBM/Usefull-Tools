@@ -577,7 +577,7 @@ git commit -m "DXT1- und DXT5-Dekodierung mit Tests"
 **Formatnotiz (am 2026-08-26 an `structures/data/alpha/net/lavkaalfa_co.paa` verifiziert):**
 
 ```
-u16   magic          0x01FF=DXT1 0x02FF=DXT2 0x03FF=DXT3 0x04FF=DXT4 0x05FF=DXT5
+u16   magic          0xFF01=DXT1 0xFF02=DXT2 0xFF03=DXT3 0xFF04=DXT4 0xFF05=DXT5
                      0x1555=ARGB1555 0x4444=ARGB4444 0x8080=AI88
                      alles andere -> zurueckspulen, ARGB8888 ohne Kennung
 TAGGs, solange die naechsten 4 Bytes "GGAT" sind:
@@ -595,6 +595,23 @@ Danach die Mipmaps, groesste zuerst:
 ```
 
 Die erste Mipmap ist die grösste; mehr wird nicht gebraucht. Bei den nicht-DXT-Formaten sind die Daten immer LZSS-komprimiert, bei DXT nur, wenn Bit `0x8000` gesetzt ist.
+
+**Zur Byte-Reihenfolge der Kennung — bei der Umsetzung am 2026-08-26 eine
+Fehlerquelle, die eine Stunde gekostet hat:** Ein Hexdump zeigt am Anfang
+einer DXT1-Textur die Bytefolge `01 FF`. Als Little-Endian-`ushort`
+gelesen ist das **`0xFF01`**, nicht `0x01FF`. Wird das verwechselt, gilt
+jede Datei als kennungslos, die TAGG-Blöcke werden nicht übersprungen, und
+Müllwerte landen als Breite und Höhe im Entpacker — mit erwarteten Grössen
+im Gigabytebereich und einem Programm, das scheinbar hängt.
+
+Deshalb zusätzlich zwei Plausibilitätsgrenzen im Leser: Kantenlänge
+höchstens 8192, entpackte Mipmap höchstens 128 MiB. Beide werfen eine
+`InvalidDataException` mit dem gelesenen Wert im Text, statt den Entpacker
+loslaufen zu lassen.
+
+Nachgeprüft an den ersten 50 Texturen unter `DZ\structures`: 15× DXT1,
+35× DXT5, durchweg 512×512 oder 1024×256, je 3 bis 4 TAGGs, alle
+LZO-komprimiert. Kein anderes Format kam vor.
 
 - [ ] **Step 1: Den fehlschlagenden Test schreiben**
 
