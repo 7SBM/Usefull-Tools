@@ -14,6 +14,14 @@ Format lose nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - `.gitignore`, `VENDOR.md`, dieses Änderungsprotokoll
 - README auf den tatsächlichen Funktionsstand gebracht (beschrieb bis dahin nur
   die reine ODOL→MLOD-Fassung)
+- `.rvmat`-Debinarisierung beim PBO-Entpacken (`[B]`-Modus, Batch- und
+  Einzelmodus). Bisher wurden binarisierte `.rvmat`-Dateien nur roh als Bytes
+  rausgeschrieben; jetzt nutzt derselbe `TryRapToCpp()`-Decoder, der schon
+  `config.bin` verarbeitet, auch `*.rvmat`.
+- `DayZAnimationPlugin_Voglefixed/` — Blender-Addon für Waffen-Handanimationen
+  (IK-Poses, TXA/TXO Import/Export). Fremdcode (Mrtea101/JD) mit
+  Kompatibilitätsfixes von Vogelmensch1989, siehe [`VENDOR.md`](VENDOR.md) für
+  Attribution und die bewusst ausgelassenen Demo-Assets.
 
 ### Behoben
 - Drei tote Bildverweise in der README (`before.png`, `console.png`,
@@ -23,9 +31,6 @@ Format lose nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 - Versionsnummer und `--version`-Schalter im Werkzeug selbst. `AssemblyVersion`
   steht derzeit auf dem Vorlagenwert `1.0.0.0`, während der Installer `1.9`
   meldet — die beiden widersprechen sich.
-- `.rvmat`-Unterstützung im raP-Pfad. Der Decoder `TryRapToCpp` beherrscht das
-  Format bereits, ist aber fest auf den Dateinamen `config.bin` verdrahtet;
-  binarisierte `.rvmat` sind ebenfalls raP-Dateien.
 
 ---
 

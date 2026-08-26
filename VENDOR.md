@@ -13,8 +13,21 @@ Arbeitsumgebung jederzeit neu aufbauen lässt.
 
 | Werkzeug | Herkunft | Anmerkung |
 |---|---|---|
-| **DayZ Animation Tools** | Mrtea101 / JD | Für Blender 4.x/5.x korrigiert von *Vogelmensch1989* (Stand 08.06.2026). Drei Korrekturen: `import bpy_types` entfernt, `bpy_types.*`-Annotationen auf `bpy.types.*` umgestellt, `bpy.utils.unregister_module()` entfernt. **Der Ordner muss im Addons-Verzeichnis `DayzAnimationTools` heißen**, sonst lädt das Addon nicht. |
 | **Arma Toolbox for Blender** | Alwarren | Release 4.0.5. Import/Export von Arma-/DayZ-Assets. |
+
+> [!Ausnahme] DayZ Animation Tools — doch im Repo
+> **DayZ Animation Tools** (Original: Mrtea101 / JD, für Blender 4.x/5.x korrigiert
+> von *Vogelmensch1989*, Stand 08.06.2026) liegt entgegen der obigen Regel **doch**
+> in diesem Repository, unter `DayZAnimationPlugin_Voglefixed/` — analog zum
+> Präzedenzfall der QGIS-Terrain-Tools oben (ebenfalls ein gepatchter Fremd-Fork,
+> der direkt eingecheckt ist). Attribution steht in der `ANLEITUNG.md` des Ordners.
+> Drei Korrekturen gegenüber dem Original: `import bpy_types` entfernt,
+> `bpy_types.*`-Annotationen auf `bpy.types.*` umgestellt,
+> `bpy.utils.unregister_module()` entfernt. **Der Ordner muss beim Installieren im
+> Blender-Addons-Verzeichnis in `DayzAnimationTools` umbenannt werden**, sonst lädt
+> das Addon nicht. Die vom Original mitgelieferten Demo-Assets (`_AssetSamples/`,
+> `_Referenz/` — Blend-Rigs, komplette Beispiel-Mission, ca. 330 MB) sind bewusst
+> **nicht** mit übernommen; sie liegen weiterhin nur lokal auf `H:\Usefull Tools\`.
 
 ## Referenzmaterial
 

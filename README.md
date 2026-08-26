@@ -62,6 +62,7 @@ bauen möchte, findet den vollständigen Quellcode unter
 | `DayZ_Helper_Scripte/` | 19 Skripte: Heightmap-/Terrainbearbeitung (ASC, Shapefiles), `mapgroupproto`-Generator, SHP→DayZ-Koordinaten, RVMAT-Texturpatcher, Deploy- und Backup-Skripte |
 | `DayZ_ProxyIcons/` | 36 freigestellte Proxy-Icons für Inventar-Attachment-Slots |
 | `7SBM_Animation Projekt/` | Animationsarbeit: Blender-Quellen, ANM/TXA/RTM-Paare, Waterfall-Mod |
+| `DayZAnimationPlugin_Voglefixed/` | Blender-Addon zum Erstellen eigener Waffen-Handanimationen (IK-Poses), Import/Export TXA/TXO — Fremdcode mit Kompatibilitäts-Fixes, siehe [`VENDOR.md`](VENDOR.md) |
 | `DayZ-Terrain-Config-Files-main/` | Terrain-Grundgerüst (`layers.cfg`, `buldozer.c`, `config.cpp`) |
 | `Terrain Tools/` | QGIS-Addons für Spiel-Terrains |
 | `p3d_Debinarizer_VogelFixed_2026/` | die fremde Ausgangsfassung, aus der P3D.DeBin hervorging (Archiv) |
@@ -84,6 +85,10 @@ P3D.DeBin baut auf fremder Vorarbeit auf:
 Die Ausgangsfassung umfasste 134 Zeilen und konnte ausschließlich ODOL→MLOD.
 Alles Weitere — ANM/TXA, RTM, PBO-Entpacken, raP→CPP, `model.cfg`-Erzeugung,
 Menüführung und Stapelverarbeitung — kam in diesem Projekt dazu.
+
+`DayZAnimationPlugin_Voglefixed/` baut auf **DayZ Animation Tools** von
+*Mrtea101 / JD* auf, kompatibilitätsgefixt für Blender 4.x/5.x von
+**Vogelmensch1989**. Details siehe [`VENDOR.md`](VENDOR.md).
 
 ---
 
