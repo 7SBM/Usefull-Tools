@@ -2098,12 +2098,21 @@ public sealed class ConfigClassIndex
 }
 ```
 
-**Vorgehen:** Kein vollständiger Parser. Ein Zeilenscanner mit
-Klammerzählung genügt: Bei `class X` oder `class X : Y` den Namen auf einen
-Stapel legen, bei `{` die Tiefe erhöhen, bei `};` beziehungsweise `}` die
-Tiefe senken und den Namen entfernen. Trifft der Scanner auf
-`model="..."`, wird der oberste Klassenname dem Modellpfad zugeordnet.
-Zeilen mit `//` und Blöcke mit `/* */` werden vorher entfernt.
+**Vorgehen:** Kein vollständiger Parser, sondern ein **positionsgetreuer
+Einzeldurchlauf**. Kommentare werden vorab entfernt, dann liefert ein
+einziger regulärer Ausdruck alle Ereignisse in Textreihenfolge: Klassenkopf,
+`{`, `}`, `;`, `model="..."` und Zeichenketten. Bei `class X` wird der Name
+gemerkt, bei `{` auf den Stapel gelegt, bei `}` entfernt, bei `;` vor einem
+`{` verworfen (Vorwärtsdeklaration). Trifft der Durchlauf auf `model="..."`,
+bekommt der oberste Klassenname den Modellpfad zugeordnet.
+
+**Zeilenweise zu arbeiten wäre falsch** — bei der Umsetzung am 2026-08-26
+zunächst so gebaut und dann korrigiert: In den Spieldateien stehen Klassen
+häufig einzeilig, etwa `class Land_X { model="DZ\a\b.p3d"; };`. Verarbeitet
+man erst alle Klammern der Zeile und sucht danach `model=`, ist der Stapel
+bereits wieder abgebaut, und die Zuordnung geht verloren. Zeichenketten
+bekommen eine eigene Alternative im Ausdruck, damit Klammern oder Semikola
+in Anzeigenamen den Stapel nicht verfälschen.
 
 Das ist bewusst tolerant: `config.cpp` aus Spieldateien enthält Makros und
 `#include`, die ein strenger Parser ablehnen würde. Ein falsch zugeordneter
