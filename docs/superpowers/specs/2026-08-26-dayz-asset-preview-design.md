@@ -30,7 +30,7 @@ Namen anschliessend selbst im Objekt-Browser von Terrain Builder.
 | Sachverhalt | Befund |
 |---|---|
 | Asset-Wurzel | `H:\P_Drive` — enthält `DZ\` (Gamefiles) und eigene Mods (`7SBM_*`) |
-| Modelle | 8.430 `.p3d`, ausnahmslos ODOL (binarisiert, Version 54) |
+| Modelle | 8.430 `.p3d` — **7.912 ODOL v54** (93,9 %, binarisiert) und **518 MLOD v257** (6,1 %, debinarisiert) |
 | Texturen | 29.820 `.paa`, DXT1/DXT5, LZO-komprimiert, mit TAGG-Blöcken |
 | Materialien | `.rvmat` liegen als Klartext vor (nicht binarisiert) |
 | Klassen | `config.cpp` als Klartext, Modellbezug über `model="DZ\...\x.p3d"` |
@@ -38,6 +38,16 @@ Namen anschliessend selbst im Objekt-Browser von Terrain Builder.
 
 Der P-Drive-Pfad ist **nicht** fest verdrahtet: Er wird beim ersten Start
 erkannt und ist in den Einstellungen änderbar.
+
+**Beide P3D-Formate müssen dargestellt werden.** Auf dem Arbeitslaufwerk
+liegen neben den ausgelieferten ODOL-Dateien auch 518 debinarisierte
+MLOD-Kopien — offenbar Ergebnisse des eigenen P3D.DeBin. Sie sehen im
+Ordnerbaum aus wie jede andere Datei, und ein Werkzeug, das nur ODOL
+könnte, würde bei jedem sechzehnten Modell eine leere Ansicht zeigen.
+Die beiden Formate unterscheiden sich strukturell: ODOL hält UV-Koordinaten
+und Normalen pro Vertex und gruppiert Flächen in `Sections`, MLOD hält
+UV-Koordinaten und Normalenverweise **pro Flächenecke** und nennt Textur
+und Material direkt an jeder Fläche.
 
 ## Technische Entscheidung
 
@@ -77,7 +87,7 @@ Drei Projekte unter `tools/DayZAssetPreview/`:
 
 ```
 DzAssets.Formats/     Klassenbibliothek, keine UI
-  OdolModelReader     ODOL -> ModelGeometry (nutzt BisDll)
+  P3dModelReader     ODOL -> ModelGeometry (nutzt BisDll)
   PaaImage            PAA -> BGRA32-Pixelpuffer
   DxtDecoder          BC1/BC3-Blockdekodierung
   RvmatMaterial       Klartext-RVMAT -> Texturzuweisungen
@@ -144,7 +154,7 @@ durchsucht.
 
 Jede Einheit ist ohne die anderen prüfbar:
 
-- `OdolModelReader.Read(path) -> ModelGeometry` — Datei rein,
+- `P3dModelReader.Read(path) -> ModelGeometry` — Datei rein,
   Vertizes/Indizes/Texturpfade raus. Kennt keine UI und kein WPF.
 - `PaaImage.Load(path) -> (int w, int h, byte[] bgra)` — reine Funktion.
 - `DxtDecoder.DecodeBc1/DecodeBc3(byte[], w, h) -> byte[]` — reine Funktion.
@@ -213,7 +223,7 @@ P-Drive, überspringen sich die betroffenen Tests, statt fehlzuschlagen.
   Farbwerte — hängt an keiner externen Datei.
 - `PaaImage`: lädt echte `.paa`, prüft Grösse, Format und dass der
   Pixelpuffer die erwartete Länge hat.
-- `OdolModelReader`: lädt echte `.p3d`, prüft die Anzahl LODs, dass jeder
+- `P3dModelReader`: lädt echte `.p3d`, prüft die Anzahl LODs, dass jeder
   Index innerhalb der Vertexliste liegt und die Bounding-Box endlich ist.
 - `ConfigClassIndex`: prüft an `plants/config.cpp`, dass bekannte Klassen
   auf den erwarteten Modellpfad zeigen.

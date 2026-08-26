@@ -1001,8 +1001,8 @@ Das Herzstück: aus dem `BisDll`-Modell eine renderfertige, WPF-freie Geometrie 
 
 **Files:**
 - Create: `tools/DayZAssetPreview/DzAssets.Formats/Models/ModelGeometry.cs`
-- Create: `tools/DayZAssetPreview/DzAssets.Formats/Models/OdolModelReader.cs`
-- Test: `tools/DayZAssetPreview/DzAssets.Tests/OdolModelReaderTests.cs`
+- Create: `tools/DayZAssetPreview/DzAssets.Formats/Models/P3dModelReader.cs`
+- Test: `tools/DayZAssetPreview/DzAssets.Tests/P3dModelReaderTests.cs`
 
 **Interfaces:**
 - Consumes: `BisDll.Model.P3D`, `BisDll.Model.ODOL.LOD`, `BisDll.Model.ODOL.Section`, `BisDll.Model.Resolution`.
@@ -1042,7 +1042,7 @@ public sealed class ModelGeometry
     public LodGeometry? FeinsterSichtbarerLod { get; }
 }
 
-public static class OdolModelReader
+public static class P3dModelReader
 {
     public static ModelGeometry Read(string path);
 }
@@ -1059,7 +1059,7 @@ public static class OdolModelReader
 - **UV:** in `MeshSection` unverändert übernehmen. Die Spiegelung von V geschieht erst beim Aufbau der WPF-Geometrie (Task 11), weil sie eine Eigenheit von WPF ist, nicht von ODOL.
 - **`Console.Error`-Ausgaben:** `LOD.read` und `ODOL.read` schreiben pro LOD mehrere Zeilen nach `Console.Error` (`ODOL.cs` Zeilen 110, 140, 153 und weitere). `BisDll` wird dafür **nicht** angefasst.
 
-  **`OdolModelReader` fasst `Console.Error` nicht an.** `Console.SetError`
+  **`P3dModelReader` fasst `Console.Error` nicht an.** `Console.SetError`
   wirkt prozessweit. Würde `Read` den Strom um jeden Lesevorgang sichern
   und wiederherstellen, ergäbe das ein Wettrennen, sobald zwei Threads
   gleichzeitig lesen — und genau das tut die Anwendung später (Modell laden
@@ -1073,7 +1073,7 @@ public static class OdolModelReader
 
 - [ ] **Step 1: Den fehlschlagenden Test schreiben**
 
-`tools/DayZAssetPreview/DzAssets.Tests/OdolModelReaderTests.cs`:
+`tools/DayZAssetPreview/DzAssets.Tests/P3dModelReaderTests.cs`:
 
 ```csharp
 using DzAssets.Formats.Models;
@@ -1081,10 +1081,10 @@ using Xunit;
 
 namespace DzAssets.Tests;
 
-public class OdolModelReaderTests
+public class P3dModelReaderTests
 {
     private static ModelGeometry Waschbecken()
-        => OdolModelReader.Read(TestAssets.Dz(@"structures\furniture\bathroom\basin_a\basin_a.p3d"));
+        => P3dModelReader.Read(TestAssets.Dz(@"structures\furniture\bathroom\basin_a\basin_a.p3d"));
 
     [PDriveFact]
     public void Liest_LODs_mit_Geometrie()
@@ -1170,7 +1170,7 @@ public class OdolModelReaderTests
         {
             try
             {
-                var modell = OdolModelReader.Read(datei);
+                var modell = P3dModelReader.Read(datei);
                 Assert.NotEmpty(modell.Lods);
             }
             catch (Exception ausnahme)
@@ -1186,8 +1186,8 @@ public class OdolModelReaderTests
 
 - [ ] **Step 2: Test laufen lassen — Fehlschlag erwarten**
 
-Run: `cd tools/DayZAssetPreview && dotnet test --filter FullyQualifiedName~OdolModelReaderTests`
-Expected: FAIL, `OdolModelReader` existiert nicht.
+Run: `cd tools/DayZAssetPreview && dotnet test --filter FullyQualifiedName~P3dModelReaderTests`
+Expected: FAIL, `P3dModelReader` existiert nicht.
 
 - [ ] **Step 3: `ModelGeometry.cs` schreiben**
 
@@ -1254,9 +1254,9 @@ public sealed class ModelGeometry
 }
 ```
 
-- [ ] **Step 4: `OdolModelReader.cs` schreiben**
+- [ ] **Step 4: `P3dModelReader.cs` schreiben**
 
-`tools/DayZAssetPreview/DzAssets.Formats/Models/OdolModelReader.cs`:
+`tools/DayZAssetPreview/DzAssets.Formats/Models/P3dModelReader.cs`:
 
 ```csharp
 using BisDll.Model;
@@ -1268,7 +1268,7 @@ namespace DzAssets.Formats.Models;
 /// Uebersetzt eine ODOL- oder MLOD-Datei in eine renderfertige Geometrie.
 /// Kennt kein WPF und keine Bildformate.
 /// </summary>
-public static class OdolModelReader
+public static class P3dModelReader
 {
     /// <summary>Modelle oberhalb dieser Groesse werden nicht ungefragt geladen.</summary>
     public const long WarnGroesseBytes = 200L * 1024 * 1024;
@@ -1434,7 +1434,7 @@ public static class OdolModelReader
 
 - [ ] **Step 5: Test laufen lassen — Erfolg erwarten**
 
-Run: `cd tools/DayZAssetPreview && dotnet test --filter FullyQualifiedName~OdolModelReaderTests`
+Run: `cd tools/DayZAssetPreview && dotnet test --filter FullyQualifiedName~P3dModelReaderTests`
 Expected: `Passed!  - Failed: 0, Passed: 7`
 
 Häufige Stolperstellen:
@@ -1560,7 +1560,7 @@ public class TextureResolverTests
     [PDriveFact]
     public void Findet_fuer_ein_echtes_Modell_mindestens_eine_vorhandene_Textur()
     {
-        var modell = OdolModelReader.Read(
+        var modell = P3dModelReader.Read(
             TestAssets.Dz(@"structures\furniture\bathroom\basin_a\basin_a.p3d"));
         var aufloeser = new TextureResolver(TestAssets.PDrive!);
         var lod = modell.FeinsterSichtbarerLod!;
@@ -4508,7 +4508,7 @@ In `AssetVorschauAnsicht.xaml.cs` die Methode `ModellAnzeigen` ersetzen:
 
         try
         {
-            var modell = await Task.Run(() => OdolModelReader.Read(absoluterPfad));
+            var modell = await Task.Run(() => P3dModelReader.Read(absoluterPfad));
             var lod = modell.FeinsterSichtbarerLod;
 
             if (lod is null)
@@ -4547,7 +4547,7 @@ Baum, ein Fahrzeug:
 - Drehen, Verschieben und Zoomen laufen ruckelfrei.
 
 **Steht das Modell auf dem Kopf oder spiegelverkehrt**, ist die
-Achsenumrechnung in `OdolModelReader.LiesLod` zu korrigieren — dort, nicht
+Achsenumrechnung in `P3dModelReader.LiesLod` zu korrigieren — dort, nicht
 hier. Die drei zu prüfenden Varianten: `(x, y, -z)` mit gedrehtem Umlauf
 (so umgesetzt), `(x, z, y)`, `(-x, y, z)`. Die richtige erkennt man daran,
 dass Schrift auf Schildern lesbar und nicht spiegelverkehrt ist.
@@ -4618,7 +4618,7 @@ public class TexturLaderTests
     [PDriveFact]
     public void Laedt_fuer_ein_echtes_Modell_mindestens_eine_Textur()
     {
-        var modell = OdolModelReader.Read(
+        var modell = P3dModelReader.Read(
             TestAssets.Dz(@"structures\furniture\bathroom\basin_a\basin_a.p3d"));
         var lader = new TexturLader(new TextureResolver(TestAssets.PDrive!), StillesProtokoll());
 
@@ -4630,7 +4630,7 @@ public class TexturLaderTests
     [PDriveFact]
     public void Die_geladenen_Bilder_sind_eingefroren()
     {
-        var modell = OdolModelReader.Read(
+        var modell = P3dModelReader.Read(
             TestAssets.Dz(@"structures\furniture\bathroom\basin_a\basin_a.p3d"));
         var lader = new TexturLader(new TextureResolver(TestAssets.PDrive!), StillesProtokoll());
 
@@ -4642,7 +4642,7 @@ public class TexturLaderTests
     [PDriveFact]
     public void Dieselbe_Texturdatei_wird_nur_einmal_dekodiert()
     {
-        var modell = OdolModelReader.Read(
+        var modell = P3dModelReader.Read(
             TestAssets.Dz(@"structures\furniture\bathroom\basin_a\basin_a.p3d"));
         var lod = modell.FeinsterSichtbarerLod!;
         var lader = new TexturLader(new TextureResolver(TestAssets.PDrive!), StillesProtokoll());
@@ -5420,7 +5420,7 @@ git commit -m "Volltextsuche ueber den Assetbestand"
 - Modify: `AssetVorschauAnsicht.xaml.cs`
 
 **Interfaces:**
-- Consumes: `OdolModelReader`, `TexturLader`, `GeometrieBauer`.
+- Consumes: `P3dModelReader`, `TexturLader`, `GeometrieBauer`.
 - Produces:
 
 ```csharp
@@ -5602,7 +5602,7 @@ public sealed class ThumbnailService(string cacheOrdner, TexturLader lader, Prot
     {
         try
         {
-            var modell = OdolModelReader.Read(absoluterPfad);
+            var modell = P3dModelReader.Read(absoluterPfad);
             var lod = modell.FeinsterSichtbarerLod;
             if (lod is null || lod.Positions.Length == 0) return null;
 
