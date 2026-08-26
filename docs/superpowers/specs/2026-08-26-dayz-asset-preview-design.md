@@ -67,6 +67,12 @@ ist das ausreichend.
 
 ## Architektur
 
+Die Anwendung ist kein Einzweck-Fenster, sondern ein **Rahmen für mehrere
+Werkzeuge**. Die Asset-Vorschau ist das erste Modul; geplant sind weiter der
+vollständige P3D-Debinarizer als Oberfläche und ein Previewer für
+ASC-Höhenkarten. Die Shell stellt Navigation, Theme, Einstellungen und
+Protokoll bereit; ein Modul bringt nur seine eigene Ansicht mit.
+
 Drei Projekte unter `tools/DayZAssetPreview/`:
 
 ```
@@ -75,16 +81,35 @@ DzAssets.Formats/     Klassenbibliothek, keine UI
   PaaImage            PAA -> BGRA32-Pixelpuffer
   DxtDecoder          BC1/BC3-Blockdekodierung
   RvmatMaterial       Klartext-RVMAT -> Texturzuweisungen
+  TextureResolver     Abschnitt -> Texturdatei auf der Platte
   ConfigClassIndex    config.cpp -> Klassenname <-> Modellpfad
   AssetIndex          Verzeichnisdurchlauf, Suchindex, Cache
 
 DzAssets.Preview/     WPF-Anwendung
-  MainWindow          Baum | Viewport | Info
-  ModelViewport       Kamera, Beleuchtung, Gitter, Massstabsfigur
-  ThumbnailService    Offscreen-Rendering, Plattencache
+  Shell/              Fenster, Modulnavigation, Theme, Einstellungen
+    IWerkzeugModul    Schnittstelle, die jedes Werkzeug erfuellt
+    WerkzeugKontext   gemeinsame Dienste: P-Drive, Einstellungen, Protokoll
+  Module/AssetVorschau/
+    ModelViewport     Kamera, Beleuchtung, Gitter, Massstabsfigur
+    ThumbnailService  Offscreen-Rendering, Plattencache
 
 DzAssets.Tests/       xUnit, prüft gegen echte DZ-Dateien
 ```
+
+### Warum ein Rahmen und nicht ein Fenster
+
+Die drei Werkzeuge teilen mehr, als sie unterscheidet: denselben
+P-Drive-Pfad, dasselbe Theme, dieselbe Protokolldatei, dieselbe Art,
+langlaufende Arbeit mit Fortschritt und Abbruch anzuzeigen. Ein Modul ist
+deshalb nur eine `UserControl` samt Titel und Symbol; die Shell weiss
+nichts über P3D, PAA oder ASC, und kein Modul kennt ein anderes.
+
+Die Modul-Schnittstelle entsteht in dieser Umsetzung mit **einem** Modul —
+bewusst, damit sie an einem echten Fall gemessen wird und nicht auf Vorrat
+entworfen ist. Die beiden weiteren Werkzeuge sind ausdrücklich **nicht**
+Teil dieser Umsetzung; sie werden getrennt geplant, sobald die Analyse
+ihrer Anforderungen vorliegt
+(`2026-08-26-werkzeug-module-analyse.md`).
 
 `BisDll` wird nicht kopiert, sondern per `<Compile Include>` aus
 `DayZ_Arma_p3dDeBin/_SOURCE/` mitkompiliert. So bleibt eine einzige Quelle
@@ -130,24 +155,37 @@ Jede Einheit ist ohne die anderen prüfbar:
 
 ## Oberfläche
 
+Moderne, dunkle Gestaltung: eigenes Fenster-Chrome über `WindowChrome`,
+Schrift `Segoe UI Variable Text`, Symbole aus `Segoe Fluent Icons` (beide
+unter Windows 11 vorhanden, geprüft). Keine unformatierten
+Standard-Steuerelemente. Sämtliche Farben, Radien und Abstände liegen als
+Ressourcen in einer einzigen Datei `Theme.xaml`, damit die Gestaltung an
+einer Stelle austauschbar bleibt.
+
 ```
-┌──────────────┬────────────────────────────┬──────────────┐
-│ P-Drive-Baum │                            │ Info         │
-│  DZ/         │      3D-Viewport           │  Maße X/Y/Z  │
-│   structures │                            │  Dreiecke    │
-│   plants     │   Orbit / Zoom / Pan       │  LOD-Auswahl │
-│  7SBM_...    │   Gitter in Metern         │  Texturen    │
-├──────────────┤   Massstabsfigur 1,80 m    │  Klassenname │
-│ Suche        │                            │              │
-│ Trefferliste │                            │ [Pfad kopieren]│
-└──────────────┴────────────────────────────┴──────────────┘
+┌────┬──────────────┬──────────────────────┬──────────────┐
+│ ▣  │ P-Drive-Baum │                      │ Info         │
+│ ▤  │  DZ/         │    3D-Viewport       │  Maße X/Y/Z  │
+│ ▥  │   structures │                      │  Dreiecke    │
+│    │   plants     │  Orbit / Zoom / Pan  │  LOD-Auswahl │
+│    │  7SBM_...    │  Gitter in Metern    │  Texturen    │
+│    ├──────────────┤  Massstabsfigur      │  Klassenname │
+│    │ Suche        │                      │              │
+│    │ Trefferliste │                      │ [Pfad kopieren]│
+└────┴──────────────┴──────────────────────┴──────────────┘
+  ↑
+  Modulleiste: Asset-Vorschau, später Debinarizer und Höhenkarte
 ```
 
-Bedienung: linke Maustaste dreht, mittlere oder rechte verschiebt, das Rad
-zoomt. `F` rahmt das Objekt ein, `W` schaltet das Drahtgitter um, `G` das
-Bodengitter, `M` die Massstabsfigur.
+Ganz links eine schmale Modulleiste. In dieser Umsetzung enthält sie einen
+Eintrag; die beiden künftigen Werkzeuge kommen dort dazu, ohne dass die
+Vorschau davon berührt wird.
 
-Die Trefferliste zeigt ab Phase 6 Miniaturbilder statt reiner Namen.
+Bedienung im Viewport: linke Maustaste dreht, mittlere oder rechte
+verschiebt, das Rad zoomt. `F` rahmt das Objekt ein, `W` schaltet das
+Drahtgitter um, `G` das Bodengitter, `M` die Massstabsfigur.
+
+Die Trefferliste zeigt ab Phase 7 Miniaturbilder statt reiner Namen.
 
 ## Fehlerbehandlung
 
@@ -187,18 +225,26 @@ Aufwand hier nicht.
 ## Reihenfolge der Umsetzung
 
 1. **Formatschicht** — ODOL lesen, PAA und DXT dekodieren, mit Tests
-2. **WPF-Grundgerüst** — Baum, Auswahl, Viewport ohne Texturen
-3. **Texturen und Materialien** — Sections, RVMAT-Rückfall, Alpha
-4. **Info-Panel** — Masse, Dreiecke, LOD-Umschaltung, Gitter, Massstabsfigur
-5. **Suche** — Index über alle Wurzeln, Cache
-6. **Miniaturbilder** — Offscreen-Rendering mit Plattencache
-7. **Auslieferung** — Single-File-`.exe`, Eintrag in README und CHANGELOG
+2. **Shell** — Fenster-Chrome, Theme, Modulleiste, Einstellungen, Protokoll
+3. **WPF-Grundgerüst der Vorschau** — Baum, Auswahl, Viewport ohne Texturen
+4. **Texturen und Materialien** — Sections, RVMAT-Rückfall, Alpha
+5. **Info-Panel** — Masse, Dreiecke, LOD-Umschaltung, Gitter, Massstabsfigur
+6. **Suche** — Index über alle Wurzeln, Cache
+7. **Miniaturbilder** — Offscreen-Rendering mit Plattencache
+8. **Auslieferung** — Single-File-`.exe`, Eintrag in README und CHANGELOG
 
-Die Punkte 1 bis 4 bilden das nutzbare Minimum: ein Asset auswählen und es
+Die Punkte 1 bis 5 bilden das nutzbare Minimum: ein Asset auswählen und es
 texturiert in korrekter Grösse sehen.
 
-## Späteres Extra (nicht Teil dieser Umsetzung)
+## Spätere Erweiterungen (nicht Teil dieser Umsetzung)
 
-Die Template-Library der geladenen Karte einlesen (`.tml`) und den Bestand
-auf die dort verwendeten Objekte einschränken. Bewusst nach hinten gestellt,
-damit die Eigenständigkeit des Werkzeugs erhalten bleibt.
+- **P3D-Debinarizer als Modul** — das vorhandene Konsolenwerkzeug bekommt
+  eine Oberfläche in derselben Shell.
+- **ASC-Höhenkarten-Previewer als Modul** — Esri-ASCII-Grids ansehen, wie
+  sie im Terrain-Builder- und QGIS-Ablauf des Anwenders anfallen.
+- **Template-Library der geladenen Karte einlesen** (`.tml`) und den Bestand
+  auf die dort verwendeten Objekte einschränken. Bewusst nach hinten
+  gestellt, damit die Eigenständigkeit des Werkzeugs erhalten bleibt.
+
+Die beiden Module werden getrennt geplant. Diese Umsetzung schafft nur die
+Shell, in die sie später eingehängt werden.
