@@ -3,7 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net10.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <!-- "annotations" statt "enable": eigener Code darf "string?" schreiben,
+         aber der mitkompilierte BisDll-Quellcode ist nicht annotiert und
+         wuerde unter "enable" hunderte Warnungen erzeugen, die echte
+         Befunde zudecken. -->
+    <Nullable>annotations</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>$(NoWarn);CS0169;CS0414;CS0649;CS8509;SYSLIB0011;CS0162;CS0219</NoWarn>
     <BisDllSrc>$(MSBuildThisFileDirectory)..\..\..\DayZ_Arma_p3dDeBin\_SOURCE\BisDll_Quellcode_DayZ+Arma3_FIXED\BisDll_Quellcode\BisDll_src</BisDllSrc>

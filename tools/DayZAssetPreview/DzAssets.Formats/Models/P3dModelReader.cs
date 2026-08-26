@@ -192,6 +192,10 @@ public static class P3dModelReader
 
         var gruppen = new Dictionary<(string Textur, string Material), List<int>>();
 
+        // Ausserhalb der Schleife: ein stackalloc je Flaeche waere bei
+        // Modellen mit zehntausenden Flaechen ein Stapelueberlauf (CA2014).
+        var abgebildet = new int[4];
+
         foreach (var flaeche in flaechen)
         {
             if (flaeche?.Vertices is null) continue;
@@ -203,7 +207,6 @@ public static class P3dModelReader
             if (!gruppen.TryGetValue(schluessel, out var indizes))
                 gruppen[schluessel] = indizes = [];
 
-            Span<int> abgebildet = stackalloc int[4];
             var gueltig = true;
 
             for (var i = 0; i < ecken; i++)
