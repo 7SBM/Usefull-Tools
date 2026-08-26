@@ -13,19 +13,29 @@ public partial class HauptFenster : Window
 
     private bool _wechseltModul;
 
-    public HauptFenster(WerkzeugKontext kontext, string? sofortOeffnen = null, string? suche = null)
+    public HauptFenster(WerkzeugKontext kontext,
+                        string? sofortOeffnen = null,
+                        string? suche = null,
+                        string? hoehenkarte = null)
     {
         _kontext = kontext;
         InitializeComponent();
 
-        // Weitere Werkzeuge werden hier eingehaengt — der Debinarizer und
-        // der Hoehenkarten-Previewer. Die Shell braucht dafuer keine
-        // Aenderung, nur diese Zeile.
-        ModuleHinzufuegen(new Module.AssetVorschau.AssetVorschauModul
-        {
-            SofortOeffnen = sofortOeffnen,
-            SofortSuchen = suche,
-        });
+        // Weitere Werkzeuge werden hier eingehaengt. Die Shell braucht
+        // dafuer keine Aenderung, nur diese Liste.
+        ModuleHinzufuegen(
+            new Module.AssetVorschau.AssetVorschauModul
+            {
+                SofortOeffnen = sofortOeffnen,
+                SofortSuchen = suche,
+            },
+            new Module.Hoehenkarte.HoehenkarteModul
+            {
+                SofortOeffnen = hoehenkarte,
+            });
+
+        // Wurde eine Hoehenkarte uebergeben, gleich dorthin springen.
+        if (!string.IsNullOrWhiteSpace(hoehenkarte)) ModulWaehlen("hoehenkarte");
 
         StateChanged += (_, _) =>
         {
@@ -40,6 +50,16 @@ public partial class HauptFenster : Window
     }
 
     public void StatusSetzen(string text) => StatusText.Text = text;
+
+    /// <summary>Waehlt ein Modul ueber seine Kennung.</summary>
+    public void ModulWaehlen(string id)
+    {
+        var schalter = ModulLeiste.Children.OfType<ToggleButton>()
+            .FirstOrDefault(s => s.Tag is IWerkzeugModul m
+                                 && m.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+
+        if (schalter is not null) schalter.IsChecked = true;
+    }
 
     public void StatusRechtsSetzen(string text) => StatusRechts.Text = text;
 

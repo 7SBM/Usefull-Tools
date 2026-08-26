@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using DzAssets.Formats.Models;
+using DzAssets.Preview.Gemeinsam;
 
 namespace DzAssets.Preview.Module.AssetVorschau;
 
@@ -20,13 +21,7 @@ public partial class ModelViewport : UserControl
     private LodGeometry? _lod;
     private IReadOnlyDictionary<MeshSection, ImageSource>? _texturen;
 
-    private Point3D _zielpunkt;
-    private double _abstand = 5;
-    private double _drehungUmY;      // Bogenmass
-    private double _drehungUmX = 0.45;
-    private Point _letzteMausposition;
-    private bool _dreht;
-    private bool _verschiebt;
+    private readonly OrbitKamera _kamera;
 
     private bool _drahtgitter;
     private bool _bodengitter = true;
@@ -35,8 +30,11 @@ public partial class ModelViewport : UserControl
     public ModelViewport()
     {
         InitializeComponent();
+
+        _kamera = new OrbitKamera(Kamera) { DrehungUmX = 0.45, Abstand = 6 };
+        _kamera.Anwenden();
+
         HilfsgeometrieAufbauen();
-        KameraSetzen();
 
         MouseDown += (_, _) => Focus();
     }
@@ -313,37 +311,21 @@ public partial class ModelViewport : UserControl
     {
         if (_modell is null)
         {
-            _zielpunkt = new Point3D(0, 0.9, 0);
-            _abstand = 6;
-        }
-        else
-        {
-            var min = _modell.BoundsMin;
-            var max = _modell.BoundsMax;
-            _zielpunkt = new Point3D(
-                (min.X + max.X) / 2,
-                (min.Y + max.Y) / 2,
-                (min.Z + max.Z) / 2);
-
-            var groesse = _modell.Size;
-            var radius = Math.Max(0.5, Math.Max(groesse.X, Math.Max(groesse.Y, groesse.Z)));
-            _abstand = radius * 1.9;
+            _kamera.Zielpunkt = new Point3D(0, 0.9, 0);
+            _kamera.Abstand = 6;
+            _kamera.Anwenden();
+            return;
         }
 
-        KameraSetzen();
-    }
+        var min = _modell.BoundsMin;
+        var max = _modell.BoundsMax;
 
-    private void KameraSetzen()
-    {
-        var x = _abstand * Math.Cos(_drehungUmX) * Math.Sin(_drehungUmY);
-        var y = _abstand * Math.Sin(_drehungUmX);
-        var z = _abstand * Math.Cos(_drehungUmX) * Math.Cos(_drehungUmY);
-
-        var position = new Point3D(_zielpunkt.X + x, _zielpunkt.Y + y, _zielpunkt.Z + z);
-        Kamera.Position = position;
-        Kamera.LookDirection = _zielpunkt - position;
-        Kamera.NearPlaneDistance = Math.Max(0.01, _abstand / 400);
-        Kamera.FarPlaneDistance = Math.Max(200, _abstand * 40);
+        // 2,2 statt der frueheren 1,9: die Kamera rechnet jetzt mit der
+        // halben Raumdiagonale statt mit der laengsten Kante.
+        _kamera.Einrahmen(
+            new Point3D(min.X, min.Y, min.Z),
+            new Point3D(max.X, max.Y, max.Z),
+            zugabe: 2.2);
     }
 
     // ------------------------------------------------------------ Eingabe
@@ -351,58 +333,27 @@ public partial class ModelViewport : UserControl
     protected override void OnMouseDown(MouseButtonEventArgs e)
     {
         base.OnMouseDown(e);
-        _letzteMausposition = e.GetPosition(this);
-
-        if (e.ChangedButton == MouseButton.Left) _dreht = true;
-        else if (e.ChangedButton is MouseButton.Right or MouseButton.Middle) _verschiebt = true;
-
+        _kamera.MausRunter(e, this);
         CaptureMouse();
     }
 
     protected override void OnMouseUp(MouseButtonEventArgs e)
     {
         base.OnMouseUp(e);
-        _dreht = false;
-        _verschiebt = false;
+        _kamera.MausHoch();
         ReleaseMouseCapture();
     }
 
     protected override void OnMouseMove(MouseEventArgs e)
     {
         base.OnMouseMove(e);
-        if (!_dreht && !_verschiebt) return;
-
-        var jetzt = e.GetPosition(this);
-        var dx = jetzt.X - _letzteMausposition.X;
-        var dy = jetzt.Y - _letzteMausposition.Y;
-        _letzteMausposition = jetzt;
-
-        if (_dreht)
-        {
-            _drehungUmY -= dx * 0.01;
-            _drehungUmX = Math.Clamp(_drehungUmX + dy * 0.01, -1.5, 1.5);
-        }
-        else
-        {
-            var richtung = Kamera.LookDirection;
-            richtung.Normalize();
-            var rechts = Vector3D.CrossProduct(richtung, Kamera.UpDirection);
-            rechts.Normalize();
-            var hoch = Vector3D.CrossProduct(rechts, richtung);
-
-            var faktor = _abstand * 0.0016;
-            _zielpunkt -= rechts * (dx * faktor);
-            _zielpunkt += hoch * (dy * faktor);
-        }
-
-        KameraSetzen();
+        _kamera.MausBewegt(e, this);
     }
 
     protected override void OnMouseWheel(MouseWheelEventArgs e)
     {
         base.OnMouseWheel(e);
-        _abstand = Math.Clamp(_abstand * (e.Delta > 0 ? 0.88 : 1.136), 0.05, 5000);
-        KameraSetzen();
+        _kamera.Rad(e.Delta);
     }
 
     protected override void OnKeyDown(KeyEventArgs e)

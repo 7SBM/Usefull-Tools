@@ -10,6 +10,7 @@ public sealed class Einstellungen : BeobachtbaresObjekt
     private bool _bodengitterZeigen = true;
     private bool _massstabsfigurZeigen = true;
     private bool _drahtgitterZeigen;
+    private List<string> _zuletztHoehenkarten = [];
 
     public List<string> Wurzeln
     {
@@ -41,6 +42,13 @@ public sealed class Einstellungen : BeobachtbaresObjekt
         set => Setzen(ref _drahtgitterZeigen, value);
     }
 
+    /// <summary>Zuletzt geöffnete ASC-Höhenkarten, neueste zuerst.</summary>
+    public List<string> ZuletztHoehenkarten
+    {
+        get => _zuletztHoehenkarten;
+        set => Setzen(ref _zuletztHoehenkarten, value);
+    }
+
     public static Einstellungen Laden(string datei)
     {
         Einstellungen? geladen = null;
@@ -57,6 +65,7 @@ public sealed class Einstellungen : BeobachtbaresObjekt
 
         geladen ??= new Einstellungen();
         geladen.Wurzeln ??= [];
+        geladen.ZuletztHoehenkarten ??= [];
 
         if (geladen.Wurzeln.Count == 0)
             geladen.Wurzeln = WurzelnErraten().ToList();

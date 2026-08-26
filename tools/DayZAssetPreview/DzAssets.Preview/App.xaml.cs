@@ -42,7 +42,11 @@ public partial class App : Application
             a => a.Equals("--suche", StringComparison.OrdinalIgnoreCase));
         if (stelle >= 0 && stelle + 1 < e.Args.Length) suche = e.Args[stelle + 1];
 
-        new HauptFenster(_kontext, sofortOeffnen, suche).Show();
+        // Eine .asc oeffnet unmittelbar das Hoehenkarten-Modul.
+        var hoehenkarte = e.Args.FirstOrDefault(
+            a => a.EndsWith(".asc", StringComparison.OrdinalIgnoreCase));
+
+        new HauptFenster(_kontext, sofortOeffnen, suche, hoehenkarte).Show();
     }
 
     protected override void OnExit(ExitEventArgs e)

@@ -356,6 +356,110 @@
   </Style>
 
   <!-- ===================================================================
+       Schieberegler
+       =================================================================== -->
+  <Style TargetType="Slider">
+    <Setter Property="Height" Value="20" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Slider">
+          <Grid VerticalAlignment="Center">
+            <Border Height="4" CornerRadius="2" VerticalAlignment="Center"
+                    Background="{DynamicResource PinselFlaecheHoch}"
+                    BorderBrush="{DynamicResource PinselRand}" BorderThickness="1" />
+            <Track x:Name="PART_Track">
+              <Track.DecreaseRepeatButton>
+                <RepeatButton Command="Slider.DecreaseLarge" Focusable="False">
+                  <RepeatButton.Template>
+                    <ControlTemplate TargetType="RepeatButton">
+                      <Border Height="4" CornerRadius="2" VerticalAlignment="Center"
+                              Background="{DynamicResource PinselAkzent}" />
+                    </ControlTemplate>
+                  </RepeatButton.Template>
+                </RepeatButton>
+              </Track.DecreaseRepeatButton>
+              <Track.IncreaseRepeatButton>
+                <RepeatButton Command="Slider.IncreaseLarge" Focusable="False">
+                  <RepeatButton.Template>
+                    <ControlTemplate TargetType="RepeatButton">
+                      <Border Background="Transparent" />
+                    </ControlTemplate>
+                  </RepeatButton.Template>
+                </RepeatButton>
+              </Track.IncreaseRepeatButton>
+              <Track.Thumb>
+                <Thumb Width="14" Height="14">
+                  <Thumb.Template>
+                    <ControlTemplate TargetType="Thumb">
+                      <Ellipse x:Name="Griff" Fill="{DynamicResource PinselText}"
+                               Stroke="{DynamicResource PinselAkzent}" StrokeThickness="2" />
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                          <Setter TargetName="Griff" Property="Fill"
+                                  Value="{DynamicResource PinselAkzent}" />
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </Thumb.Template>
+                </Thumb>
+              </Track.Thumb>
+            </Track>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- ===================================================================
+       Fortschrittsbalken
+       =================================================================== -->
+  <Style TargetType="ProgressBar">
+    <Setter Property="Height" Value="4" />
+    <Setter Property="Background" Value="{DynamicResource PinselFlaecheHoch}" />
+    <Setter Property="Foreground" Value="{DynamicResource PinselAkzent}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ProgressBar">
+          <Grid ClipToBounds="True">
+            <Border Background="{TemplateBinding Background}" CornerRadius="2" />
+            <Border x:Name="PART_Track" />
+            <Border x:Name="PART_Indicator" HorizontalAlignment="Left"
+                    Background="{TemplateBinding Foreground}" CornerRadius="2" />
+            <!-- Unbestimmter Zustand: ein Balken wandert durch. -->
+            <Border x:Name="Laeufer" Width="90" HorizontalAlignment="Left"
+                    Background="{TemplateBinding Foreground}" CornerRadius="2"
+                    Visibility="Collapsed" RenderTransformOrigin="0,0">
+              <Border.RenderTransform>
+                <TranslateTransform x:Name="LaeuferVersatz" X="-90" />
+              </Border.RenderTransform>
+            </Border>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsIndeterminate" Value="True">
+              <Setter TargetName="PART_Indicator" Property="Visibility" Value="Collapsed" />
+              <Setter TargetName="Laeufer" Property="Visibility" Value="Visible" />
+              <Trigger.EnterActions>
+                <BeginStoryboard x:Name="Lauf">
+                  <Storyboard RepeatBehavior="Forever">
+                    <DoubleAnimation Storyboard.TargetName="LaeuferVersatz"
+                                     Storyboard.TargetProperty="X"
+                                     From="-90" To="400" Duration="0:0:1.4" />
+                  </Storyboard>
+                </BeginStoryboard>
+              </Trigger.EnterActions>
+              <Trigger.ExitActions>
+                <StopStoryboard BeginStoryboardName="Lauf" />
+              </Trigger.ExitActions>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- ===================================================================
        Bildlaufleisten: schlank, ohne Pfeilknoepfe
        =================================================================== -->
   <Style x:Key="StilBildlaufDaumen" TargetType="Thumb">
