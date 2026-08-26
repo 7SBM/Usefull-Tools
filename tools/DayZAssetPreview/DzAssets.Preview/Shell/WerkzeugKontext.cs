@@ -22,7 +22,7 @@ public sealed class WerkzeugKontext(string datenOrdner, Einstellungen einstellun
     {
         var ordner = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "DayZAssetPreview");
+            "7SBM-DayZ-Tools");
 
         try
         {
@@ -30,7 +30,7 @@ public sealed class WerkzeugKontext(string datenOrdner, Einstellungen einstellun
         }
         catch (Exception fehler) when (fehler is IOException or UnauthorizedAccessException)
         {
-            ordner = Path.Combine(Path.GetTempPath(), "DayZAssetPreview");
+            ordner = Path.Combine(Path.GetTempPath(), "7SBM-DayZ-Tools");
             Directory.CreateDirectory(ordner);
         }
 

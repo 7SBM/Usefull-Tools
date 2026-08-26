@@ -1,17 +1,17 @@
-; Setup fuer DayZ Asset Preview.
+; Setup fuer 7SBM-DayZ-Tools.
 ;
 ; Erwartet die veroeffentlichte Anwendung in .\veroeffentlicht\ —
 ; also zuerst veroeffentlichen.ps1 laufen lassen.
 ;
-; Uebersetzen:  "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" DayZAssetPreview_Setup.iss
+; Uebersetzen:  "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" 7SBM-DayZ-Tools_Setup.iss
 
-#define AppName "DayZ Asset Preview"
+#define AppName "7SBM-DayZ-Tools"
 #define AppVersion "1.0"
 #define AppPublisher "7SpeedBlendMaster"
-#define AppExeName "DayZ Asset Preview.exe"
+#define AppExeName "7SBM-DayZ-Tools.exe"
 
 [Setup]
-AppId={{7SBM-DAYZ-ASSET-PREVIEW-2026}
+AppId={{7SBM-DAYZ-TOOLS-2026}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppVerName={#AppName} {#AppVersion}
@@ -21,8 +21,8 @@ DefaultGroupName=7SBM
 DisableProgramGroupPage=yes
 DisableDirPage=no
 OutputDir=_RELEASE
-OutputBaseFilename=DayZAssetPreview_Setup
-SetupIconFile=DzAssets.Preview\DayZAssetPreview.ico
+OutputBaseFilename=7SBM-DayZ-Tools_Setup
+SetupIconFile=DzAssets.Preview\7SBM-DayZ-Tools.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=classic
@@ -46,42 +46,42 @@ Name: "oeffnenmit"; Description: "Zum Menue ""Oeffnen mit"" fuer .p3d und .asc h
 
 [Files]
 Source: "veroeffentlicht\{#AppExeName}";            DestDir: "{app}"; Flags: ignoreversion
-Source: "DzAssets.Preview\DayZAssetPreview.ico";    DestDir: "{app}"; Flags: ignoreversion
+Source: "DzAssets.Preview\7SBM-DayZ-Tools.ico";    DestDir: "{app}"; Flags: ignoreversion
 Source: "README.md";                                DestDir: "{app}"; Flags: ignoreversion isreadme
 
 [Icons]
-Name: "{group}\{#AppName}";                Filename: "{app}\{#AppExeName}"; IconFilename: "{app}\DayZAssetPreview.ico"
+Name: "{group}\{#AppName}";                Filename: "{app}\{#AppExeName}"; IconFilename: "{app}\7SBM-DayZ-Tools.ico"
 Name: "{group}\{#AppName} deinstallieren"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#AppName}";        Filename: "{app}\{#AppExeName}"; IconFilename: "{app}\DayZAssetPreview.ico"; Tasks: desktopicon
+Name: "{commondesktop}\{#AppName}";        Filename: "{app}\{#AppExeName}"; IconFilename: "{app}\7SBM-DayZ-Tools.ico"; Tasks: desktopicon
 
 [Registry]
 ; Bewusst nur "Oeffnen mit" und keine Standardzuordnung: .p3d haengt in
 ; aller Regel schon am Object Builder, und die darf ein Setup nicht
 ; stillschweigend an sich reissen.
-Root: HKA; Subkey: "Software\Classes\7SBM.AssetPreview.p3d"; \
+Root: HKA; Subkey: "Software\Classes\7SBM.DayZTools.p3d"; \
     ValueType: string; ValueName: ""; ValueData: "DayZ-Modell"; \
     Flags: uninsdeletekey; Tasks: oeffnenmit
-Root: HKA; Subkey: "Software\Classes\7SBM.AssetPreview.p3d\DefaultIcon"; \
-    ValueType: string; ValueName: ""; ValueData: "{app}\DayZAssetPreview.ico"; \
+Root: HKA; Subkey: "Software\Classes\7SBM.DayZTools.p3d\DefaultIcon"; \
+    ValueType: string; ValueName: ""; ValueData: "{app}\7SBM-DayZ-Tools.ico"; \
     Tasks: oeffnenmit
-Root: HKA; Subkey: "Software\Classes\7SBM.AssetPreview.p3d\shell\open\command"; \
+Root: HKA; Subkey: "Software\Classes\7SBM.DayZTools.p3d\shell\open\command"; \
     ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExeName}"" ""%1"""; \
     Tasks: oeffnenmit
 Root: HKA; Subkey: "Software\Classes\.p3d\OpenWithProgids"; \
-    ValueType: string; ValueName: "7SBM.AssetPreview.p3d"; ValueData: ""; \
+    ValueType: string; ValueName: "7SBM.DayZTools.p3d"; ValueData: ""; \
     Flags: uninsdeletevalue; Tasks: oeffnenmit
 
-Root: HKA; Subkey: "Software\Classes\7SBM.AssetPreview.asc"; \
+Root: HKA; Subkey: "Software\Classes\7SBM.DayZTools.asc"; \
     ValueType: string; ValueName: ""; ValueData: "ASC-Hoehenkarte"; \
     Flags: uninsdeletekey; Tasks: oeffnenmit
-Root: HKA; Subkey: "Software\Classes\7SBM.AssetPreview.asc\DefaultIcon"; \
-    ValueType: string; ValueName: ""; ValueData: "{app}\DayZAssetPreview.ico"; \
+Root: HKA; Subkey: "Software\Classes\7SBM.DayZTools.asc\DefaultIcon"; \
+    ValueType: string; ValueName: ""; ValueData: "{app}\7SBM-DayZ-Tools.ico"; \
     Tasks: oeffnenmit
-Root: HKA; Subkey: "Software\Classes\7SBM.AssetPreview.asc\shell\open\command"; \
+Root: HKA; Subkey: "Software\Classes\7SBM.DayZTools.asc\shell\open\command"; \
     ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExeName}"" ""%1"""; \
     Tasks: oeffnenmit
 Root: HKA; Subkey: "Software\Classes\.asc\OpenWithProgids"; \
-    ValueType: string; ValueName: "7SBM.AssetPreview.asc"; ValueData: ""; \
+    ValueType: string; ValueName: "7SBM.DayZTools.asc"; ValueData: ""; \
     Flags: uninsdeletevalue; Tasks: oeffnenmit
 
 [Run]
@@ -232,7 +232,7 @@ begin
   S := S + 'ist enthalten. Die Anwendung liest die entpackten' + NewLine;
   S := S + 'Gamefiles nur — sie schreibt dort nichts.' + NewLine + NewLine;
   S := S + 'Einstellungen, Protokoll und Zwischenspeicher liegen in' + NewLine;
-  S := S + '%LOCALAPPDATA%\DayZAssetPreview und bleiben bei einer' + NewLine;
+  S := S + '%LOCALAPPDATA%\7SBM-DayZ-Tools und bleiben bei einer' + NewLine;
   S := S + 'Deinstallation erhalten.' + NewLine + NewLine;
 
   S := S + '--- Hinweis zur Nutzung ---' + NewLine + NewLine;

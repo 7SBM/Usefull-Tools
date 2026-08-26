@@ -1,4 +1,4 @@
-# Erzeugt eine eigenstaendige "DayZ Asset Preview.exe".
+# Erzeugt eine eigenstaendige "7SBM-DayZ-Tools.exe".
 #
 # Selbstenthaltend, damit auf dem Zielrechner keine .NET-Installation
 # noetig ist. Das kostet Groesse, erspart aber die Frage, warum das

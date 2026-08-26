@@ -5,8 +5,8 @@ namespace DzAssets.Preview.Module.Hoehenkarte;
 
 public sealed class HoehenkarteModul : IWerkzeugModul
 {
-    public string Id => "hoehenkarte";
-    public string Titel => "Höhenkarte";
+    public string Id => "asc-highfield";
+    public string Titel => "ASC-Highfield Modifi";
 
     /// <summary>E909 — Berge, Segoe Fluent Icons.</summary>
     public string Symbol => "";

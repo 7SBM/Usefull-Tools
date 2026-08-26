@@ -41,7 +41,7 @@ public partial class HauptFenster : Window
         // Ein ausdruecklich genanntes Modul geht vor; sonst springt eine
         // uebergebene Hoehenkarte in ihr Modul.
         if (!string.IsNullOrWhiteSpace(modul)) ModulWaehlen(modul);
-        else if (!string.IsNullOrWhiteSpace(hoehenkarte)) ModulWaehlen("hoehenkarte");
+        else if (!string.IsNullOrWhiteSpace(hoehenkarte)) ModulWaehlen("asc-highfield");
 
         StateChanged += (_, _) =>
         {
@@ -57,14 +57,37 @@ public partial class HauptFenster : Window
 
     public void StatusSetzen(string text) => StatusText.Text = text;
 
-    /// <summary>Waehlt ein Modul ueber seine Kennung.</summary>
+    /// <summary>
+    /// Waehlt ein Modul. Angenommen werden die Kennung und der Anfang des
+    /// Titels — wer „--modul asc" tippt, meint zweifelsfrei die Hoehenkarte,
+    /// und die frueheren Kennungen sollen weiter funktionieren.
+    /// </summary>
     public void ModulWaehlen(string id)
     {
+        if (string.IsNullOrWhiteSpace(id)) return;
+
+        var gesucht = id.Trim();
+
         var schalter = ModulLeiste.Children.OfType<ToggleButton>()
-            .FirstOrDefault(s => s.Tag is IWerkzeugModul m
-                                 && m.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefault(s => s.Tag is IWerkzeugModul m && Passt(m, gesucht));
 
         if (schalter is not null) schalter.IsChecked = true;
+        else _kontext.Protokoll.Schreiben($"Modul '{gesucht}' nicht gefunden.");
+    }
+
+    private static bool Passt(IWerkzeugModul modul, string gesucht)
+    {
+        if (modul.Id.Equals(gesucht, StringComparison.OrdinalIgnoreCase)) return true;
+        if (modul.Id.StartsWith(gesucht, StringComparison.OrdinalIgnoreCase)) return true;
+        if (modul.Titel.StartsWith(gesucht, StringComparison.OrdinalIgnoreCase)) return true;
+
+        // Die Kennungen aus der Zeit vor der Umbenennung.
+        return (gesucht.ToLowerInvariant(), modul.Id) switch
+        {
+            ("asset-vorschau", "objekt-preview") => true,
+            ("hoehenkarte", "asc-highfield") => true,
+            _ => false,
+        };
     }
 
     public void StatusRechtsSetzen(string text) => StatusRechts.Text = text;

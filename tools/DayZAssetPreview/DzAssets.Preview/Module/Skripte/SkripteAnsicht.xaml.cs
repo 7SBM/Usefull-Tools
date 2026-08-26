@@ -207,7 +207,7 @@ public partial class SkripteAnsicht : UserControl
 
         var antwort = MessageBox.Show(
             $"„{_gewaehlt.Dateiname}“ wurde geändert. Speichern?",
-            "DayZ Asset Preview", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            "7SBM-DayZ-Tools", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
 
         switch (antwort)
         {
@@ -240,7 +240,7 @@ public partial class SkripteAnsicht : UserControl
         {
             _kontext.Protokoll.Fehler($"Skript ließ sich nicht speichern: {_gewaehlt.Pfad}", fehler);
             MessageBox.Show($"Speichern misslang:\n\n{fehler.Message}",
-                "DayZ Asset Preview", MessageBoxButton.OK, MessageBoxImage.Warning);
+                "7SBM-DayZ-Tools", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
     }
@@ -269,7 +269,7 @@ public partial class SkripteAnsicht : UserControl
         if (ordner is null || !Directory.Exists(ordner))
         {
             MessageBox.Show("Erst einen Skriptordner aufnehmen.",
-                "DayZ Asset Preview", MessageBoxButton.OK, MessageBoxImage.Information);
+                "7SBM-DayZ-Tools", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 

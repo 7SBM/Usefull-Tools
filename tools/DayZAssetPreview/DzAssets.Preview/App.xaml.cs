@@ -27,7 +27,7 @@ public partial class App : Application
             MessageBox.Show(
                 $"Es ist ein Fehler aufgetreten:\n\n{args.Exception.Message}\n\n" +
                 $"Einzelheiten stehen in\n{_kontext.Protokoll.Datei}",
-                "DayZ Asset Preview", MessageBoxButton.OK, MessageBoxImage.Warning);
+                "7SBM-DayZ-Tools", MessageBoxButton.OK, MessageBoxImage.Warning);
             args.Handled = true;
         };
 

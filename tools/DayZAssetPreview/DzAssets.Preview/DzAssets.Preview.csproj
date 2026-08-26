@@ -6,13 +6,13 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ApplicationTitle>DayZ Asset Preview</ApplicationTitle>
-    <AssemblyName>DayZ Asset Preview</AssemblyName>
+    <ApplicationTitle>7SBM-DayZ-Tools</ApplicationTitle>
+    <AssemblyName>7SBM-DayZ-Tools</AssemblyName>
     <RootNamespace>DzAssets.Preview</RootNamespace>
     <Version>1.0.0</Version>
     <Company>7SBM</Company>
-    <Product>DayZ Asset Preview</Product>
-    <ApplicationIcon>DayZAssetPreview.ico</ApplicationIcon>
+    <Product>7SBM-DayZ-Tools</Product>
+    <ApplicationIcon>7SBM-DayZ-Tools.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

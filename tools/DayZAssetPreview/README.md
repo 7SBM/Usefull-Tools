@@ -1,4 +1,4 @@
-# DayZ Asset Preview
+# 7SBM-DayZ-Tools
 
 Eine Werkzeugsammlung für die Terrain-Arbeit an **BrienZ** — als eine
 Windows-Anwendung mit vier Modulen. Sie läuft eigenständig neben Terrain
@@ -7,8 +7,8 @@ Projektdateien, solange man es nicht ausdrücklich verlangt.
 
 | Modul | Zweck |
 |---|---|
-| **Asset-Vorschau** | DayZ-Modelle texturiert in 3D ansehen — der Ersatz für die fehlende Vorschau im Terrain Builder |
-| **Höhenkarte** | ASC-Höhenkarten als 3D-Relief betrachten |
+| **Objekt Preview** | DayZ-Modelle texturiert in 3D ansehen — der Ersatz für die fehlende Vorschau im Terrain Builder |
+| **ASC-Highfield Modifi** | ASC-Höhenkarten als 3D-Relief betrachten |
 | **Debinarizer** | Binarisierte P3D (ODOL) in bearbeitbare MLOD umwandeln |
 | **Skripte** | Die eigenen Hilfsskripte ansehen, bearbeiten, ausführen und ergänzen |
 
@@ -17,7 +17,7 @@ eine Zeile in `HauptFenster`.
 
 ---
 
-## Asset-Vorschau
+## Objekt Preview
 
 Ordnerbaum und Volltextsuche über den gesamten Bestand — im Test 9.646
 Modelle aus `DZ` und den eigenen Mods. Die Trefferliste zeigt
@@ -50,7 +50,7 @@ Verweist ein Modell auf `P:\…`, also auf das Arma-Arbeitslaufwerk, wird der
 Laufwerksbuchstabe abgestreift und relativ zu den eingestellten Wurzeln
 gesucht — ein Arbeitslaufwerk ist dessen Spiegel.
 
-## Höhenkarte
+## ASC-Highfield Modifi
 
 Liest Esri-ASCII-Grids (`.asc`) und stellt sie als 3D-Relief dar. Die
 124-MB-Karte mit 4096 × 4096 Zellen ist in gut zwei Sekunden eingelesen.
@@ -105,22 +105,22 @@ gesucht; weitere Ordner lassen sich aufnehmen.
 ## Aufruf
 
 ```
-"DayZ Asset Preview.exe"
-"DayZ Asset Preview.exe" H:\P_Drive\DZ\plants\tree\t_betulapendula_1f.p3d
-"DayZ Asset Preview.exe" H:\BrienZ_QGIS\gtt_export\gtt_heightmap.asc
-"DayZ Asset Preview.exe" --suche "wall concrete"
-"DayZ Asset Preview.exe" --modul hoehenkarte
-"DayZ Asset Preview.exe" --skript DayZ_TB_River_steps.py
+"7SBM-DayZ-Tools.exe"
+"7SBM-DayZ-Tools.exe" H:\P_Drive\DZ\plants\tree\t_betulapendula_1f.p3d
+"7SBM-DayZ-Tools.exe" H:\BrienZ_QGIS\gtt_export\gtt_heightmap.asc
+"7SBM-DayZ-Tools.exe" --suche "wall concrete"
+"7SBM-DayZ-Tools.exe" --modul asc-highfield
+"7SBM-DayZ-Tools.exe" --skript DayZ_TB_River_steps.py
 ```
 
 Eine `.p3d` oder `.asc` als Argument wird sofort geöffnet und springt ins
-passende Modul. Modulkennungen: `asset-vorschau`, `hoehenkarte`,
+passende Modul. Modulkennungen: `objekt-preview`, `asc-highfield`,
 `debinarizer`, `skripte`.
 
 ## Einstellungen und Daten
 
 ```
-%LOCALAPPDATA%\DayZAssetPreview\
+%LOCALAPPDATA%\7SBM-DayZ-Tools\
     settings.json    Wurzeln, Skriptordner, Schalter, zuletzt Geöffnetes
     log.txt          Meldungen, auch die des P3D-Lesers
     index.json       Zwischenspeicher des Bestands
@@ -136,16 +136,16 @@ Hinzufügen neuer Modelle auf **Neu einlesen** klicken.
 Es gibt zwei Wege — beide brauchen keine .NET-Installation, die Laufzeit
 ist enthalten.
 
-**Setup** (`DayZAssetPreview_Setup.exe`, rund 57 MB) legt das Programm
+**Setup** (`7SBM-DayZ-Tools_Setup.exe`, rund 57 MB) legt das Programm
 unter `%ProgramFiles%\7SBM\Asset Preview` ab, erstellt Startmenü- und auf
 Wunsch Desktop-Verknüpfung und trägt sich für `.p3d` und `.asc` ins Menü
 **Öffnen mit** ein. Die Standardzuordnung bleibt unangetastet — `.p3d`
 hängt in aller Regel am Object Builder, und die darf ein Setup nicht
 stillschweigend an sich reissen.
 
-**Portabel**: `DayZ Asset Preview.exe` einfach irgendwohin legen und
+**Portabel**: `7SBM-DayZ-Tools.exe` einfach irgendwohin legen und
 starten. Einstellungen landen so oder so in
-`%LOCALAPPDATA%\DayZAssetPreview`.
+`%LOCALAPPDATA%\7SBM-DayZ-Tools`.
 
 Windows SmartScreen meldet sich beim ersten Start, weil der Installer
 nicht signiert ist: „Weitere Informationen" → „Trotzdem ausführen".
@@ -156,7 +156,7 @@ nicht signiert ist: „Weitere Informationen" → „Trotzdem ausführen".
 dotnet build tools/DayZAssetPreview
 dotnet test  tools/DayZAssetPreview
 powershell -ExecutionPolicy Bypass -File tools/DayZAssetPreview/veroeffentlichen.ps1
-"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" tools\DayZAssetPreview\DayZAssetPreview_Setup.iss
+"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" tools\DayZAssetPreview\7SBM-DayZ-Tools_Setup.iss
 ```
 
 Die ersten drei Schritte erzeugen die eigenständige `.exe` in

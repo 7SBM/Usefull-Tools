@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
-        Title="DayZ Asset Preview"
+        Title="7SBM-DayZ-Tools"
         Height="840" Width="1440"
         MinHeight="560" MinWidth="980"
         WindowStartupLocation="CenterScreen"
@@ -40,7 +40,7 @@
           <TextBlock Text="&#xE809;" FontFamily="{DynamicResource SchriftSymbole}"
                      FontSize="15" Foreground="{DynamicResource PinselAkzent}"
                      VerticalAlignment="Center" />
-          <TextBlock Text="DayZ Asset Preview" Margin="10,0,0,0"
+          <TextBlock Text="7SBM-DayZ-Tools" Margin="10,0,0,0"
                      FontWeight="SemiBold" VerticalAlignment="Center" />
           <Border Width="1" Height="14" Margin="12,0"
                   Background="{DynamicResource PinselRand}" VerticalAlignment="Center" />
