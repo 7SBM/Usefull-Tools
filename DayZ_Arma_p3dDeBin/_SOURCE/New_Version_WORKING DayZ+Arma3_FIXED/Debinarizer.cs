@@ -2273,6 +2273,28 @@ namespace P3DDebinarizer
                                 }
                                 catch { }
 
+                                // binarisierte .rvmat → lesbares raP-Textformat
+                                try
+                                {
+                                    string[] rvmats = Directory.GetFiles(outDir,
+                                        "*.rvmat", SearchOption.AllDirectories);
+                                    foreach (string rv in rvmats)
+                                    {
+                                        string rvC; string rvE;
+                                        if (TryRapToCpp(rv, out rvC, out rvE))
+                                        {
+                                            File.WriteAllText(rv, rvC,
+                                                new UTF8Encoding(false));
+                                            SetColor(ConsoleColor.Cyan);
+                                            Console.WriteLine("        → " +
+                                                Path.GetFileName(rv) + " debinarisiert  (" +
+                                                (rvC.Length / 1024.0).ToString("F1") + " KB)");
+                                            ResetColor();
+                                        }
+                                    }
+                                }
+                                catch { }
+
                                 pOk++;
                             }
                             Console.WriteLine();
@@ -2376,6 +2398,30 @@ namespace P3DDebinarizer
                                 {
                                     SetColor(ConsoleColor.DarkYellow);
                                     Console.WriteLine("  [raP]  config.bin nicht konvertiert: " + rapErr);
+                                    ResetColor();
+                                }
+                            }
+                        }
+                        catch { }
+
+                        // binarisierte .rvmat → lesbares raP-Textformat (wie Mikero DeRap)
+                        try
+                        {
+                            string[] rvmatsSingle = Directory.GetFiles(pboOutputDir,
+                                "*.rvmat", SearchOption.AllDirectories);
+                            foreach (string rv in rvmatsSingle)
+                            {
+                                string rvC; string rvE;
+                                if (TryRapToCpp(rv, out rvC, out rvE))
+                                {
+                                    File.WriteAllText(rv, rvC, new UTF8Encoding(false));
+                                    SetColor(ConsoleColor.Cyan);
+                                    string rvRel = rv.Substring(pboOutputDir.Length)
+                                        .TrimStart(Path.DirectorySeparatorChar,
+                                                   Path.AltDirectorySeparatorChar);
+                                    Console.WriteLine(string.Format(
+                                        "  [raP]  {0,-44}  → debinarisiert  ({1:F1} KB)",
+                                        rvRel, rvC.Length / 1024.0));
                                     ResetColor();
                                 }
                             }
