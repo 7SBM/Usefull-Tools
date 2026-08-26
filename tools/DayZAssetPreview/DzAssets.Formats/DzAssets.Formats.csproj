@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>$(NoWarn);CS0169;CS0414;CS0649;CS8509;SYSLIB0011;CS0162;CS0219</NoWarn>
+    <BisDllSrc>$(MSBuildThisFileDirectory)..\..\..\DayZ_Arma_p3dDeBin\_SOURCE\BisDll_Quellcode_DayZ+Arma3_FIXED\BisDll_Quellcode\BisDll_src</BisDllSrc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- BisDll hat einen eigenen Namespace BisDll.Stream mit einer eigenen
+         BinaryWriter-Klasse. Waere System.IO global eingebunden, waere der
+         Name in 18 BisDll-Dateien mehrdeutig (CS0104). Der Vendor-Code
+         bleibt unangetastet; eigener Code schreibt "using System.IO;". -->
+    <Using Remove="System.IO" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="$(BisDllSrc)\**\*.cs"
+             Exclude="$(BisDllSrc)\Properties\**\*.cs;$(BisDllSrc)\bin\**\*.cs;$(BisDllSrc)\obj\**\*.cs"
+             LinkBase="Vendor\BisDll" />
+  </ItemGroup>
+
+  <Target Name="PruefeBisDllQuelle" BeforeTargets="BeforeBuild">
+    <Error Condition="!Exists('$(BisDllSrc)')"
+           Text="BisDll-Quellcode nicht gefunden unter $(BisDllSrc). Das Werkzeug wird aus dem Repository heraus gebaut und erwartet DayZ_Arma_p3dDeBin/_SOURCE/ an seinem Platz." />
+  </Target>
+
+</Project>

@@ -114,10 +114,19 @@ dotnet sln add DzAssets.Formats/DzAssets.Formats.csproj
 Run: `cd tools/DayZAssetPreview && dotnet build DzAssets.Formats/DzAssets.Formats.csproj`
 Expected: `Build succeeded`. Warnungen sind hinnehmbar, Fehler nicht.
 
-Falls Fehler auftreten, sind es fast sicher diese drei — jeweils in der `.csproj` beheben, **nicht** im `BisDll`-Quellcode:
+Falls Fehler auftreten, in der `.csproj` beheben, **nicht** im
+`BisDll`-Quellcode:
 - `CS0227` (unsafe): `AllowUnsafeBlocks` fehlt.
 - Doppelte Assembly-Attribute: `Properties/` ist nicht ausgeschlossen.
 - `System.Security.Permissions` nicht gefunden: ebenfalls `Properties/`.
+- **`CS0104: "BinaryWriter" ist ein mehrdeutiger Verweis` (18-mal).** Trat
+  bei der Umsetzung am 2026-08-26 tatsächlich auf. Ursache:
+  `ImplicitUsings` bindet `System.IO` global ein, und `BisDll` hat einen
+  eigenen Namespace `BisDll.Stream` mit einer eigenen `BinaryWriter`-Klasse.
+  Im ursprünglichen net461-Projekt gab es keine impliziten Usings, deshalb
+  fiel es dort nie auf. Behoben durch `<Using Remove="System.IO" />` in der
+  oben gezeigten `.csproj`; eigener Code schreibt `using System.IO;`
+  explizit. Der Vendor-Code bleibt unangetastet.
 
 - [ ] **Step 3: Testprojekt mit Zugriff auf die echten Dateien anlegen**
 

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DzAssets.Formats/DzAssets.Formats.csproj" />
+  <Project Path="DzAssets.Tests/DzAssets.Tests.csproj" />
+</Solution>
