@@ -19,6 +19,10 @@ public partial class AssetVorschauAnsicht : UserControl
         Interval = TimeSpan.FromMilliseconds(220),
     };
 
+    private readonly ThumbnailService _bilder;
+    private readonly Queue<TrefferAnzeige> _bildWarteschlange = new();
+    private bool _bilderLaufen;
+
     private AssetIndex? _index;
     private ConfigClassIndex? _klassenIndex;
 
@@ -35,15 +39,26 @@ public partial class AssetVorschauAnsicht : UserControl
     private bool _initialisiert;
 
     private readonly string? _sofortOeffnen;
+    private readonly string? _sofortSuchen;
 
-    public AssetVorschauAnsicht(WerkzeugKontext kontext, string? sofortOeffnen = null)
+    public AssetVorschauAnsicht(WerkzeugKontext kontext,
+                                string? sofortOeffnen = null,
+                                string? sofortSuchen = null)
     {
         _kontext = kontext;
         _sofortOeffnen = sofortOeffnen;
+        _sofortSuchen = sofortSuchen;
         InitializeComponent();
 
         _texturLader = new TexturLader(
             new TextureResolver(_kontext.Einstellungen.Wurzeln),
+            _kontext.Protokoll);
+
+        // Eigener Lader fuer die Miniaturbilder: sonst wuerde die Liste
+        // "Fehlend" des Hauptladers waehrend der Anzeige ueberschrieben.
+        _bilder = new ThumbnailService(
+            Path.Combine(_kontext.DatenOrdner, "thumbs"),
+            new TexturLader(new TextureResolver(_kontext.Einstellungen.Wurzeln), _kontext.Protokoll),
             _kontext.Protokoll);
 
         SchalterGitter.IsChecked = _kontext.Einstellungen.BodengitterZeigen;
@@ -101,6 +116,13 @@ public partial class AssetVorschauAnsicht : UserControl
 
             _kontext.Protokoll.Schreiben($"Bestand eingelesen: {_index.Eintraege.Count} Modelle");
 
+            if (!neuEinlesen && !string.IsNullOrWhiteSpace(_sofortSuchen))
+            {
+                SuchFeld.Text = _sofortSuchen;
+                _suchTakt.Stop();
+                SucheAusfuehren();
+            }
+
             if (!neuEinlesen && !string.IsNullOrWhiteSpace(_sofortOeffnen))
             {
                 var voll = Path.GetFullPath(_sofortOeffnen);
@@ -121,7 +143,19 @@ public partial class AssetVorschauAnsicht : UserControl
             _ = Task.Run(() =>
             {
                 var index = ConfigClassIndex.Erstellen(wurzeln);
-                Dispatcher.Invoke(() => _klassenIndex = index);
+                Dispatcher.Invoke(() =>
+                {
+                    _klassenIndex = index;
+
+                    // Ist bereits ein Modell offen, wurde sein Klassenname
+                    // noch ohne Index bestimmt und blieb leer — jetzt
+                    // nachtragen.
+                    if (_aktuellesModell is not null
+                        && LodAuswahl.SelectedItem is LodGeometry offen)
+                    {
+                        InfoSetzen(_aktuellesModell, offen, _aktuellerAssetPfad);
+                    }
+                });
             });
         }
         catch (Exception fehler)
@@ -306,5 +340,42 @@ public partial class AssetVorschauAnsicht : UserControl
             1 => "1 Treffer",
             _ => $"{treffer.Count:N0} Treffer",
         };
+
+        VorschaubilderAnfordern(treffer);
+    }
+
+    // -------------------------------------------------------- Miniaturbilder
+
+    private void VorschaubilderAnfordern(IReadOnlyList<TrefferAnzeige> treffer)
+    {
+        _bildWarteschlange.Clear();
+
+        // Hoechstens 60 je Suche: mehr sieht ohnehin niemand, bevor er
+        // weitertippt.
+        foreach (var anzeige in treffer.Take(60))
+        {
+            var ausCache = _bilder.AusCache(anzeige.Eintrag.AbsoluterPfad);
+            if (ausCache is not null) anzeige.Vorschau = ausCache;
+            else _bildWarteschlange.Enqueue(anzeige);
+        }
+
+        BilderNachziehen();
+    }
+
+    private void BilderNachziehen()
+    {
+        if (_bilderLaufen || _bildWarteschlange.Count == 0) return;
+        _bilderLaufen = true;
+
+        Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, () =>
+        {
+            _bilderLaufen = false;
+            if (_bildWarteschlange.Count == 0) return;
+
+            var anzeige = _bildWarteschlange.Dequeue();
+            anzeige.Vorschau = _bilder.Erzeugen(anzeige.Eintrag.AbsoluterPfad);
+
+            BilderNachziehen();
+        });
     }
 }

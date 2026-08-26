@@ -36,7 +36,13 @@ public partial class App : Application
         var sofortOeffnen = e.Args.FirstOrDefault(
             a => a.EndsWith(".p3d", StringComparison.OrdinalIgnoreCase));
 
-        new HauptFenster(_kontext, sofortOeffnen).Show();
+        // "--suche <text>" startet mit vorbelegtem Suchfeld.
+        string? suche = null;
+        var stelle = Array.FindIndex(e.Args,
+            a => a.Equals("--suche", StringComparison.OrdinalIgnoreCase));
+        if (stelle >= 0 && stelle + 1 < e.Args.Length) suche = e.Args[stelle + 1];
+
+        new HauptFenster(_kontext, sofortOeffnen, suche).Show();
     }
 
     protected override void OnExit(ExitEventArgs e)

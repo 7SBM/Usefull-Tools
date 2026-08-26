@@ -58,6 +58,7 @@ bauen möchte, findet den vollständigen Quellcode unter
 
 | Ordner | Inhalt |
 |--------|--------|
+| `tools/DayZAssetPreview/` | **DayZ Asset Preview** — 3D-Vorschau der entpackten Gamefiles als Ersatz für die fehlende Vorschau im Terrain Builder, siehe [eigene README](tools/DayZAssetPreview/README.md) |
 | `DayZ_Arma_p3dDeBin/_SOURCE/` | Quellcode von P3D.DeBin inkl. `BisDll`-Modellbibliothek und Inno-Setup-Skript |
 | `DayZ_Helper_Scripte/` | 19 Skripte: Heightmap-/Terrainbearbeitung (ASC, Shapefiles), `mapgroupproto`-Generator, SHP→DayZ-Koordinaten, RVMAT-Texturpatcher, Deploy- und Backup-Skripte |
 | `DayZ_ProxyIcons/` | 36 freigestellte Proxy-Icons für Inventar-Attachment-Slots |

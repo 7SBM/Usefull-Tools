@@ -13,7 +13,7 @@ public partial class HauptFenster : Window
 
     private bool _wechseltModul;
 
-    public HauptFenster(WerkzeugKontext kontext, string? sofortOeffnen = null)
+    public HauptFenster(WerkzeugKontext kontext, string? sofortOeffnen = null, string? suche = null)
     {
         _kontext = kontext;
         InitializeComponent();
@@ -24,6 +24,7 @@ public partial class HauptFenster : Window
         ModuleHinzufuegen(new Module.AssetVorschau.AssetVorschauModul
         {
             SofortOeffnen = sofortOeffnen,
+            SofortSuchen = suche,
         });
 
         StateChanged += (_, _) =>

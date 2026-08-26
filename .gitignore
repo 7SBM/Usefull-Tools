@@ -66,7 +66,15 @@ EditorCache/
 # ueber die Versionierung (Tag p3ddebin-vX.Y + SHA256SUMS).
 /DayZ_Arma_p3dDeBin/_RELEASE/
 
-# ---- 7. Sonstiges ------------------------------------------
+# ---- 7. DayZ Asset Preview ---------------------------------
+# Bauergebnisse und die veroeffentlichte .exe. Letztere wird wie der
+# P3D.DeBin-Installer ueber Releases verteilt, nicht ueber die
+# Versionierung.
+tools/DayZAssetPreview/**/bin/
+tools/DayZAssetPreview/**/obj/
+tools/DayZAssetPreview/veroeffentlicht/
+
+# ---- 8. Sonstiges ------------------------------------------
 Thumbs.db
 desktop.ini
 *~

@@ -11,6 +11,19 @@ Format lose nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unveröffentlicht]
 
 ### Hinzugefügt
+- **DayZ Asset Preview** (`tools/DayZAssetPreview/`) — eigenständiges
+  Windows-Programm, das die entpackten DayZ-Assets texturiert in 3D anzeigt.
+  Gedacht als Ersatz für die fehlende Vorschau im Terrain Builder: läuft auf
+  dem zweiten Bildschirm, koppelt sich nicht an TB.
+  Ordnerbaum und Volltextsuche über den gesamten Bestand (im Test 9.646
+  Modelle aus `DZ` und den eigenen Mods), Miniaturbilder mit Plattencache,
+  Umschaltung der Detailstufen, Bodengitter in Metern und eine
+  Maßstabsfigur von 1,80 m.
+  Liest **ODOL und MLOD** über den `BisDll`-Parser des P3D.DeBin — der
+  Quellcode wird mitkompiliert statt kopiert, Korrekturen wirken in beiden
+  Werkzeugen. `.paa`-Texturen (DXT1/DXT5, LZO) werden selbst dekodiert.
+  Angelegt als Rahmen für weitere Werkzeuge; der Debinarizer und ein
+  ASC-Höhenkarten-Previewer sollen als Module folgen.
 - `.gitignore`, `VENDOR.md`, dieses Änderungsprotokoll
 - README auf den tatsächlichen Funktionsstand gebracht (beschrieb bis dahin nur
   die reine ODOL→MLOD-Fassung)

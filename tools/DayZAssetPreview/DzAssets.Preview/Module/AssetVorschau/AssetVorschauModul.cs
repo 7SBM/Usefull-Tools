@@ -19,6 +19,9 @@ public sealed class AssetVorschauModul : IWerkzeugModul
     /// </summary>
     public string? SofortOeffnen { get; init; }
 
+    /// <summary>Suchtext, mit dem das Suchfeld vorbelegt wird.</summary>
+    public string? SofortSuchen { get; init; }
+
     public UserControl ErzeugeAnsicht(WerkzeugKontext kontext)
-        => new AssetVorschauAnsicht(kontext, SofortOeffnen);
+        => new AssetVorschauAnsicht(kontext, SofortOeffnen, SofortSuchen);
 }
