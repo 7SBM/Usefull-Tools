@@ -152,6 +152,9 @@
                     Checked="Ansicht_Geaendert" Unchecked="Ansicht_Geaendert" />
           <CheckBox x:Name="SchalterDraht" Content="Drahtgitter" Margin="0,3"
                     Checked="Ansicht_Geaendert" Unchecked="Ansicht_Geaendert" />
+          <CheckBox x:Name="SchalterProxys" Content="Proxy-Platzhalter" Margin="0,3"
+                    Checked="Ansicht_Geaendert" Unchecked="Ansicht_Geaendert"
+                    ToolTip="Die Pyramiden mit Pfeil, die Andockstellen markieren" />
 
           <Button x:Name="KnopfPfadKopieren" Content="Pfad kopieren" Margin="0,16,0,0"
                   HorizontalAlignment="Stretch" Click="PfadKopieren_Click" />

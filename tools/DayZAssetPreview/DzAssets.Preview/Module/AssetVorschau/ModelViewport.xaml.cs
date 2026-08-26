@@ -12,6 +12,7 @@ namespace DzAssets.Preview.Module.AssetVorschau;
 public partial class ModelViewport : UserControl
 {
     private static readonly Material Ersatzmaterial = ErzeugeErsatzmaterial();
+    private static readonly Material Proxymaterial = ErzeugeProxymaterial();
     private static readonly ImageSource Gitterkachel = ErzeugeGitterkachel();
 
     private Model3DGroup? _modellGruppe;
@@ -26,6 +27,7 @@ public partial class ModelViewport : UserControl
     private bool _drahtgitter;
     private bool _bodengitter = true;
     private bool _massstabsfigur = true;
+    private bool _proxys;
 
     public ModelViewport()
     {
@@ -55,6 +57,16 @@ public partial class ModelViewport : UserControl
     {
         get => _massstabsfigur;
         set { if (_massstabsfigur == value) return; _massstabsfigur = value; HilfsgeometrieAufbauen(); }
+    }
+
+    /// <summary>
+    /// Proxy-Platzhalter mitzeichnen. Aus, weil die Pyramide mit Pfeil
+    /// nicht zum sichtbaren Objekt gehoert und mitten im Modell steht.
+    /// </summary>
+    public bool ProxysZeigen
+    {
+        get => _proxys;
+        set { if (_proxys == value) return; _proxys = value; NeuAufbauen(); }
     }
 
     public void Zeigen(ModelGeometry modell, LodGeometry lod,
@@ -92,10 +104,12 @@ public partial class ModelViewport : UserControl
 
         foreach (var abschnitt in _lod.Sections)
         {
+            if (abschnitt.IstProxy && !_proxys) continue;
+
             var geometrie = GeometrieBauer.Bauen(_lod, abschnitt);
             if (geometrie.Positions.Count == 0) continue;
 
-            var material = MaterialFuer(abschnitt);
+            var material = abschnitt.IstProxy ? Proxymaterial : MaterialFuer(abschnitt);
 
             // DayZ-Modelle sind haeufig einseitig modelliert; ohne
             // Rueckseitenmaterial fehlten ganze Waende.
@@ -105,7 +119,7 @@ public partial class ModelViewport : UserControl
             });
         }
 
-        if (_drahtgitter) gruppe.Children.Add(DrahtgitterErzeugen(_lod));
+        if (_drahtgitter) gruppe.Children.Add(DrahtgitterErzeugen(_lod, _proxys));
 
         _modellGruppe = gruppe;
         Szene.Children.Add(gruppe);
@@ -129,6 +143,17 @@ public partial class ModelViewport : UserControl
         return material;
     }
 
+    /// <summary>Proxy-Platzhalter deutlich abgesetzt, damit sie als
+    /// Hilfsgeometrie erkennbar bleiben.</summary>
+    private static Material ErzeugeProxymaterial()
+    {
+        var pinsel = new SolidColorBrush(Color.FromArgb(0xBB, 0xF0, 0xA6, 0x4A));
+        pinsel.Freeze();
+        var material = new EmissiveMaterial(pinsel);
+        material.Freeze();
+        return material;
+    }
+
     private static Material ErzeugeErsatzmaterial()
     {
         var material = new MaterialGroup();
@@ -144,7 +169,7 @@ public partial class ModelViewport : UserControl
     /// gezeichnet — das genuegt, um die Unterteilung zu beurteilen, ohne
     /// eine Linienbibliothek zu brauchen.
     /// </summary>
-    private static Model3DGroup DrahtgitterErzeugen(LodGeometry lod)
+    private static Model3DGroup DrahtgitterErzeugen(LodGeometry lod, bool mitProxys)
     {
         var gruppe = new Model3DGroup();
 
@@ -155,6 +180,8 @@ public partial class ModelViewport : UserControl
 
         foreach (var abschnitt in lod.Sections)
         {
+            if (abschnitt.IstProxy && !mitProxys) continue;
+
             var geometrie = GeometrieBauer.Bauen(lod, abschnitt);
             if (geometrie.Positions.Count == 0) continue;
 

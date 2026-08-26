@@ -64,6 +64,7 @@ public partial class AssetVorschauAnsicht : UserControl
         SchalterGitter.IsChecked = _kontext.Einstellungen.BodengitterZeigen;
         SchalterMassstab.IsChecked = _kontext.Einstellungen.MassstabsfigurZeigen;
         SchalterDraht.IsChecked = _kontext.Einstellungen.DrahtgitterZeigen;
+        SchalterProxys.IsChecked = _kontext.Einstellungen.ProxysZeigen;
         _initialisiert = true;
         AnsichtUebernehmen();
 
@@ -285,10 +286,12 @@ public partial class AssetVorschauAnsicht : UserControl
         Viewport.BodengitterZeigen = SchalterGitter.IsChecked == true;
         Viewport.MassstabsfigurZeigen = SchalterMassstab.IsChecked == true;
         Viewport.DrahtgitterZeigen = SchalterDraht.IsChecked == true;
+        Viewport.ProxysZeigen = SchalterProxys.IsChecked == true;
 
         _kontext.Einstellungen.BodengitterZeigen = SchalterGitter.IsChecked == true;
         _kontext.Einstellungen.MassstabsfigurZeigen = SchalterMassstab.IsChecked == true;
         _kontext.Einstellungen.DrahtgitterZeigen = SchalterDraht.IsChecked == true;
+        _kontext.Einstellungen.ProxysZeigen = SchalterProxys.IsChecked == true;
     }
 
     private void PfadKopieren_Click(object sender, RoutedEventArgs e)

@@ -1,0 +1,178 @@
+<UserControl x:Class="DzAssets.Preview.Module.Skripte.SkripteAnsicht"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource PinselGrund}">
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="340" MinWidth="260" />
+      <ColumnDefinition Width="5" />
+      <ColumnDefinition Width="*" MinWidth="420" />
+    </Grid.ColumnDefinitions>
+
+    <!-- ============ Links: Skriptliste ============ -->
+    <Border Grid.Column="0" Background="{DynamicResource PinselFlaeche}"
+            BorderBrush="{DynamicResource PinselRand}" BorderThickness="0,0,1,0">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="14,14,14,10">
+          <TextBox x:Name="SuchFeld" TextChanged="SuchFeld_TextChanged" Padding="31,7,9,7" />
+          <TextBlock Text="&#xE721;" FontFamily="{DynamicResource SchriftSymbole}"
+                     FontSize="13" Foreground="{DynamicResource PinselTextSchwach}"
+                     Margin="11,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False" />
+          <TextBlock x:Name="SuchHinweis" Text="Skripte durchsuchen…"
+                     Style="{StaticResource StilNebentext}"
+                     Margin="32,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False" />
+        </Grid>
+
+        <ListBox x:Name="SkriptListe" Grid.Row="1"
+                 Background="Transparent" BorderThickness="0"
+                 SelectionChanged="SkriptListe_SelectionChanged"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 VirtualizingStackPanel.IsVirtualizing="True">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                  <Border CornerRadius="3" Padding="5,1" Margin="0,0,7,0"
+                          Background="{DynamicResource PinselGrund}"
+                          BorderBrush="{DynamicResource PinselRand}" BorderThickness="1">
+                    <TextBlock Text="{Binding ArtName}" FontSize="9.5"
+                               Foreground="{DynamicResource PinselTextSchwach}" />
+                  </Border>
+                  <TextBlock Text="{Binding Dateiname}" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <TextBlock Text="{Binding Titel}" Style="{StaticResource StilNebentext}"
+                           TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Border Grid.Row="2" Padding="14,10" BorderBrush="{DynamicResource PinselRand}"
+                BorderThickness="0,1,0,0">
+          <StackPanel>
+            <StackPanel Orientation="Horizontal">
+              <Button x:Name="KnopfOrdner" Content="Ordner…" Click="Ordner_Click"
+                      ToolTip="Weiteren Ordner mit Skripten aufnehmen" />
+              <Button x:Name="KnopfNeu" Content="Neu…" Click="Neu_Click" Margin="7,0,0,0"
+                      ToolTip="Neues Skript anlegen" />
+              <Button x:Name="KnopfAuffrischen" Content="Neu einlesen" Click="Auffrischen_Click"
+                      Margin="7,0,0,0" />
+            </StackPanel>
+            <TextBlock x:Name="ListeText" Style="{StaticResource StilNebentext}"
+                       Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+          </StackPanel>
+        </Border>
+      </Grid>
+    </Border>
+
+    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+    <!-- ============ Rechts: Inhalt und Lauf ============ -->
+    <Grid Grid.Column="2">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" MinHeight="150" />
+        <RowDefinition Height="5" />
+        <RowDefinition Height="260" MinHeight="90" />
+      </Grid.RowDefinitions>
+
+      <!-- Kopf -->
+      <Border Grid.Row="0" Padding="18,14" Background="{DynamicResource PinselFlaeche}"
+              BorderBrush="{DynamicResource PinselRand}" BorderThickness="0,0,0,1">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+
+          <StackPanel Grid.Column="0">
+            <TextBlock x:Name="KopfName" Style="{StaticResource StilUeberschrift}"
+                       Text="Kein Skript gewählt" TextTrimming="CharacterEllipsis" />
+            <TextBlock x:Name="KopfPfad" Style="{StaticResource StilNebentext}"
+                       Margin="0,4,0,0" TextTrimming="CharacterEllipsis" />
+            <TextBlock x:Name="KopfBeschreibung" Style="{StaticResource StilNebentext}"
+                       Margin="0,8,0,0" TextWrapping="Wrap" MaxHeight="72" />
+          </StackPanel>
+
+          <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+            <Button x:Name="KnopfSpeichern" Content="Speichern" Click="Speichern_Click"
+                    IsEnabled="False" />
+            <Button x:Name="KnopfOeffnen" Content="Im Editor" Click="ImEditor_Click"
+                    Margin="7,0,0,0" IsEnabled="False"
+                    ToolTip="Mit dem eingestellten Programm des Systems öffnen" />
+          </StackPanel>
+        </Grid>
+      </Border>
+
+      <!-- Quelltext -->
+      <Grid Grid.Row="1">
+        <TextBox x:Name="Quelltext"
+                 AcceptsReturn="True" AcceptsTab="True"
+                 TextWrapping="NoWrap"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Auto"
+                 FontFamily="{DynamicResource SchriftFest}"
+                 FontSize="12.5"
+                 Background="{DynamicResource PinselGrund}"
+                 BorderThickness="0"
+                 Padding="16,12"
+                 IsReadOnly="True"
+                 TextChanged="Quelltext_TextChanged" />
+      </Grid>
+
+      <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center" ResizeDirection="Rows" />
+
+      <!-- Lauf -->
+      <Border Grid.Row="3" Background="{DynamicResource PinselFlaeche}"
+              BorderBrush="{DynamicResource PinselRand}" BorderThickness="0,1,0,0">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <Grid Grid.Row="0" Margin="16,12,16,8">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="ARGUMENTE" Style="{StaticResource StilFeldname}"
+                       VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox Grid.Column="1" x:Name="ArgumenteFeld"
+                     ToolTip="Durch Leerzeichen getrennt, in Anführungszeichen für Leerzeichen im Wert" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="10,0,0,0">
+              <Button x:Name="KnopfStart" Content="Ausführen" Click="Start_Click"
+                      IsEnabled="False" />
+              <Button x:Name="KnopfAbbruch" Content="Abbrechen" Click="Abbruch_Click"
+                      Margin="7,0,0,0" IsEnabled="False" />
+              <Button x:Name="KnopfLeeren" Content="Leeren" Click="Leeren_Click"
+                      Margin="7,0,0,0" />
+            </StackPanel>
+          </Grid>
+
+          <TextBox x:Name="Ausgabe" Grid.Row="1"
+                   IsReadOnly="True"
+                   TextWrapping="NoWrap"
+                   VerticalScrollBarVisibility="Auto"
+                   HorizontalScrollBarVisibility="Auto"
+                   FontFamily="{DynamicResource SchriftFest}"
+                   FontSize="12"
+                   Background="{DynamicResource PinselGrund}"
+                   BorderThickness="0"
+                   Padding="16,10" />
+        </Grid>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>

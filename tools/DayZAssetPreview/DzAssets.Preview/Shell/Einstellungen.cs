@@ -11,6 +11,8 @@ public sealed class Einstellungen : BeobachtbaresObjekt
     private bool _massstabsfigurZeigen = true;
     private bool _drahtgitterZeigen;
     private List<string> _zuletztHoehenkarten = [];
+    private List<string> _skriptOrdner = [];
+    private bool _proxysZeigen;
 
     public List<string> Wurzeln
     {
@@ -49,6 +51,20 @@ public sealed class Einstellungen : BeobachtbaresObjekt
         set => Setzen(ref _zuletztHoehenkarten, value);
     }
 
+    /// <summary>Proxy-Platzhalter in der Modellvorschau mitzeichnen.</summary>
+    public bool ProxysZeigen
+    {
+        get => _proxysZeigen;
+        set => Setzen(ref _proxysZeigen, value);
+    }
+
+    /// <summary>Ordner, in denen nach Hilfsskripten gesucht wird.</summary>
+    public List<string> SkriptOrdner
+    {
+        get => _skriptOrdner;
+        set => Setzen(ref _skriptOrdner, value);
+    }
+
     public static Einstellungen Laden(string datei)
     {
         Einstellungen? geladen = null;
@@ -66,6 +82,7 @@ public sealed class Einstellungen : BeobachtbaresObjekt
         geladen ??= new Einstellungen();
         geladen.Wurzeln ??= [];
         geladen.ZuletztHoehenkarten ??= [];
+        geladen.SkriptOrdner ??= [];
 
         if (geladen.Wurzeln.Count == 0)
             geladen.Wurzeln = WurzelnErraten().ToList();

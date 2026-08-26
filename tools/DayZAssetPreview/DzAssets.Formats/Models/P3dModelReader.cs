@@ -129,10 +129,22 @@ public static class P3dModelReader
         var materialien = lod.Materials ?? [];
         var abschnitte = lod.Sections ?? [];
 
+        // Ein Proxy nennt den Abschnitt, in dem sein Platzhalter liegt.
+        // Diese Abschnitte enthalten die Pyramide mit Pfeil, nicht das
+        // eingehaengte Modell — sie gehoeren nicht zum sichtbaren Objekt.
+        var proxyAbschnitte = new HashSet<int>();
+        foreach (var proxy in lod.Proxies ?? [])
+        {
+            if (proxy is not null && proxy.sectionIndex >= 0)
+                proxyAbschnitte.Add(proxy.sectionIndex);
+        }
+
         var ergebnis = new List<MeshSection>(abschnitte.Length);
+        var nummer = -1;
 
         foreach (var abschnitt in abschnitte)
         {
+            nummer++;
             if (abschnitt is null) continue;
 
             var indizes = new List<int>();
@@ -165,6 +177,7 @@ public static class P3dModelReader
                 Indices = indizes.ToArray(),
                 TexturePath = texturPfad,
                 MaterialPath = materialPfad,
+                IstProxy = proxyAbschnitte.Contains(nummer),
             });
         }
 
@@ -190,20 +203,30 @@ public static class P3dModelReader
         var uvs = new List<Vec2>(punkte.Length);
         var bekannt = new Dictionary<(int Punkt, int Normale, float U, float V), int>();
 
-        var gruppen = new Dictionary<(string Textur, string Material), List<int>>();
+        // In MLOD stehen die Proxy-Platzhalter in Auswahlgruppen, deren
+        // Name mit "proxy:" beginnt. Ihre Flaechen bilden die Pyramide mit
+        // Pfeil und gehoeren nicht zum sichtbaren Objekt.
+        var proxyFlaechen = ProxyFlaechenAusTaggs(lod, flaechen.Length);
+
+        var gruppen = new Dictionary<(string Textur, string Material, bool Proxy), List<int>>();
 
         // Ausserhalb der Schleife: ein stackalloc je Flaeche waere bei
         // Modellen mit zehntausenden Flaechen ein Stapelueberlauf (CA2014).
         var abgebildet = new int[4];
+        var flaechenNummer = -1;
 
         foreach (var flaeche in flaechen)
         {
+            flaechenNummer++;
             if (flaeche?.Vertices is null) continue;
 
             var ecken = Math.Clamp(flaeche.NumberOfVertices, 0, flaeche.Vertices.Length);
             if (ecken < 3) continue;
 
-            var schluessel = (flaeche.Texture ?? string.Empty, flaeche.Material ?? string.Empty);
+            var schluessel = (flaeche.Texture ?? string.Empty,
+                              flaeche.Material ?? string.Empty,
+                              flaechenNummer < proxyFlaechen.Length && proxyFlaechen[flaechenNummer]);
+
             if (!gruppen.TryGetValue(schluessel, out var indizes))
                 gruppen[schluessel] = indizes = [];
 
@@ -235,6 +258,7 @@ public static class P3dModelReader
                 Indices = g.Value.ToArray(),
                 TexturePath = OhneLeer(g.Key.Textur),
                 MaterialPath = OhneLeer(g.Key.Material),
+                IstProxy = g.Key.Proxy,
             })
             .ToArray();
 
@@ -279,6 +303,31 @@ public static class P3dModelReader
             bekannt[schluessel] = neu;
             return neu;
         }
+    }
+
+    /// <summary>
+    /// Markiert die Flaechen, die zu einer Auswahlgruppe mit dem Praefix
+    /// "proxy:" gehoeren. Das Byte-Feld je Flaeche ist ungleich null,
+    /// wenn die Flaeche in der Gruppe liegt.
+    /// </summary>
+    private static bool[] ProxyFlaechenAusTaggs(MlodLod lod, int flaechenAnzahl)
+    {
+        var treffer = new bool[flaechenAnzahl];
+        if (lod.taggs is null) return treffer;
+
+        foreach (var tagg in lod.taggs)
+        {
+            if (tagg is not BisDll.Model.MLOD.NamedSelectionTagg auswahl) continue;
+            if (auswahl.faces is null) continue;
+            if (auswahl.Name is null) continue;
+            if (!auswahl.Name.StartsWith("proxy:", StringComparison.OrdinalIgnoreCase)) continue;
+
+            var anzahl = Math.Min(flaechenAnzahl, auswahl.faces.Length);
+            for (var i = 0; i < anzahl; i++)
+                if (auswahl.faces[i] != 0) treffer[i] = true;
+        }
+
+        return treffer;
     }
 
     // ------------------------------------------------------------ Gemeinsam

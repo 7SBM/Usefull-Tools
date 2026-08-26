@@ -40,19 +40,41 @@ public sealed class TextureResolver
 
         var bereinigt = assetPfad.Trim().Replace('/', '\\').TrimStart('\\');
         if (bereinigt.Length == 0) return null;
-        if (Path.IsPathRooted(bereinigt)) return bereinigt;
+
+        if (Path.IsPathRooted(bereinigt))
+        {
+            // Liegt die Datei tatsaechlich dort, ist alles gut.
+            if (DateiVorhanden(bereinigt)) return bereinigt;
+
+            // Sonst ist es fast immer ein Verweis auf das Arma-Arbeits-
+            // laufwerk "P:\", das hier nicht eingebunden ist. Ein
+            // Arbeitslaufwerk ist ein Spiegel davon, also den
+            // Laufwerksbuchstaben abstreifen und relativ weitersuchen.
+            //
+            // Findet sich dort ebenfalls nichts, bleibt der urspruengliche
+            // Pfad die Antwort — der Aufrufer soll melden, was im Modell
+            // steht, nicht einen von hier erfundenen Ort.
+            var ohneLaufwerk = OhneLaufwerksbuchstaben(bereinigt);
+            if (ohneLaufwerk is null) return bereinigt;
+
+            return UnterWurzeln(ohneLaufwerk) ?? bereinigt;
+        }
+
         if (_wurzeln.Length == 0) return null;
 
-        string? ersterVersuch = null;
+        return UnterWurzeln(bereinigt) ?? Path.Combine(_wurzeln[0], bereinigt);
+    }
+
+    /// <summary>Erste Wurzel, unter der die Datei tatsaechlich liegt.</summary>
+    private string? UnterWurzeln(string relativ)
+    {
         foreach (var wurzel in _wurzeln)
         {
-            var kandidat = Path.Combine(wurzel, bereinigt);
-            ersterVersuch ??= kandidat;
-
+            var kandidat = Path.Combine(wurzel, relativ);
             if (DateiVorhanden(kandidat)) return kandidat;
         }
 
-        return ersterVersuch;
+        return null;
     }
 
     /// <summary>Absoluter Pfad zur Diffusetextur des Abschnitts, oder null.</summary>
@@ -70,6 +92,19 @@ public sealed class TextureResolver
         var ausMaterial = ZuAbsolut(material.DiffusePfad);
 
         return ausMaterial is not null && DateiVorhanden(ausMaterial) ? ausMaterial : null;
+    }
+
+    /// <summary>
+    /// Streift "P:\" oder einen anderen Laufwerksbuchstaben ab.
+    /// Null, wenn der Pfad gar keinen hat (etwa ein UNC-Pfad).
+    /// </summary>
+    private static string? OhneLaufwerksbuchstaben(string pfad)
+    {
+        if (pfad.Length < 3) return null;
+        if (pfad[1] != ':') return null;
+        if (!char.IsLetter(pfad[0])) return null;
+
+        return pfad[2..].TrimStart('\\');
     }
 
     private static bool DateiVorhanden(string pfad)

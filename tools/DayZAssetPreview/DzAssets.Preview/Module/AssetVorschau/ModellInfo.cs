@@ -49,7 +49,11 @@ public sealed class ModellInfo : BeobachtbaresObjekt
             AssetPfad = assetPfad,
             Groesse = string.Format(Deutsch, "{0:N2} × {1:N2} × {2:N2} m",
                 groesse.X, groesse.Y, groesse.Z),
-            Dreiecke = lod.TriangleCount.ToString("N0", Deutsch),
+            Dreiecke = lod.TriangleCountOhneProxy == lod.TriangleCount
+                ? lod.TriangleCount.ToString("N0", Deutsch)
+                : string.Format(Deutsch, "{0:N0}  (+{1:N0} Proxy)",
+                    lod.TriangleCountOhneProxy,
+                    lod.TriangleCount - lod.TriangleCountOhneProxy),
             Version = modell.IstBinarisiert
                 ? $"ODOL {modell.Version}"
                 : $"MLOD {modell.Version} (debinarisiert)",

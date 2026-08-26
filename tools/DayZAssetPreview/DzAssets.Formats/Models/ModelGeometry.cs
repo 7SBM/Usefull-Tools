@@ -24,6 +24,14 @@ public sealed class MeshSection
     /// <summary>Assetpfad des Materials, z. B. "DZ\structures\...\x.rvmat".</summary>
     public string? MaterialPath { get; init; }
 
+    /// <summary>
+    /// Wahr, wenn dieser Abschnitt einen Proxy-Platzhalter enthaelt — die
+    /// Pyramide mit Pfeil, die in Arma und DayZ die Andockstelle fuer ein
+    /// eingehaengtes Modell markiert. Sie gehoert nicht zum sichtbaren
+    /// Objekt und wird darum in der Vorschau ausgeblendet.
+    /// </summary>
+    public bool IstProxy { get; init; }
+
     public int TriangleCount => Indices.Length / 3;
 }
 
@@ -38,6 +46,11 @@ public sealed class LodGeometry
     public required MeshSection[] Sections { get; init; }
 
     public int TriangleCount => Sections.Sum(a => a.TriangleCount);
+
+    /// <summary>Dreiecke ohne die Proxy-Platzhalter.</summary>
+    public int TriangleCountOhneProxy => Sections.Where(a => !a.IstProxy).Sum(a => a.TriangleCount);
+
+    public bool HatProxies => Sections.Any(a => a.IstProxy);
 
     /// <summary>
     /// Der LOD-Name. Wird von der Oberflaeche benutzt, damit eine

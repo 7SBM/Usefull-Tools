@@ -32,7 +32,8 @@ public partial class HauptFenster : Window
             new Module.Hoehenkarte.HoehenkarteModul
             {
                 SofortOeffnen = hoehenkarte,
-            });
+            },
+            new Module.Skripte.SkripteModul());
 
         // Wurde eine Hoehenkarte uebergeben, gleich dorthin springen.
         if (!string.IsNullOrWhiteSpace(hoehenkarte)) ModulWaehlen("hoehenkarte");
