@@ -13,5 +13,12 @@ public sealed class AssetVorschauModul : IWerkzeugModul
 
     public string Beschreibung => "DayZ-Modelle aus den entpackten Gamefiles ansehen";
 
-    public UserControl ErzeugeAnsicht(WerkzeugKontext kontext) => new AssetVorschauAnsicht(kontext);
+    /// <summary>
+    /// Modell, das nach dem Start sofort geladen wird. Wird aus dem
+    /// Aufrufargument gesetzt, damit sich eine .p3d direkt oeffnen laesst.
+    /// </summary>
+    public string? SofortOeffnen { get; init; }
+
+    public UserControl ErzeugeAnsicht(WerkzeugKontext kontext)
+        => new AssetVorschauAnsicht(kontext, SofortOeffnen);
 }

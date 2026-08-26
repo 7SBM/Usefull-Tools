@@ -38,6 +38,13 @@ public sealed class LodGeometry
     public required MeshSection[] Sections { get; init; }
 
     public int TriangleCount => Sections.Sum(a => a.TriangleCount);
+
+    /// <summary>
+    /// Der LOD-Name. Wird von der Oberflaeche benutzt, damit eine
+    /// Auswahlliste den Namen zeigt und nicht den Klassennamen — auch
+    /// dann, wenn eine Vorlage DisplayMemberPath nicht auswertet.
+    /// </summary>
+    public override string ToString() => Name;
 }
 
 public sealed class ModelGeometry

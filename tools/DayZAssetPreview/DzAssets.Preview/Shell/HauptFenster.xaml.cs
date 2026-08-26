@@ -13,7 +13,7 @@ public partial class HauptFenster : Window
 
     private bool _wechseltModul;
 
-    public HauptFenster(WerkzeugKontext kontext)
+    public HauptFenster(WerkzeugKontext kontext, string? sofortOeffnen = null)
     {
         _kontext = kontext;
         InitializeComponent();
@@ -21,7 +21,10 @@ public partial class HauptFenster : Window
         // Weitere Werkzeuge werden hier eingehaengt — der Debinarizer und
         // der Hoehenkarten-Previewer. Die Shell braucht dafuer keine
         // Aenderung, nur diese Zeile.
-        ModuleHinzufuegen(new Module.AssetVorschau.AssetVorschauModul());
+        ModuleHinzufuegen(new Module.AssetVorschau.AssetVorschauModul
+        {
+            SofortOeffnen = sofortOeffnen,
+        });
 
         StateChanged += (_, _) =>
         {
@@ -100,8 +103,8 @@ public partial class HauptFenster : Window
             }
             catch (Exception fehler)
             {
-                _kontext.Protokoll.Fehler($"Modul '{modul.Titel}' liess sich nicht oeffnen", fehler);
-                StatusSetzen($"Modul '{modul.Titel}' liess sich nicht oeffnen — siehe Protokoll.");
+                _kontext.Protokoll.Fehler($"Modul '{modul.Titel}' ließ sich nicht öffnen", fehler);
+                StatusSetzen($"Modul '{modul.Titel}' ließ sich nicht öffnen — siehe Protokoll.");
                 return;
             }
         }

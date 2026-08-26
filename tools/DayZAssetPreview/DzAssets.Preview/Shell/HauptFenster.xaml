@@ -55,7 +55,7 @@
           <Button x:Name="KnopfMaximieren" Content="&#xE922;" Click="Maximieren_Click"
                   Style="{StaticResource StilFensterKnopf}" ToolTip="Maximieren" />
           <Button x:Name="KnopfSchliessen" Content="&#xE8BB;" Click="Schliessen_Click"
-                  Style="{StaticResource StilSchliessenKnopf}" ToolTip="Schliessen" />
+                  Style="{StaticResource StilSchliessenKnopf}" ToolTip="Schließen" />
         </StackPanel>
       </Grid>
 

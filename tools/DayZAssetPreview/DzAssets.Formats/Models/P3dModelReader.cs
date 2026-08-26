@@ -113,7 +113,7 @@ public static class P3dModelReader
         return new LodGeometry
         {
             Resolution = lod.Resolution,
-            Name = lod.Name,
+            Name = LodName(lod),
             IstSichtbar = Resolution.IsVisual(lod.Resolution),
             Positions = positionen,
             Normals = normalen,
@@ -241,7 +241,7 @@ public static class P3dModelReader
         return new LodGeometry
         {
             Resolution = lod.Resolution,
-            Name = lod.Name,
+            Name = LodName(lod),
             IstSichtbar = Resolution.IsVisual(lod.Resolution),
             Positions = positionen.ToArray(),
             Normals = normalen.ToArray(),
@@ -285,6 +285,20 @@ public static class P3dModelReader
 
     /// <summary>Arma ist linkshaendig, WPF rechtshaendig: Z spiegeln.</summary>
     private static Vec3 NachWpf(float x, float y, float z) => new(x, y, -z);
+
+    /// <summary>
+    /// Lesbarer LOD-Name. BisDll formatiert Aufloesungsstufen mit "#.000",
+    /// was bei der Stufe 0 und deutschem Zahlenformat ",000" ergibt —
+    /// in einer Auswahlliste unbrauchbar.
+    /// </summary>
+    private static string LodName(BisDll.Model.P3D_LOD lod)
+    {
+        if (!Resolution.IsResolution(lod.Resolution))
+            return lod.Name;
+
+        return string.Create(System.Globalization.CultureInfo.InvariantCulture,
+            $"Stufe {lod.Resolution:0.###}");
+    }
 
     private static string? OhneLeer(string? wert)
         => string.IsNullOrWhiteSpace(wert) ? null : wert;

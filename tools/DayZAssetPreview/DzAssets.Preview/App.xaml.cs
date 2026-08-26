@@ -31,7 +31,12 @@ public partial class App : Application
             args.Handled = true;
         };
 
-        new HauptFenster(_kontext).Show();
+        // Ein .p3d als Aufrufargument wird sofort geoeffnet — so laesst
+        // sich eine Datei direkt an das Programm uebergeben.
+        var sofortOeffnen = e.Args.FirstOrDefault(
+            a => a.EndsWith(".p3d", StringComparison.OrdinalIgnoreCase));
+
+        new HauptFenster(_kontext, sofortOeffnen).Show();
     }
 
     protected override void OnExit(ExitEventArgs e)
