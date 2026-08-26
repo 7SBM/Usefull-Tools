@@ -1,5 +1,5 @@
 #define AppName "7SBM P3D.DeBin"
-#define AppVersion "1.9"
+#define AppVersion "1.10"
 #define AppPublisher "7SpeedBlendMaster"
 #define AppExeName "Debinarizer.exe"
 #define AppDir "New_Version_WORKING DayZ+Arma3_FIXED"
