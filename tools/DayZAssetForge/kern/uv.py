@@ -26,4 +26,11 @@ def sichere_uv(obj):
     bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.uv.smart_project(angle_limit=1.15, island_margin=0.02)
     bpy.ops.object.mode_set(mode="OBJECT")
+
+    # Sicherheitsnetz: falls Smart-UV in verschachteltem Kontext nichts erzeugt hat,
+    # trotzdem eine (aktive) UV-Ebene garantieren, damit der Bake nie an fehlender UV scheitert.
+    if not obj.data.uv_layers:
+        obj.data.uv_layers.new(name="UVMap")
+    if obj.data.uv_layers.active is None:
+        obj.data.uv_layers.active = obj.data.uv_layers[0]
     return True

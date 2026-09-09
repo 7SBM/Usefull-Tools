@@ -16,7 +16,7 @@ for _p in (_WURZEL, _HIER):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-TESTMODULE = ["test_teile", "test_uv", "test_dezimierung", "test_backen", "test_export"]
+TESTMODULE = ["test_teile", "test_uv", "test_dezimierung", "test_backen", "test_export", "test_laden"]
 
 
 def main():
