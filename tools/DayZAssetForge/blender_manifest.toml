@@ -1,0 +1,9 @@
+schema_version = "1.0.0"
+id = "dayz_assetforge_7sbm"
+version = "0.1.0"
+name = "7SBM DayZ AssetForge"
+tagline = "High-Poly nach Low-Poly mit gebackener NOHQ fuer DayZ"
+maintainer = "7SBM <7speedblendmaster@gmail.com>"
+type = "add-on"
+blender_version_min = "4.2.0"
+license = ["SPDX:MIT"]
