@@ -31,6 +31,21 @@ def hochpoly_wuerfel(name="High", unterteilungen=4):
     return obj
 
 
+def hochpoly_kugel(name="HighKugel", unterteilungen=5):
+    """Erzeugt eine feine Icosphere als High-Poly mit gekruemmter Oberflaeche.
+
+    Gekruemmte Flaechen ergeben beim Backen echte Normal-Variation (kein Flat-Blau).
+    """
+    mesh = bpy.data.meshes.new(name)
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    bm = bmesh.new()
+    bmesh.ops.create_icosphere(bm, subdivisions=unterteilungen, radius=1.0)
+    bm.to_mesh(mesh)
+    bm.free()
+    return obj
+
+
 def zaehle_dreiecke(obj):
     mesh = obj.data
     mesh.calc_loop_triangles()
