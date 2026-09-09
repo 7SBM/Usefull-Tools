@@ -11,6 +11,13 @@ Format lose nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 ## [Unveröffentlicht]
 
 ### Hinzugefügt
+- `tools/DayZAssetForge/` — **eigenes Blender-Addon (ab 5.0)** für die Mesh-Seite der
+  DayZ-Item-Erstellung: teilt ein High-Poly-Modell Stück für Stück, dezimiert jedes Teil,
+  backt die NOHQ-Normalmap vom High auf das Low (Cycles, Grün-Kanal umschaltbar) und
+  exportiert Low-Mesh (OBJ) + `_no.png` + Object-Builder-To-Do. Reiner Kern getrennt von der
+  UI, headless getestet in Blender 5.0 (9/9 grün). Liefert die Vorlage für den
+  `rvmat_paa_generator.py` des Item-Generators; erzeugt selbst kein PAA/RVMAT. Design/Plan
+  unter `docs/superpowers/`. (2026-09-09)
 - `.gitignore`, `VENDOR.md`, dieses Änderungsprotokoll
 - README auf den tatsächlichen Funktionsstand gebracht (beschrieb bis dahin nur
   die reine ODOL→MLOD-Fassung)

@@ -63,6 +63,7 @@ bauen möchte, findet den vollständigen Quellcode unter
 | `DayZ_ProxyIcons/` | 36 freigestellte Proxy-Icons für Inventar-Attachment-Slots |
 | `7SBM_Animation Projekt/` | Animationsarbeit: Blender-Quellen, ANM/TXA/RTM-Paare, Waterfall-Mod |
 | `DayZAnimationPlugin_Voglefixed/` | Blender-Addon zum Erstellen eigener Waffen-Handanimationen (IK-Poses), Import/Export TXA/TXO — Fremdcode mit Kompatibilitäts-Fixes, siehe [`VENDOR.md`](VENDOR.md) |
+| `tools/DayZAssetForge/` | **Eigenes Blender-Addon** (ab 5.0): High-Poly → Low-Poly Stück für Stück, NOHQ vom High auf das Low gebacken, Export als OBJ + `_no.png` für den Item-Generator. Siehe [`LIESMICH.md`](tools/DayZAssetForge/LIESMICH.md) |
 | `DayZ-Terrain-Config-Files-main/` | Terrain-Grundgerüst (`layers.cfg`, `buldozer.c`, `config.cpp`) |
 | `Terrain Tools/` | QGIS-Addons für Spiel-Terrains |
 | `p3d_Debinarizer_VogelFixed_2026/` | die fremde Ausgangsfassung, aus der P3D.DeBin hervorging (Archiv) |
