@@ -7,3 +7,11 @@ maintainer = "7SBM <7speedblendmaster@gmail.com>"
 type = "add-on"
 blender_version_min = "4.2.0"
 license = ["SPDX:MIT"]
+
+# Blender zeigt diese Begruendung in den Einstellungen an.
+[permissions]
+files = "Schreibt OBJ, Normal-PNG und To-Do in den Zielordner"
+
+# Was NICHT ins ausgelieferte Extension-ZIP gehoert (Tests laufen aus dem Repo).
+[build]
+paths_exclude_pattern = ["__pycache__/", "/.git/", "/*.zip", "/tests/", "/.gitignore"]

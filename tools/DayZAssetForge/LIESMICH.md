@@ -32,6 +32,18 @@ dafür die `object_builder_todo.txt` an (LODs, Named Selections, Memory-Points, 
 Blender 5.0 → **Bearbeiten → Einstellungen → Erweiterungen → ▾ → Von Datei installieren…** →
 den Addon-Ordner als ZIP wählen (bzw. Auslieferung als Extension-ZIP über GitHub Releases).
 
+Oder per Kommandozeile — baut das ZIP aus dem Repo-Ordner (validiert dabei das Manifest) und
+installiert es in die User-Extensions:
+
+```
+blender --command extension build --source-dir tools\DayZAssetForge --output-filepath dayz_assetforge_7sbm-0.1.0.zip
+blender --command extension install-file dayz_assetforge_7sbm-0.1.0.zip --repo user_default --enable
+```
+
+Jede Blender-Hauptversion (5.0, 5.2 …) hat einen **eigenen** Extensions-Ordner
+(`%APPDATA%\Blender Foundation\Blender\<Version>\extensions\user_default\`) — bei mehreren
+Installationen (z. B. Foundation **und** Steam) je einmal mit der jeweiligen `blender.exe` ausführen.
+
 ## Bedienung
 
 3D-Viewport → N-Panel (Taste **N**) → Reiter **AssetForge**. High-Poly auswählen, Zielordner
